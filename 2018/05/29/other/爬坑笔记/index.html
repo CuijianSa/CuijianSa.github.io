@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>爬坑笔记 | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="爬坑笔记本文对日常工作及学习中遇到的问题做个记录  2018/5/18 1:01:33   编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折 undefined reference vtable for VideoDeviceclass VideoDevice: public QObject {     Q_OBJECT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="爬坑笔记">
+<meta property="og:url" content="http://yoursite.com/2018/05/29/other/爬坑笔记/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="爬坑笔记本文对日常工作及学习中遇到的问题做个记录  2018/5/18 1:01:33   编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折 undefined reference vtable for VideoDeviceclass VideoDevice: public QObject {     Q_OBJECT">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-16T16:23:40.197Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="爬坑笔记">
+<meta name="twitter:description" content="爬坑笔记本文对日常工作及学习中遇到的问题做个记录  2018/5/18 1:01:33   编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折 undefined reference vtable for VideoDeviceclass VideoDevice: public QObject {     Q_OBJECT">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-other/爬坑笔记" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/other/爬坑笔记/" class="article-date">
+  <time datetime="2018-05-28T17:04:43.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      爬坑笔记
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="爬坑笔记"><a href="#爬坑笔记" class="headerlink" title="爬坑笔记"></a>爬坑笔记</h1><p>本文对日常工作及学习中遇到的问题做个记录</p>
+<blockquote>
+<p>2018/5/18 1:01:33 </p>
+</blockquote>
+<p>编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折</p>
+<h2 id="undefined-reference-vtable-for-VideoDevice"><a href="#undefined-reference-vtable-for-VideoDevice" class="headerlink" title="undefined reference vtable for VideoDevice"></a>undefined reference vtable for VideoDevice</h2><pre><code>class VideoDevice: public QObject
+{
+    Q_OBJECT
+public:
+    explicit VideoDevice(QObject *parent = nullptr);
+       VideoDevice(QString dev_name);
+    int open_device();
+    int close_device();
+.....
+</code></pre><p>定义一个类VideoDevice继承于QObject，编译出现cmake error: undefined reference to <code>vtable for VideoDevice&#39;错误， 一般这是虚函数没有提供实现造成的，不过</code>VideoDevice`并不是一个虚函数，所以和这个没有关系，很有可能是Q_OBJECT这个宏造成的，查阅资料说明Q_OBJECT 元对象一般是由moc XXX.cpp生成moc文件实现的，在CMakeList指定了VideoDevice.h 的moc文件， error fix.</p>
+<p><strong>QT5_WRAP_CPP(video_device_moc include/videodevice.h)</strong></p>
+<p>发现的确生成了一个moc文件，此cpp对videodevice.h生成了一些元对象，和信号和槽相关</p>
+<pre><code>QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+struct qt_meta_stringdata_VideoDevice_t {
+    QByteArrayData data[4];
+    char stringdata0[39];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_VideoDevice_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_VideoDevice_t qt_meta_stringdata_VideoDevice = {
+    {
+QT_MOC_LITERAL(0, 0, 11), // &quot;VideoDevice&quot;
+QT_MOC_LITERAL(1, 12, 13), // &quot;display_error&quot;
+QT_MOC_LITERAL(2, 26, 0), // &quot;&quot;
+QT_MOC_LITERAL(3, 27, 11) // &quot;std::string&quot;
+
+    },
+    &quot;VideoDevice\0display_error\0\0std::string&quot;
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_VideoDevice[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       1,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+
+       0        // eod
+};
+
+void VideoDevice::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        VideoDevice *_t = static_cast&lt;VideoDevice *&gt;(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t-&gt;display_error((*reinterpret_cast&lt; std::string(*)&gt;(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast&lt;int *&gt;(_a[0]);
+        void **func = reinterpret_cast&lt;void **&gt;(_a[1]);
+        {
+            typedef void (VideoDevice::*_t)(std::string );
+            if (*reinterpret_cast&lt;_t *&gt;(func) == static_cast&lt;_t&gt;(&amp;VideoDevice::display_error)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
+}
+
+const QMetaObject VideoDevice::staticMetaObject = {
+    { &amp;QObject::staticMetaObject, qt_meta_stringdata_VideoDevice.data,
+      qt_meta_data_VideoDevice,  qt_static_metacall, nullptr, nullptr}
+};
+
+
+const QMetaObject *VideoDevice::metaObject() const
+{
+    return QObject::d_ptr-&gt;metaObject ? QObject::d_ptr-&gt;dynamicMetaObject() : &amp;staticMetaObject;
+}
+
+void *VideoDevice::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_VideoDevice.stringdata0))
+        return static_cast&lt;void*&gt;(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int VideoDevice::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id &lt; 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id &lt; 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id &lt; 1)
+            *reinterpret_cast&lt;int*&gt;(_a[0]) = -1;
+        _id -= 1;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void VideoDevice::display_error(std::string _t1)
+{
+    void *_a[] = { nullptr, const_cast&lt;void*&gt;(reinterpret_cast&lt;const void*&gt;(&amp;_t1)) };
+    QMetaObject::activate(this, &amp;staticMetaObject, 0, _a);
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE
+</code></pre><h2 id="lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol"><a href="#lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol" class="headerlink" title="/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol"></a>/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol</h2><p>使用cmake 编译ffmpeg发现 …reference to symbol ‘pthread_create@@GLIBC_2.2.5, 发现是依赖于pthread<br>在连接库中加上-lpthread即可</p>
+<p>fmmpeg库之间有依赖关系，需要按顺序加载lib, make加载顺序为从右向左，故左边的库依赖于右边</p>
+<p>-lavcodec -lavdevice -lavfilter -lavformat -lavutil -lpostproc -lswresample -lswscale -lx264 -lpthread</p>
+<h2 id="关于stm32-freertos异常死机问题"><a href="#关于stm32-freertos异常死机问题" class="headerlink" title="关于stm32 freertos异常死机问题"></a>关于stm32 freertos异常死机问题</h2><blockquote>
+<p>2018/5/22 22:05:01 </p>
+</blockquote>
+<ul>
+<li>MCU: stm32</li>
+<li>OS: FreeRTOS</li>
+<li>问题描述: 最近项目任务，需要利用CMSIS接口对FreeRTOS做了一层封装，以实现多平台抽象，改造运行时很快挂死了。使用JLINK时DEBUG,发现运行时常常在某些函数时挂死，但不常是同一函数，发现通常是在函数退出时挂掉，初步怀疑是栈太小被破坏了，导致函数返回跑偏，栈大小改大同样。继续跟踪发现虽然挂的地点不同，但都进入了同一个函数，DEFAULTXXX, 发现此函数位于启动函数中，如果未设置中断函数，发生中断会自动进入DEFAULTXXX, 可能是我链接时未将中断处理函数链接上，将中断实现函数链接FIX (0.0 醉了，  十足小白)</li>
+</ul>
+<h2 id="FreeRTOS-线程函数问题"><a href="#FreeRTOS-线程函数问题" class="headerlink" title="FreeRTOS 线程函数问题"></a>FreeRTOS 线程函数问题</h2><p>一直在linux环境下工作，对STM32 OVER RTOS不是很熟悉， 利用CMSIS OS over FreeRTOS封装Thread;编写测试用例时发现线程函数直接退出会进入FreeRTOS内部一个函数，Tips要求线程函数一直loop或者退出时调用vTaskDelete（NULL）删除自己。</p>
+<p>查看了一些资料，发现FreeRTOS不能类似于linux线程直接退出处于僵死状态，需要线程内部调用vTaskDelete（NULL）删除自己或者别的线程调用vTaskDelete（thread_id）。 猜测FreeRTOSCreate时是将任务加入到task list,每隔一段时间调用一次，调用vTaskDelete则将任务从task list中移除；  如果函数直接退出但task list还在task list中， 时间片到达时运行task， 函数已经退出可能导致task不知如何运行，被集中运行到了DEFAULT THREAD FUNCTION中了.</p>
+<h2 id="utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题"><a href="#utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题" class="headerlink" title="utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题"></a>utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题</h2><blockquote>
+<p>2018/5/23 23:00:41 </p>
+</blockquote>
+<ul>
+<li><p>背景: 最近在<a href="https://github.com/CuijianSa/utils" target="_blank" rel="noopener">utils</a>项目中使用ffmpeg+QT+cmake 播放h264视频流, 编译UI时报错</p>
+<pre><code>Generating ui_mainwindow.h
+File &apos;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.ui&apos; is not valid
+qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/build.make:57: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc&apos; failed
+CMakeFiles/Makefile2:615: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/all&apos; failed
+AUTOUIC: error: process for ui_mainwindow.h needed by
+ &quot;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.cpp&quot;
+failed:
+</code></pre></li>
+<li>思路: 在CMakeLists中已经指定了QT5_WRAP_UI指定了UI文件,QT5_WRAP_UI(ui_mainwindow mainwindow.ui)，编译log却在下级src查询*ui.h文件，和预期不符。然后查询Makefile查看的UI路径，发现路径正常<pre><code>`./qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp.dir/build.make:    cd /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp &amp;&amp; /home/cuijian/Qt5.9.2/5.9.2/gcc_64/bin/uic -o /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp/ui_mainwindow.h /home/cuijian/share/git/utils/qt/ffmpeg_rtsp/mainwindow.ui`
+</code></pre></li>
+</ul>
+<p>THANK Gooole，遍历了几篇文章找到蛛丝马迹， 因为我mainwindow.cpp是位于src目录下，而编译器也在src下搜寻ui_mainwindow.h，和设置的UI路径不符（实际上ui_mainwindow.h位于CMakeLists同级目录），应该和自动配置有关，查看了CMAKE_UIC命令，尝试把CMAKE_AUTOUIC关闭按照cmake设定的UI编译解决。  阻塞了两晚… </p>
+<h2 id="程序随机挂死问题，DEBUG无异常"><a href="#程序随机挂死问题，DEBUG无异常" class="headerlink" title="程序随机挂死问题，DEBUG无异常"></a>程序随机挂死问题，DEBUG无异常</h2><blockquote>
+<p>2018/5/24 22:34:34 </p>
+</blockquote>
+<p>很简单的一个问题。<br>主要是同事开启了Watchdog, merge代码未喂狗。导致挂死，debug看不出异常… </p>
+<h2 id="吐槽一下ARM-CMSIS—OS接口"><a href="#吐槽一下ARM-CMSIS—OS接口" class="headerlink" title="吐槽一下ARM CMSIS—OS接口"></a>吐槽一下ARM CMSIS—OS接口</h2><blockquote>
+<p>2018/5/29 1:27:39 </p>
+</blockquote>
+<p>最近做使用CMSIS over freertos封装实现项目HAL, 发现不合理的地方</p>
+<ol>
+<li><p>osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t count)   </p>
+<p> count为semaphore可用资源量， 跟踪代码发现在freertos stm32中其内部实现为count同时被设为最大资源量和初始值。 ===&gt; 无法将初始值设为0(因为count也指定了最大资源)</p>
+</li>
+<li><p>CMSIS_5-develop包中提供了Template， 使用C++对CMSIS_OS进行了一次封装， 不过发现Mutex.cpp没有调用osMutexDelete释放互斥量,会引起资源泄露的问题,其sample如下:</p>
+<pre><code>#include &quot;Mutex.h&quot;
+
+#include &lt;string.h&gt;
+//#include &quot;error.h&quot;
+
+namespace rtos {
+
+Mutex::Mutex() {
+#ifdef CMSIS_OS_RTX
+    memset(_mutex_data, 0, sizeof(_mutex_data));
+    _osMutexDef.mutex = _mutex_data;
+#endif
+    _osMutexId = osMutexCreate(&amp;_osMutexDef);
+    if (_osMutexId == NULL) {
+//        error(&quot;Error initializing the mutex object\n&quot;);
+    }
+}
+
+osStatus Mutex::lock(uint32_t millisec) {
+    return osMutexWait(_osMutexId, millisec);
+}
+
+bool Mutex::trylock() {
+    return (osMutexWait(_osMutexId, 0) == osOK);
+}
+
+osStatus Mutex::unlock() {
+    return osMutexRelease(_osMutexId);
+}
+
+}
+</code></pre></li>
+</ol>
+<h2 id="undefined-reference-vtable-for"><a href="#undefined-reference-vtable-for" class="headerlink" title="undefined reference vtable for"></a>undefined reference vtable for</h2><blockquote>
+<p>2018/5/30 0:08:23 </p>
+</blockquote>
+<p>C++ 继承基类编译出现undefined reference vtable for XXX,这是由于编译器在子类未发现纯虚函数在子类的实现，虚拟函数table。 在子类实现虚函数即可</p>
+<h1 id="FFmpeg-RTSP-缩放花屏"><a href="#FFmpeg-RTSP-缩放花屏" class="headerlink" title="FFmpeg RTSP 缩放花屏"></a>FFmpeg RTSP 缩放花屏</h1><p>使用开源库ffmpeg播放RTSP(H264=&gt;RGB24), 使用sws_getContext()出现花屏。原因在与缩放后width没有16字节对齐</p>
+<ol>
+<li>将缩放后的宽度16字节对齐</li>
+<li><p>sws_scale时picture.linesize分别设置RGB字节数（缩放后宽度所占BYTE，</p>
+<pre><code>scaleWidth = CELING_2_POWER(width / scale, 16);
+scaleHeight = CELING_2_POWER(height / scale, 16);
+
+pSwsCtx = sws_getContext(width, height, pCodecCtx-&gt;pix_fmt, scaleWidth, scaleHeight, AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+
+pixbyte = scaleWidth * 3;
+picture.linesize[0] = picture.linesize[1] = picture.linesize[2] = pixbyte;
+
+sws_scale(pSwsCtx, pFrame-&gt;data, pFrame-&gt;linesize, 0, height, picture.data, picture.linesize)
+</code></pre></li>
+</ol>
+<h1 id="类互相引用导致一方类定义不可达"><a href="#类互相引用导致一方类定义不可达" class="headerlink" title="类互相引用导致一方类定义不可达"></a>类互相引用导致一方类定义不可达</h1><blockquote>
+<p>2018/6/21 23:40:39 </p>
+</blockquote>
+<ol>
+<li>class A 成员函数形参为class B*，这种情景很常见(在另一个类中修改本类的成员变量，或者保存本类的对象指针)，比如观察者模式及状态模式。</li>
+<li>class A及class B都包含宏用于防重复包含，而在类中直接include 对方头文件必会导致有一方类实现不可达</li>
+</ol>
+<p><strong>解决方法:</strong><br>.h中使用class 对方类声明，在.cpp包含对方头文件。.cpp不存在重复包含的问题。程序会在符号表中查找该函数的实现。</p>
+<h1 id="C-构造函数调用虚函数问题"><a href="#C-构造函数调用虚函数问题" class="headerlink" title="C++构造函数调用虚函数问题"></a>C++构造函数调用虚函数问题</h1><blockquote>
+<p>2018/7/4 23:35:59 </p>
+</blockquote>
+<ul>
+<li>问题描述</li>
+</ul>
+<p>class A 继承于class Base,基类和子类构造都调用虚函数Function,实例化class A的对象时，子类和基类的Function都会被调用一遍</p>
+<p>原因:</p>
+<ul>
+<li>在基类子对象构造期间，编译器直接调用基类版本的虚函数。在子类对象构造期间，编译器直接调用基类虚函数的版本。并没有走虚机制。虽然在基类子对象的构造期间，虚表指针指向的是基类的Virtual Table，在进入子类对象构造后，虚表指针指向的是子类对象的Virtual Table</li>
+</ul>
+<p>故以下输出为:</p>
+<p>Base::Fuction<br>A::Fuction </p>
+<pre><code>class Base  
+{  
+public:  
+    Base()  
+    {  
+        Fuction();  
+    }  
+
+    virtual void Fuction()  
+    {  
+        cout &lt;&lt; &quot;Base::Fuction&quot; &lt;&lt; endl;  
+    }  
+};  
+
+class A : public Base  
+{  
+public:  
+    A()  
+    {  
+        Fuction();  
+    }  
+
+    virtual void Fuction()  
+    {  
+        cout &lt;&lt; &quot;A::Fuction&quot; &lt;&lt; endl;  
+    }  
+};  
+
+A a;  
+</code></pre><p>==&gt;使用多态时， 注意勿在构造函数中调用虚函数， 否则会造成无法执行到子类虚函数，引起异常也不好排查</p>
+<h1 id="ubuntu输入密码后无法进入系统"><a href="#ubuntu输入密码后无法进入系统" class="headerlink" title="ubuntu输入密码后无法进入系统"></a>ubuntu输入密码后无法进入系统</h1><blockquote>
+<p>2018/7/17 0:32:26 </p>
+</blockquote>
+<p>查看~/.xsession-errors，发现dbus未起来导致dbus-deamon异常，unity一个服务termintor.</p>
+<p>最近工作上需要用到dbus, 所以在本机编译dbus源码，并make install安装到系统中,可能破坏掉了原先ubuntu内部的dbus配置。</p>
+<p>手动删除安装的dbus配置， 重启解决。</p>
+<p>教训:以后专门建立一个package防止源码，编译程序时指定package路径，尽量与系统隔离。</p>
+<h1 id="函数返回的string生命周期问题"><a href="#函数返回的string生命周期问题" class="headerlink" title="函数返回的string生命周期问题"></a>函数返回的string生命周期问题</h1><blockquote>
+<p>2018/8/2 23:41:17 </p>
+</blockquote>
+<pre><code>std::string toString(){
+    return std::string(data);
+}
+
+int iterCalback() 
+{
+    char *argv[2];
+    if(cb) {
+        argv[0] = key.toString().c_str();
+        argv[1] = value.toString().c_str();
+
+        cb(argc, argv);
+    }
+}
+</code></pre><p>示例如上， 获取key及value的字符串常量传递给callback,发现argv[0]及argv[1]同一个地址且指向同一字符串</p>
+<p>原因： 理解错函数返回string生命周期的问题， string_key通过函数返回，toString()执行完毕后，临时变量string其生命周期已经结束， 栈空间将会被收回。执行下一函数获取string_value,将会key复用的占用的空间(不一定同一栈地址)</p>
+<p>note:函数返回的临时变量在函数调用结束时即被销毁。</p>
+<h1 id="对数组名取址"><a href="#对数组名取址" class="headerlink" title="对数组名取址"></a>对数组名取址</h1><blockquote>
+<p>2018/8/13 22:37:29 </p>
+</blockquote>
+<p>数组名的值是个常量，是数组第一个元素的地址，它的数据类型取决于数组的类型。以下为例</p>
+<pre><code>int a[2] = {1,2}
+
+printf(&quot;a = %p\n&quot;, a); // I
+printf(&quot;&amp;a = %p\n&quot;, &amp;a); // II
+printf(&quot;a + 1 = %p\n&quot;, a + 1);// III
+printf(&quot;&amp;a + 1 = %p\n&quot;, &amp;a + 1);// IV
+
+a = 0x804a014
+&amp;a = 0x804a014
+a + 1 = 0x804a018
+&amp;a + 1 = 0x804a01c
+</code></pre><p>对数组名取址=数组第一个元素的地址.<br>今天趟坑，dbus需要传入一个二级指针，自己傻乎乎的直接对数组取值传入，实际上还是首元素的地址。dbus函数内部认为其为二级指针，使用一个变量指向其指向的值， 并将其当做字符串的地址。实际上是把数组的数据当做字符串的地址。导致非法访问core dump</p>
+<h1 id="对隐形调用函数大坑说明"><a href="#对隐形调用函数大坑说明" class="headerlink" title="对隐形调用函数大坑说明"></a>对隐形调用函数大坑说明</h1><blockquote>
+<p>2018/8/17 0:23:04</p>
+</blockquote>
+<p>背景:x86 linux 64位系统<br>proxy接收到message-proxy消息， 进行解析打包传出后总是挂掉。<br>原以为是函数内部拼接字符串错误， 使用log后发现出入参都很正常， 原以为是函数栈被踩导致函数调用结束后跑偏导致core dump, 后来使用log发现程序是可以调用函数返回的， 对返回值打印其地址时发现地址只有4个字节， 而返回值却有8个字节， 其前4个字节时相同的， 也就是表示丢了高4个字节。查看编译Log时发现调用func时将char <em>转为integet.在64位系统中char</em>就是8byte, 而int 为4byte；这段日志提示了我编译器进行了隐藏转换， 后来发现调用库文件没有显式包含函数声明导致编辑器自动默认声明。导致char* =&gt; int， 而对截断后的地址进行访问造成非法访问内存空间crash</p>
+<p>教训:<br>不要放过任何一个warning,为了减少大坑，还是将所有的warning解决</p>
+<p>示例如下:调用函数未现实声明被调用的函数，造成编译器自动声明函数， 其返回值为int,这也是warning说明int数据传给了char*,所以point被截断了<br><code>warning: initialization makes pointer from integer without a cast [-Wint-conversion]</code></p>
+<pre><code> 1 #include &lt;stdio.h&gt;
+ 2 #include &lt;stdlib.h&gt;
+ 3 #include &lt;string.h&gt;
+ 4 
+ 5 
+ 6 char *get_msg_id()
+ 7 {
+ 8     char *p = malloc(32);
+ 9     if(p) {
+10         strcpy(p, &quot;msg_id:32&quot;);
+11     }
+12     printf(&quot;%p\n&quot;, p);
+13     return p;
+14 }
+
+
+ 1 #include &lt;stdio.h&gt;
+ 2 
+ 3 int main()
+ 4 {
+ 5     char *p = get_msg_id();
+ 6     printf(&quot;%p&quot;,p);
+ 7 }
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjq850ckm000uf0vcy5w9lsvz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/29/网络/HTTP/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          HTTP
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

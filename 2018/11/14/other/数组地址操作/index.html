@@ -5,19 +5,19 @@
   
 
   
-  <title>Hello World | CuijianSa.github.io</title>
+  <title>数组地址操作 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="对指针取址和对数组取地址含义是不同的 arr和&amp;amp;arr结果都是数组的首地址，但是他们类型不相同 arr表示&amp;amp;arr[0],即数组首元素取址 arr+1=首地址+sizeof(char) &amp;amp;arr虽值为数组首元素地址，但类型为:类型(*)[数组个数],所以&amp;amp;arr+1=首地址+sizeof(arr) 123456789101112131415161718char ar">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2018/12/19/hello-world/index.html">
+<meta property="og:title" content="数组地址操作">
+<meta property="og:url" content="http://yoursite.com/2018/11/14/other/数组地址操作/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="对指针取址和对数组取地址含义是不同的 arr和&amp;amp;arr结果都是数组的首地址，但是他们类型不相同 arr表示&amp;amp;arr[0],即数组首元素取址 arr+1=首地址+sizeof(char) &amp;amp;arr虽值为数组首元素地址，但类型为:类型(*)[数组个数],所以&amp;amp;arr+1=首地址+sizeof(arr) 123456789101112131415161718char ar">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-18T17:00:04.475Z">
+<meta property="og:updated_time" content="2018-11-14T16:27:18.217Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="数组地址操作">
+<meta name="twitter:description" content="对指针取址和对数组取地址含义是不同的 arr和&amp;amp;arr结果都是数组的首地址，但是他们类型不相同 arr表示&amp;amp;arr[0],即数组首元素取址 arr+1=首地址+sizeof(char) &amp;amp;arr虽值为数组首元素地址，但类型为:类型(*)[数组个数],所以&amp;amp;arr+1=首地址+sizeof(arr) 123456789101112131415161718char ar">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -68,12 +68,16 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-other/数组地址操作" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/12/19/hello-world/" class="article-date">
-  <time datetime="2018-12-18T17:00:04.475Z" itemprop="datePublished">2018-12-19</time>
+    <a href="/2018/11/14/other/数组地址操作/" class="article-date">
+  <time datetime="2018-11-14T15:28:10.000Z" itemprop="datePublished">2018-11-14</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -82,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      数组地址操作
     </h1>
   
 
@@ -90,20 +94,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p>对指针取址和对数组取地址含义是不同的</p>
+<p>arr和&amp;arr结果都是数组的首地址，但是他们类型不相同</p>
+<p>arr表示&amp;arr[0],即数组首元素取址</p>
+<p>arr+1=首地址+sizeof(char)</p>
+<p>&amp;arr虽值为数组首元素地址，但类型为:类型(*)[数组个数],所以&amp;arr+1=首地址+sizeof(arr)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">char arr[] = &quot;123455678&quot;;</span><br><span class="line"></span><br><span class="line">printf(&quot;arr:%p\n&quot;,arr);</span><br><span class="line">printf(&quot;&amp;arr[0]:%p\n&quot;,&amp;arr[0]);</span><br><span class="line">printf(&quot;arr+1:%p\n&quot;,arr+1);</span><br><span class="line"></span><br><span class="line">char *p = arr;</span><br><span class="line">printf(&quot;p:%p\n&quot;, p); </span><br><span class="line">printf(&quot;&amp;p:%p\n&quot;,&amp;p);</span><br><span class="line">printf(&quot;p+1:%p\n&quot;,p+1);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">arr:0x7ffec43c2e80</span><br><span class="line">&amp;arr[0]:0x7ffec43c2e80</span><br><span class="line">arr+1:0x7ffec43c2e81</span><br><span class="line">p:0x7ffec43c2e80</span><br><span class="line">&amp;p:0x7ffec43c2e78</span><br><span class="line">p+1:0x7ffec43c2e81</span><br></pre></td></tr></table></figure>
+<p>对数组名取地址曾经踩过大坑，如下</p>
+<p>dbus_message_append_args中参数要求传入间接指针，<br>错误用法，对&amp;arr其实类型为char(*)[]，而非char**,导致访问非法内存crash<br>const char arr[] = “Hello World”;<br>dbus_message_append_args (message,<br>                          DBUS_TYPE_INT32, &amp;v_INT32,<br>                          DBUS_TYPE_STRING, &amp;arr,<br>                          DBUS_TYPE_INVALID)</p>
+<p>正确用法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dbus_int32_t v_INT32 = 42;</span><br><span class="line">const char *v_STRING = &quot;Hello World&quot;;</span><br><span class="line">dbus_message_append_args (message,</span><br><span class="line">                          DBUS_TYPE_INT32, &amp;v_INT32,</span><br><span class="line">                          DBUS_TYPE_STRING, &amp;v_STRING,</span><br><span class="line">                          DBUS_TYPE_INVALID);</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjq850cie0000f0vc6wtwt4lv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjq850cjv0004f0vcpsu59rg2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -112,19 +116,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/12/19/C++/C-回调函数的实现/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/01/other/github访问提速/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          C++回调函数的实现
+          github访问提速
         
       </div>
     </a>
   
   
-    <a href="/2018/12/01/other/github访问提速/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/10/13/流媒体/RTMP/RTMP/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">github访问提速</div>
+      <div class="article-nav-title">RTMP</div>
     </a>
   
 </nav>

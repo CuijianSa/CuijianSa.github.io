@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="CuijianSa.github.io">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CuijianSa.github.io">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-架构/thinking-in-uml" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/31/架构/thinking-in-uml/" class="article-date">
+  <time datetime="2018-07-31T15:32:28.000Z" itemprop="datePublished">2018-07-31</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/设计模式/">设计模式</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/31/架构/thinking-in-uml/">thinking_in_uml</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://www.cnblogs.com/shaobing012/p/4914667.html" target="_blank" rel="noopener">比较好的UML类图实例</a></p>
+<p><a href="https://www.cnblogs.com/alex-blog/articles/2704214.html" target="_blank" rel="noopener">UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合）</a></p>
+<h1 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h1><p>面向对象是将世界看成一个个独立的对象， 相互之间没有因果关系。只有在某个外部驱动下，对象之间才会根据某种规律相互传递信息。</p>
+<p>将对客观事物建立一种抽象的方法用以表征事物并获得对事物本身的理解，同时将理解概念化， 将逻辑组织起来构成一种对所观察的对象的内部结构和工作原理的便于理解的表达</p>
+<p>面向对象分析</p>
+<ul>
+<li>一切都是对象</li>
+<li>对象都是独立的</li>
+<li>对象都具有原子性</li>
+<li>对象都是可抽象的</li>
+<li>对象都具有层次性</li>
+</ul>
+<h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><ul>
+<li>类：类是对对象某一方面特征的归纳和抽象，对象则是类实例化的结果</li>
+<li>属性: 对象特征，描述与对象有关的属性的角色，只有对象单独具有的特征才能建模成熟悉，否则应使用与类关联关系或聚合关系对特征进行建模</li>
+<li>方法: 访问对象或者影响其他对象属性或关系的唯一方法，访问和改变对象的属性</li>
+<li>可见性:<ul>
+<li>公有: 属性和方法对其他模型元素可见</li>
+<li>保护: 属性及方法支队类本身，子类及友元可见</li>
+<li>私有: 属性和方法支队类本身和友元可视</li>
+</ul>
+</li>
+</ul>
+<h2 id="类之间关系"><a href="#类之间关系" class="headerlink" title="类之间关系"></a>类之间关系</h2><ul>
+<li>关联 <img src="relation.jpg" alt=""></li>
+</ul>
+<p>描述不同类的对象的结构关系，强关联关系。用于定义对象之间静态的、天然的结构。和依赖关系不同，依赖关系表示对象之间临时性的、动态的关系。在最终代码中， 关联对象通常以成员变量的形式表示。与依赖相比，关联的两个对象不会互相直接使用，一般都是由外部对象来访问，例如， 外部访问者可以通过员工对象获得公司的对象。<br>关联关系一般不强调对象， 当A-B时，默认A和B之间相互知道对方的存在，表示对象相互拥有对方的实例变量<br>//单向关联</p>
+<pre><code>class Person{};
+
+class Friend
+
+{
+
+    Person* mpPerson;
+
+};
+
+//eg.2
+
+//双向关联
+
+class A;
+
+class B
+
+{
+
+    A* pA;
+
+};
+
+class A
+
+{
+
+    B* pB;
+
+};
+
+//eg.3
+
+//自身关联
+
+class C
+
+{
+
+    C* pC;
+
+}
+</code></pre><ul>
+<li>依赖关系 <img src="depend.jpg" alt=""></li>
+</ul>
+<p>描述一个对象在运行期会使用到另一个对象的关系，与关联关系不同，依赖关系是一种临时的关系，通常在运行期产生，并且随着场景的不同，依赖关系会发生变化。在代码中一般体现为类的构造方法，类方法的传入参数。依赖关系处理临时知道对方外， 还会使用对方的属性和方法。被依赖的对象改变会导致依赖对象的修改。例如A保存了B对象的实例，但A对象对B对象没有操作，A仅仅是知道B对象，应使用关联关系，并且B修改方法后，A并无变化。如果A对象在某个场景中使用B对象的属性或方法，则B的修改会导致A的修改，这时A依赖于B。</p>
+<pre><code>class Car{};
+
+class House{};
+
+class Person
+
+{
+
+    void buy(Car&amp; car){}
+
+    void buy(House* pHouse){}
+
+};
+</code></pre><ul>
+<li>实现关系 <img src="realize.jpg" alt=""></li>
+</ul>
+<p>指的是一个class类实现interface接口（可以是多个）的功能；实现是类与接口之间最常见的关系</p>
+<pre><code>class FInterface{
+    virtual void it();
+};
+
+class SC:public FInterface{
+    void it(){}
+}
+</code></pre><ul>
+<li>泛化关系 <img src="generalization.jpg" alt=""></li>
+</ul>
+<p>说明两个对象之间的继承关系，表示一个类是另一类的继承，继承而的的类为子类，意味祖先的定义对于后代的对象也是有效的</p>
+<p><code>父类 父类实例＝new 子类();</code></p>
+<ul>
+<li>聚合关系 <img src="aggregation.jpg" alt=""></li>
+</ul>
+<p>聚合是关联关系的一种特例，他体现的是整体与部分、拥有的关系，即has-a的关系，此时整体与部分之间是可分离的，他们可以具有各自的生命周期，部分可以属于多个整体对象，也可以为多个整体对象共享；比如计算机与CPU、公司与员工的关系等；表现在代码层面，和关联关系是一致的，只能从语义级别来区分； </p>
+<pre><code>class CPU{};
+
+class Memory{};
+
+class Computer
+
+{
+
+    CPU* mpCPU;
+
+    Memory* mpMemory;
+
+};
+</code></pre><ul>
+<li>组合关系 <img src="composition.jpg" alt=""></li>
+</ul>
+<p>组合也是关联关系的一种特例，他体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合；他同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束；比如你和你的大脑；表现在代码层面，和关联关系是一致的，只能从语义级别来区分； </p>
+<pre><code>class Leg{};
+
+class Arm{};
+
+class Person
+
+{
+
+    Leg mLeg;
+
+    Arm mArm;
+
+};
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjq850cjz0008f0vchmw1eqvw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-other/unsigned关键字" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/14/other/unsigned关键字/" class="article-date">
+  <time datetime="2018-07-14T05:33:51.000Z" itemprop="datePublished">2018-07-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/14/other/unsigned关键字/">unsigned关键字</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>[转] <a href="https://blog.csdn.net/a997013919/article/details/76684179" target="_blank" rel="noopener">无法忽视的unsigned关键字</a></p>
+</blockquote>
+<h2 id="对unsigned解释"><a href="#对unsigned解释" class="headerlink" title="对unsigned解释"></a>对unsigned解释</h2><p>整型的每一种都分有无符号（unsigned）和有符号（signed）两种类型（float和double总是带符号的），在默认情况下声明的整型变量都是有符号的类型（char有点特别），如果需声明无符号类型的话就需要在类型前加上unsigned。无符号版本和有符号版本的区别就是无符号类型能保存2倍于有符号类型的正整数数据，比如16位系统中一个short能存储的数据的范围为-32768~32767，而unsigned能存储的数据范围则是0~65535。由于在计算机中,整数是以补码形式存放的。根据最高位的不同，如果是1,有符号数的话就是负数；如果是无符号数,则都解释为正数。另外，unsigned若省略后一个关键字，大多数编译器都会认为是unsigned int。</p>
+<pre><code>char c = 0xc9;
+printf(&quot;A:c = %2x\n&quot;,(unsigned char)c);
+printf(&quot;B:c = %2x\n&quot;,c &amp; 0xff);
+printf(&quot;C:c = %2x\n&quot;,c);
+
+输出如下：
+
+A:c = c9
+B:c = c9
+C:c = ffffffc9
+</code></pre><p>　首先我们必须知道，printf()函数的%x(X)输出的是Int型别的16进制格式。所以char型别的c变量会被转换成Int型别。</p>
+<p>　其次，我们的知道计算机是用补码表示数据的</p>
+<ul>
+<li><p>情况C:</p>
+<p>  　　　c的补码：11001001（0xc9）。</p>
+<p>  　　　c的反码：11001000（0xc9）。</p>
+<p>  　　　c的原码：10110111（0xc9）。　</p>
+<p>  　　　因为char型别是带符号的，所以最高位的1这里视为负号。</p>
+<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
+<p>  　　　Int_c的原码：10000000 00000000 00000000 00110111（把c原码的最高位1  提到最高位。其余高位补0）。</p>
+<p>  　　　Int_c的反码：11111111 11111111 11111111 11001000</p>
+<p>  　　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
+<p>  　　　所以打印出来看似诡异的值其实是合情合理的。如何避免？看AB情况。</p>
+</li>
+</ul>
+<ul>
+<li><p>情况B:</p>
+<p>  　　我们在情况C的基础上将c与0xff做&amp;操作。</p>
+<p>  　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
+<p>  　　　　　　　　 &amp;</p>
+<p>  　　　　　　　　 00000000 00000000 00000000 11111111</p>
+<p>  　　最终结果为： 00000000 00000000 00000000 11001001(0xc9)。</p>
+</li>
+</ul>
+<ul>
+<li><p>情况A:</p>
+<p>  　　　c的补码：11001001（0xc9）。</p>
+<p>  　　　c的反码：11001001（0xc9）。</p>
+<p>  　　　c的原码：11001001（0xc9）。　</p>
+<p>  　　　这里强制转换c为unsigned char型别。因此最高位的1不是正负号</p>
+<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
+<p>  　　　Int_c的原码：00000000 00000000 00000000 11001001（把c原码的最高位1  提到最高位。其余高位补0）。</p>
+<p>  　　　Int_c的反码：00000000 00000000 00000000 11001001</p>
+<p>  　　　Int_c的补码：00000000 00000000 00000000 11001001(0xc9)。</p>
+<p>  以32位机为例，int 分为无符号 unsigned 和有符号 signed 两种类型，默认为signed。二者的区别就是无符号类型能保存2倍于有符号类型的数据。32位下，signed int 的表示范围为：-2147483648 ~ 2147483647 (最高位做符号位)。unsigned int 的表示范围为：0 ~ 4294967295 （不保留符号位）。我们都知道，两个不同的数据类型在进行混合使用时，会自动进行类型转换。其转换原则就是：向着精度更高、长度更长的方向转换。也就是我们平常见到的 char 转为 int ，int 转为 long，float 转为 double  . etc.</p>
+</li>
+</ul>
+<p>相关资料:</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">C语言打印16进制出现0xffffff现象的问题剖析</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">unsigned关键字，你真的懂了吗</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjq850cjq0001f0vcyk52d8rn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-网络/OSI七层模型" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/13/网络/OSI七层模型/" class="article-date">
+  <time datetime="2018-06-13T14:38:34.000Z" itemprop="datePublished">2018-06-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/13/网络/OSI七层模型/">OSI网络模型</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="OSI网络模型"><a href="#OSI网络模型" class="headerlink" title="OSI网络模型"></a>OSI网络模型</h1><table>
+<thead>
+<tr>
+<th>OSI七层网络模型</th>
+<th>TCP/IP四层模型</th>
+<th>功能</th>
+<th>协议</th>
+<th>数据单位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层</td>
+<td>应用层</td>
+<td>面向用户应用，为用户提供对各种网络资源的方便访问服务</td>
+<td>TFTP、HTTP、SNMP</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>-</td>
+<td>对来自应用层的命令和数据进行解析，对各种语法赋予相应的含义，并按照一定的格式传送给会话层</td>
+<td>Telnet、SNMP</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>-</td>
+<td>向两个实体提供建立和使用连接的方法</td>
+<td>SMTP、DNS</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>传输层</td>
+<td>向用户提供可靠的端到端差错和流量控制，保证报文的正确传输</td>
+<td>TCP UDP</td>
+<td>段segment / 数据包Packet</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>网络层</td>
+<td>控制数据链路层和传输层之间的信息转发、建立、维持和中指网络连接</td>
+<td>IP 、ICMP、ARP、RARP</td>
+<td>包packet</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>数据链路层</td>
+<td>负责建立和管理节点间链路</td>
+<td>Ethernet、Arpanet、PPP</td>
+<td>帧Frame</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>-</td>
+<td>利用传输介质为数据链路层提供物理连接，实现比特流的透明传输</td>
+<td>IEEE 802.A, IEEE 802.2 -  IEEE 802.11</td>
+<td>比特流Bit</td>
+</tr>
+</tbody>
+</table>
+<p><img src="osi_model.jpg" alt=""></p>
+<h2 id="数据包说明"><a href="#数据包说明" class="headerlink" title="数据包说明"></a>数据包说明</h2><p><img src="segment.gif" alt=""></p>
+<p><img src="segment_flow.jpg" alt=""></p>
+<p>参考</p>
+<blockquote>
+<p><a href="https://zhidao.baidu.com/question/192109576.html" target="_blank" rel="noopener">https://zhidao.baidu.com/question/192109576.html</a><br><a href="https://www.cnblogs.com/jeanschen/p/3762475.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeanschen/p/3762475.html</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjq850ck00009f0vc18p26017" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-网络/HTTP" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/网络/HTTP/" class="article-date">
+  <time datetime="2018-05-28T17:54:38.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/29/网络/HTTP/">HTTP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定</p>
+<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><ul>
+<li><p>request line</p>
+<p>  由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1</p>
+<ul>
+<li><p>Get</p>
+<p>  常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表URL的结束和请求参数的开始，长度受限制, 一般最多1024byte。/index.jsp?id=100&amp;op=bind</p>
+</li>
+<li><p>POST</p>
+<p>  POST会将请求参数封装到HTTP请求数据中，以名称/值得形式出现,可以传输大量的数据，传送的数据大小没有显示也不会显示在URL</p>
+<pre><code>POST /search HTTP/1.1
+Accept:image/git,image/x-xbitmap,image/jpeg,image/pjpeg
+Referer:&lt;a href=&quot;http://www.google.cn/&quot;&gt;http://www.google.cn&lt;/a&gt;
+Accept-Langel:zh-cn
+Accept-Encoding:gzip,deflate
+Host:&lt;a href=&quot;http://www.google.cn&quot;&gt;www.google.cn&lt;/a&gt;
+Connection:Keep-Alive
+Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; 
+NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-
+FxlRugatx63JLv7CWMD6UB_O_r
+
+hl=zh-CN&amp;source=hp&amp;q=domety
+</code></pre><p>POST请求行中不包含数据字符串，数据保存在”请求内容部分”，各数据&amp;符号个靠,POST大多用于页面的表单中</p>
+</li>
+<li><p>HEAD</p>
+<p>   类似于GET，只不过服务端接受到HEAD请求后只返回响应头，而不会发送响应内容，当只需要查看页面状态时,使用HEAD非常高效，省去页面的内容</p>
+</li>
+<li>PUT</li>
+<li>DELETE</li>
+<li>OPTIONS</li>
+<li>TRACE</li>
+<li>CONNECT</li>
+</ul>
+</li>
+<li><p>header 由关键字/值对组成,每行一堆，”:”分隔</p>
+<ul>
+<li>User-Agent:产生请求的浏览器类型</li>
+<li>Accept:客户端可识别的内容类型列表</li>
+<li>Host:请求的主机名</li>
+</ul>
+</li>
+<li><p>blank line</p>
+<p>  每个请求头之间是一个空行，发送回车符和换行符，通知服务器以下不再有请求头。</p>
+</li>
+<li><p>request body</p>
+<p>  请求数据不再GET中使用，而是在POST方法中使用，适用于需要客户需要填写表单的场合。最常用的请求头是Content-Type和Content-Length。</p>
+</li>
+</ul>
+<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><pre><code>&lt;status-line&gt;
+&lt;headers&gt;
+&lt;blank link&gt;
+[&lt;response-body&gt;]
+</code></pre><ul>
+<li><p>状态行</p>
+<p>  格式如下<br>  HTTP-Version Staus-Code Reason-Phrase CRLF</p>
+<ul>
+<li>HTTP-Version表示HTTP协议版本</li>
+<li><p>Status-Code服务器返回的响应状态代码</p>
+<ul>
+<li>1xx:指示消息–表示请求已接收，继续处理</li>
+<li>2xx:成功– 表示请求一杯成功接收、理解、接收</li>
+<li>3xx:重定向–要完成请求必须进行更进一步的操作</li>
+<li>4xx:客户端错误–请求有语法或请求无法实现</li>
+<li>5xx:服务端错误–服务器未能实现合法的请求</li>
+</ul>
+</li>
+<li><p>Reason-Phrase状态代码的文本描述</p>
+<ul>
+<li>200 OK:客户端请求成功</li>
+<li>400 Bad Request:客户端请求有语法错误，不能被服务器所理解</li>
+<li>401 Unathorized:请求未经授权，必须和WWW-Authenticate报头域一起使用</li>
+<li>403 Forbidden:服务器接收到请求，但拒绝提供服务</li>
+<li>404 Not Found:请求资源不存在</li>
+<li>500 Internal Server Error:服务器发布不可预期的错误</li>
+<li>503 Server Unavailable:服务器当前不能处理客户端的请求，一段时间后可能恢复正常，</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消息报头</p>
+</li>
+<li><p>响应正文</p>
+<pre><code>HTTP/1.1 200 OK
+Date: Sat, 31 Dec 2005 23:59:59 GMT
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 122
+
+＜html＞
+＜head＞
+＜title＞Wrox Homepage＜/title＞
+＜/head＞
+＜body＞
+＜!-- body goes here --＞
+＜/body＞
+＜/html＞
+</code></pre></li>
+</ul>
+<p>GET及POST区别</p>
+<ul>
+<li><p>GET提交，请求的数据附加在URL之后，以？分割 URL和数据，多个参数&amp;连接，如果是英文字母/数字原样发送，空格转为+，中文或者其他字符使用BASE64加密,例%E4%BD%A0</p>
+</li>
+<li><p>POST提交,把提交的数据放于HTTP包包体中<request-body></request-body></p>
+</li>
+</ul>
+<p>传输数据的大小</p>
+<ul>
+<li><p>HTTP协议没有对传输的数据大小进行限制，HTTP规范也没对URL长度限制,实际开发过程中主要的限制有:</p>
+<ul>
+<li>GET:特定的浏览器及服务器对URL长度限制，例如IE(2K+35)字节。</li>
+<li>POST:由于不是通过URL传值，理论上数据不受限，但各个WEB服务器会规定对POST提交数据大小进行限制</li>
+</ul>
+</li>
+<li><p>安全性</p>
+<p>  POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了，</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjq850cka000mf0vc5l51i2ij" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-other/爬坑笔记" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/other/爬坑笔记/" class="article-date">
+  <time datetime="2018-05-28T17:04:43.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/29/other/爬坑笔记/">爬坑笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="爬坑笔记"><a href="#爬坑笔记" class="headerlink" title="爬坑笔记"></a>爬坑笔记</h1><p>本文对日常工作及学习中遇到的问题做个记录</p>
+<blockquote>
+<p>2018/5/18 1:01:33 </p>
+</blockquote>
+<p>编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折</p>
+<h2 id="undefined-reference-vtable-for-VideoDevice"><a href="#undefined-reference-vtable-for-VideoDevice" class="headerlink" title="undefined reference vtable for VideoDevice"></a>undefined reference vtable for VideoDevice</h2><pre><code>class VideoDevice: public QObject
+{
+    Q_OBJECT
+public:
+    explicit VideoDevice(QObject *parent = nullptr);
+       VideoDevice(QString dev_name);
+    int open_device();
+    int close_device();
+.....
+</code></pre><p>定义一个类VideoDevice继承于QObject，编译出现cmake error: undefined reference to <code>vtable for VideoDevice&#39;错误， 一般这是虚函数没有提供实现造成的，不过</code>VideoDevice`并不是一个虚函数，所以和这个没有关系，很有可能是Q_OBJECT这个宏造成的，查阅资料说明Q_OBJECT 元对象一般是由moc XXX.cpp生成moc文件实现的，在CMakeList指定了VideoDevice.h 的moc文件， error fix.</p>
+<p><strong>QT5_WRAP_CPP(video_device_moc include/videodevice.h)</strong></p>
+<p>发现的确生成了一个moc文件，此cpp对videodevice.h生成了一些元对象，和信号和槽相关</p>
+<pre><code>QT_BEGIN_MOC_NAMESPACE
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+struct qt_meta_stringdata_VideoDevice_t {
+    QByteArrayData data[4];
+    char stringdata0[39];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_VideoDevice_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_VideoDevice_t qt_meta_stringdata_VideoDevice = {
+    {
+QT_MOC_LITERAL(0, 0, 11), // &quot;VideoDevice&quot;
+QT_MOC_LITERAL(1, 12, 13), // &quot;display_error&quot;
+QT_MOC_LITERAL(2, 26, 0), // &quot;&quot;
+QT_MOC_LITERAL(3, 27, 11) // &quot;std::string&quot;
+
+    },
+    &quot;VideoDevice\0display_error\0\0std::string&quot;
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_VideoDevice[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       1,   14, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, 0x80000000 | 3,    2,
+
+       0        // eod
+};
+
+void VideoDevice::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        VideoDevice *_t = static_cast&lt;VideoDevice *&gt;(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t-&gt;display_error((*reinterpret_cast&lt; std::string(*)&gt;(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast&lt;int *&gt;(_a[0]);
+        void **func = reinterpret_cast&lt;void **&gt;(_a[1]);
+        {
+            typedef void (VideoDevice::*_t)(std::string );
+            if (*reinterpret_cast&lt;_t *&gt;(func) == static_cast&lt;_t&gt;(&amp;VideoDevice::display_error)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
+}
+
+const QMetaObject VideoDevice::staticMetaObject = {
+    { &amp;QObject::staticMetaObject, qt_meta_stringdata_VideoDevice.data,
+      qt_meta_data_VideoDevice,  qt_static_metacall, nullptr, nullptr}
+};
+
+
+const QMetaObject *VideoDevice::metaObject() const
+{
+    return QObject::d_ptr-&gt;metaObject ? QObject::d_ptr-&gt;dynamicMetaObject() : &amp;staticMetaObject;
+}
+
+void *VideoDevice::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_VideoDevice.stringdata0))
+        return static_cast&lt;void*&gt;(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int VideoDevice::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id &lt; 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id &lt; 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id &lt; 1)
+            *reinterpret_cast&lt;int*&gt;(_a[0]) = -1;
+        _id -= 1;
+    }
+    return _id;
+}
+
+// SIGNAL 0
+void VideoDevice::display_error(std::string _t1)
+{
+    void *_a[] = { nullptr, const_cast&lt;void*&gt;(reinterpret_cast&lt;const void*&gt;(&amp;_t1)) };
+    QMetaObject::activate(this, &amp;staticMetaObject, 0, _a);
+}
+QT_WARNING_POP
+QT_END_MOC_NAMESPACE
+</code></pre><h2 id="lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol"><a href="#lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol" class="headerlink" title="/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol"></a>/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol</h2><p>使用cmake 编译ffmpeg发现 …reference to symbol ‘pthread_create@@GLIBC_2.2.5, 发现是依赖于pthread<br>在连接库中加上-lpthread即可</p>
+<p>fmmpeg库之间有依赖关系，需要按顺序加载lib, make加载顺序为从右向左，故左边的库依赖于右边</p>
+<p>-lavcodec -lavdevice -lavfilter -lavformat -lavutil -lpostproc -lswresample -lswscale -lx264 -lpthread</p>
+<h2 id="关于stm32-freertos异常死机问题"><a href="#关于stm32-freertos异常死机问题" class="headerlink" title="关于stm32 freertos异常死机问题"></a>关于stm32 freertos异常死机问题</h2><blockquote>
+<p>2018/5/22 22:05:01 </p>
+</blockquote>
+<ul>
+<li>MCU: stm32</li>
+<li>OS: FreeRTOS</li>
+<li>问题描述: 最近项目任务，需要利用CMSIS接口对FreeRTOS做了一层封装，以实现多平台抽象，改造运行时很快挂死了。使用JLINK时DEBUG,发现运行时常常在某些函数时挂死，但不常是同一函数，发现通常是在函数退出时挂掉，初步怀疑是栈太小被破坏了，导致函数返回跑偏，栈大小改大同样。继续跟踪发现虽然挂的地点不同，但都进入了同一个函数，DEFAULTXXX, 发现此函数位于启动函数中，如果未设置中断函数，发生中断会自动进入DEFAULTXXX, 可能是我链接时未将中断处理函数链接上，将中断实现函数链接FIX (0.0 醉了，  十足小白)</li>
+</ul>
+<h2 id="FreeRTOS-线程函数问题"><a href="#FreeRTOS-线程函数问题" class="headerlink" title="FreeRTOS 线程函数问题"></a>FreeRTOS 线程函数问题</h2><p>一直在linux环境下工作，对STM32 OVER RTOS不是很熟悉， 利用CMSIS OS over FreeRTOS封装Thread;编写测试用例时发现线程函数直接退出会进入FreeRTOS内部一个函数，Tips要求线程函数一直loop或者退出时调用vTaskDelete（NULL）删除自己。</p>
+<p>查看了一些资料，发现FreeRTOS不能类似于linux线程直接退出处于僵死状态，需要线程内部调用vTaskDelete（NULL）删除自己或者别的线程调用vTaskDelete（thread_id）。 猜测FreeRTOSCreate时是将任务加入到task list,每隔一段时间调用一次，调用vTaskDelete则将任务从task list中移除；  如果函数直接退出但task list还在task list中， 时间片到达时运行task， 函数已经退出可能导致task不知如何运行，被集中运行到了DEFAULT THREAD FUNCTION中了.</p>
+<h2 id="utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题"><a href="#utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题" class="headerlink" title="utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题"></a>utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题</h2><blockquote>
+<p>2018/5/23 23:00:41 </p>
+</blockquote>
+<ul>
+<li><p>背景: 最近在<a href="https://github.com/CuijianSa/utils" target="_blank" rel="noopener">utils</a>项目中使用ffmpeg+QT+cmake 播放h264视频流, 编译UI时报错</p>
+<pre><code>Generating ui_mainwindow.h
+File &apos;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.ui&apos; is not valid
+qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/build.make:57: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc&apos; failed
+CMakeFiles/Makefile2:615: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/all&apos; failed
+AUTOUIC: error: process for ui_mainwindow.h needed by
+ &quot;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.cpp&quot;
+failed:
+</code></pre></li>
+<li>思路: 在CMakeLists中已经指定了QT5_WRAP_UI指定了UI文件,QT5_WRAP_UI(ui_mainwindow mainwindow.ui)，编译log却在下级src查询*ui.h文件，和预期不符。然后查询Makefile查看的UI路径，发现路径正常<pre><code>`./qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp.dir/build.make:    cd /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp &amp;&amp; /home/cuijian/Qt5.9.2/5.9.2/gcc_64/bin/uic -o /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp/ui_mainwindow.h /home/cuijian/share/git/utils/qt/ffmpeg_rtsp/mainwindow.ui`
+</code></pre></li>
+</ul>
+<p>THANK Gooole，遍历了几篇文章找到蛛丝马迹， 因为我mainwindow.cpp是位于src目录下，而编译器也在src下搜寻ui_mainwindow.h，和设置的UI路径不符（实际上ui_mainwindow.h位于CMakeLists同级目录），应该和自动配置有关，查看了CMAKE_UIC命令，尝试把CMAKE_AUTOUIC关闭按照cmake设定的UI编译解决。  阻塞了两晚… </p>
+<h2 id="程序随机挂死问题，DEBUG无异常"><a href="#程序随机挂死问题，DEBUG无异常" class="headerlink" title="程序随机挂死问题，DEBUG无异常"></a>程序随机挂死问题，DEBUG无异常</h2><blockquote>
+<p>2018/5/24 22:34:34 </p>
+</blockquote>
+<p>很简单的一个问题。<br>主要是同事开启了Watchdog, merge代码未喂狗。导致挂死，debug看不出异常… </p>
+<h2 id="吐槽一下ARM-CMSIS—OS接口"><a href="#吐槽一下ARM-CMSIS—OS接口" class="headerlink" title="吐槽一下ARM CMSIS—OS接口"></a>吐槽一下ARM CMSIS—OS接口</h2><blockquote>
+<p>2018/5/29 1:27:39 </p>
+</blockquote>
+<p>最近做使用CMSIS over freertos封装实现项目HAL, 发现不合理的地方</p>
+<ol>
+<li><p>osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t count)   </p>
+<p> count为semaphore可用资源量， 跟踪代码发现在freertos stm32中其内部实现为count同时被设为最大资源量和初始值。 ===&gt; 无法将初始值设为0(因为count也指定了最大资源)</p>
+</li>
+<li><p>CMSIS_5-develop包中提供了Template， 使用C++对CMSIS_OS进行了一次封装， 不过发现Mutex.cpp没有调用osMutexDelete释放互斥量,会引起资源泄露的问题,其sample如下:</p>
+<pre><code>#include &quot;Mutex.h&quot;
+
+#include &lt;string.h&gt;
+//#include &quot;error.h&quot;
+
+namespace rtos {
+
+Mutex::Mutex() {
+#ifdef CMSIS_OS_RTX
+    memset(_mutex_data, 0, sizeof(_mutex_data));
+    _osMutexDef.mutex = _mutex_data;
+#endif
+    _osMutexId = osMutexCreate(&amp;_osMutexDef);
+    if (_osMutexId == NULL) {
+//        error(&quot;Error initializing the mutex object\n&quot;);
+    }
+}
+
+osStatus Mutex::lock(uint32_t millisec) {
+    return osMutexWait(_osMutexId, millisec);
+}
+
+bool Mutex::trylock() {
+    return (osMutexWait(_osMutexId, 0) == osOK);
+}
+
+osStatus Mutex::unlock() {
+    return osMutexRelease(_osMutexId);
+}
+
+}
+</code></pre></li>
+</ol>
+<h2 id="undefined-reference-vtable-for"><a href="#undefined-reference-vtable-for" class="headerlink" title="undefined reference vtable for"></a>undefined reference vtable for</h2><blockquote>
+<p>2018/5/30 0:08:23 </p>
+</blockquote>
+<p>C++ 继承基类编译出现undefined reference vtable for XXX,这是由于编译器在子类未发现纯虚函数在子类的实现，虚拟函数table。 在子类实现虚函数即可</p>
+<h1 id="FFmpeg-RTSP-缩放花屏"><a href="#FFmpeg-RTSP-缩放花屏" class="headerlink" title="FFmpeg RTSP 缩放花屏"></a>FFmpeg RTSP 缩放花屏</h1><p>使用开源库ffmpeg播放RTSP(H264=&gt;RGB24), 使用sws_getContext()出现花屏。原因在与缩放后width没有16字节对齐</p>
+<ol>
+<li>将缩放后的宽度16字节对齐</li>
+<li><p>sws_scale时picture.linesize分别设置RGB字节数（缩放后宽度所占BYTE，</p>
+<pre><code>scaleWidth = CELING_2_POWER(width / scale, 16);
+scaleHeight = CELING_2_POWER(height / scale, 16);
+
+pSwsCtx = sws_getContext(width, height, pCodecCtx-&gt;pix_fmt, scaleWidth, scaleHeight, AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
+
+pixbyte = scaleWidth * 3;
+picture.linesize[0] = picture.linesize[1] = picture.linesize[2] = pixbyte;
+
+sws_scale(pSwsCtx, pFrame-&gt;data, pFrame-&gt;linesize, 0, height, picture.data, picture.linesize)
+</code></pre></li>
+</ol>
+<h1 id="类互相引用导致一方类定义不可达"><a href="#类互相引用导致一方类定义不可达" class="headerlink" title="类互相引用导致一方类定义不可达"></a>类互相引用导致一方类定义不可达</h1><blockquote>
+<p>2018/6/21 23:40:39 </p>
+</blockquote>
+<ol>
+<li>class A 成员函数形参为class B*，这种情景很常见(在另一个类中修改本类的成员变量，或者保存本类的对象指针)，比如观察者模式及状态模式。</li>
+<li>class A及class B都包含宏用于防重复包含，而在类中直接include 对方头文件必会导致有一方类实现不可达</li>
+</ol>
+<p><strong>解决方法:</strong><br>.h中使用class 对方类声明，在.cpp包含对方头文件。.cpp不存在重复包含的问题。程序会在符号表中查找该函数的实现。</p>
+<h1 id="C-构造函数调用虚函数问题"><a href="#C-构造函数调用虚函数问题" class="headerlink" title="C++构造函数调用虚函数问题"></a>C++构造函数调用虚函数问题</h1><blockquote>
+<p>2018/7/4 23:35:59 </p>
+</blockquote>
+<ul>
+<li>问题描述</li>
+</ul>
+<p>class A 继承于class Base,基类和子类构造都调用虚函数Function,实例化class A的对象时，子类和基类的Function都会被调用一遍</p>
+<p>原因:</p>
+<ul>
+<li>在基类子对象构造期间，编译器直接调用基类版本的虚函数。在子类对象构造期间，编译器直接调用基类虚函数的版本。并没有走虚机制。虽然在基类子对象的构造期间，虚表指针指向的是基类的Virtual Table，在进入子类对象构造后，虚表指针指向的是子类对象的Virtual Table</li>
+</ul>
+<p>故以下输出为:</p>
+<p>Base::Fuction<br>A::Fuction </p>
+<pre><code>class Base  
+{  
+public:  
+    Base()  
+    {  
+        Fuction();  
+    }  
+
+    virtual void Fuction()  
+    {  
+        cout &lt;&lt; &quot;Base::Fuction&quot; &lt;&lt; endl;  
+    }  
+};  
+
+class A : public Base  
+{  
+public:  
+    A()  
+    {  
+        Fuction();  
+    }  
+
+    virtual void Fuction()  
+    {  
+        cout &lt;&lt; &quot;A::Fuction&quot; &lt;&lt; endl;  
+    }  
+};  
+
+A a;  
+</code></pre><p>==&gt;使用多态时， 注意勿在构造函数中调用虚函数， 否则会造成无法执行到子类虚函数，引起异常也不好排查</p>
+<h1 id="ubuntu输入密码后无法进入系统"><a href="#ubuntu输入密码后无法进入系统" class="headerlink" title="ubuntu输入密码后无法进入系统"></a>ubuntu输入密码后无法进入系统</h1><blockquote>
+<p>2018/7/17 0:32:26 </p>
+</blockquote>
+<p>查看~/.xsession-errors，发现dbus未起来导致dbus-deamon异常，unity一个服务termintor.</p>
+<p>最近工作上需要用到dbus, 所以在本机编译dbus源码，并make install安装到系统中,可能破坏掉了原先ubuntu内部的dbus配置。</p>
+<p>手动删除安装的dbus配置， 重启解决。</p>
+<p>教训:以后专门建立一个package防止源码，编译程序时指定package路径，尽量与系统隔离。</p>
+<h1 id="函数返回的string生命周期问题"><a href="#函数返回的string生命周期问题" class="headerlink" title="函数返回的string生命周期问题"></a>函数返回的string生命周期问题</h1><blockquote>
+<p>2018/8/2 23:41:17 </p>
+</blockquote>
+<pre><code>std::string toString(){
+    return std::string(data);
+}
+
+int iterCalback() 
+{
+    char *argv[2];
+    if(cb) {
+        argv[0] = key.toString().c_str();
+        argv[1] = value.toString().c_str();
+
+        cb(argc, argv);
+    }
+}
+</code></pre><p>示例如上， 获取key及value的字符串常量传递给callback,发现argv[0]及argv[1]同一个地址且指向同一字符串</p>
+<p>原因： 理解错函数返回string生命周期的问题， string_key通过函数返回，toString()执行完毕后，临时变量string其生命周期已经结束， 栈空间将会被收回。执行下一函数获取string_value,将会key复用的占用的空间(不一定同一栈地址)</p>
+<p>note:函数返回的临时变量在函数调用结束时即被销毁。</p>
+<h1 id="对数组名取址"><a href="#对数组名取址" class="headerlink" title="对数组名取址"></a>对数组名取址</h1><blockquote>
+<p>2018/8/13 22:37:29 </p>
+</blockquote>
+<p>数组名的值是个常量，是数组第一个元素的地址，它的数据类型取决于数组的类型。以下为例</p>
+<pre><code>int a[2] = {1,2}
+
+printf(&quot;a = %p\n&quot;, a); // I
+printf(&quot;&amp;a = %p\n&quot;, &amp;a); // II
+printf(&quot;a + 1 = %p\n&quot;, a + 1);// III
+printf(&quot;&amp;a + 1 = %p\n&quot;, &amp;a + 1);// IV
+
+a = 0x804a014
+&amp;a = 0x804a014
+a + 1 = 0x804a018
+&amp;a + 1 = 0x804a01c
+</code></pre><p>对数组名取址=数组第一个元素的地址.<br>今天趟坑，dbus需要传入一个二级指针，自己傻乎乎的直接对数组取值传入，实际上还是首元素的地址。dbus函数内部认为其为二级指针，使用一个变量指向其指向的值， 并将其当做字符串的地址。实际上是把数组的数据当做字符串的地址。导致非法访问core dump</p>
+<h1 id="对隐形调用函数大坑说明"><a href="#对隐形调用函数大坑说明" class="headerlink" title="对隐形调用函数大坑说明"></a>对隐形调用函数大坑说明</h1><blockquote>
+<p>2018/8/17 0:23:04</p>
+</blockquote>
+<p>背景:x86 linux 64位系统<br>proxy接收到message-proxy消息， 进行解析打包传出后总是挂掉。<br>原以为是函数内部拼接字符串错误， 使用log后发现出入参都很正常， 原以为是函数栈被踩导致函数调用结束后跑偏导致core dump, 后来使用log发现程序是可以调用函数返回的， 对返回值打印其地址时发现地址只有4个字节， 而返回值却有8个字节， 其前4个字节时相同的， 也就是表示丢了高4个字节。查看编译Log时发现调用func时将char <em>转为integet.在64位系统中char</em>就是8byte, 而int 为4byte；这段日志提示了我编译器进行了隐藏转换， 后来发现调用库文件没有显式包含函数声明导致编辑器自动默认声明。导致char* =&gt; int， 而对截断后的地址进行访问造成非法访问内存空间crash</p>
+<p>教训:<br>不要放过任何一个warning,为了减少大坑，还是将所有的warning解决</p>
+<p>示例如下:调用函数未现实声明被调用的函数，造成编译器自动声明函数， 其返回值为int,这也是warning说明int数据传给了char*,所以point被截断了<br><code>warning: initialization makes pointer from integer without a cast [-Wint-conversion]</code></p>
+<pre><code> 1 #include &lt;stdio.h&gt;
+ 2 #include &lt;stdlib.h&gt;
+ 3 #include &lt;string.h&gt;
+ 4 
+ 5 
+ 6 char *get_msg_id()
+ 7 {
+ 8     char *p = malloc(32);
+ 9     if(p) {
+10         strcpy(p, &quot;msg_id:32&quot;);
+11     }
+12     printf(&quot;%p\n&quot;, p);
+13     return p;
+14 }
+
+
+ 1 #include &lt;stdio.h&gt;
+ 2 
+ 3 int main()
+ 4 {
+ 5     char *p = get_msg_id();
+ 6     printf(&quot;%p&quot;,p);
+ 7 }
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjq850ckm000uf0vcy5w9lsvz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

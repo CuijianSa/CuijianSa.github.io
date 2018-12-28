@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>HTTP | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定 HTTP请求报文 request line   由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1  Get   常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP">
+<meta property="og:url" content="http://yoursite.com/2018/05/29/网络/HTTP/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定 HTTP请求报文 request line   由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1  Get   常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-05-28T17:57:44.248Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP">
+<meta name="twitter:description" content="HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定 HTTP请求报文 request line   由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1  Get   常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-网络/HTTP" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/网络/HTTP/" class="article-date">
+  <time datetime="2018-05-28T17:54:38.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HTTP
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定</p>
+<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><ul>
+<li><p>request line</p>
+<p>  由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1</p>
+<ul>
+<li><p>Get</p>
+<p>  常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表URL的结束和请求参数的开始，长度受限制, 一般最多1024byte。/index.jsp?id=100&amp;op=bind</p>
+</li>
+<li><p>POST</p>
+<p>  POST会将请求参数封装到HTTP请求数据中，以名称/值得形式出现,可以传输大量的数据，传送的数据大小没有显示也不会显示在URL</p>
+<pre><code>POST /search HTTP/1.1
+Accept:image/git,image/x-xbitmap,image/jpeg,image/pjpeg
+Referer:&lt;a href=&quot;http://www.google.cn/&quot;&gt;http://www.google.cn&lt;/a&gt;
+Accept-Langel:zh-cn
+Accept-Encoding:gzip,deflate
+Host:&lt;a href=&quot;http://www.google.cn&quot;&gt;www.google.cn&lt;/a&gt;
+Connection:Keep-Alive
+Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; 
+NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-
+FxlRugatx63JLv7CWMD6UB_O_r
+
+hl=zh-CN&amp;source=hp&amp;q=domety
+</code></pre><p>POST请求行中不包含数据字符串，数据保存在”请求内容部分”，各数据&amp;符号个靠,POST大多用于页面的表单中</p>
+</li>
+<li><p>HEAD</p>
+<p>   类似于GET，只不过服务端接受到HEAD请求后只返回响应头，而不会发送响应内容，当只需要查看页面状态时,使用HEAD非常高效，省去页面的内容</p>
+</li>
+<li>PUT</li>
+<li>DELETE</li>
+<li>OPTIONS</li>
+<li>TRACE</li>
+<li>CONNECT</li>
+</ul>
+</li>
+<li><p>header 由关键字/值对组成,每行一堆，”:”分隔</p>
+<ul>
+<li>User-Agent:产生请求的浏览器类型</li>
+<li>Accept:客户端可识别的内容类型列表</li>
+<li>Host:请求的主机名</li>
+</ul>
+</li>
+<li><p>blank line</p>
+<p>  每个请求头之间是一个空行，发送回车符和换行符，通知服务器以下不再有请求头。</p>
+</li>
+<li><p>request body</p>
+<p>  请求数据不再GET中使用，而是在POST方法中使用，适用于需要客户需要填写表单的场合。最常用的请求头是Content-Type和Content-Length。</p>
+</li>
+</ul>
+<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><pre><code>&lt;status-line&gt;
+&lt;headers&gt;
+&lt;blank link&gt;
+[&lt;response-body&gt;]
+</code></pre><ul>
+<li><p>状态行</p>
+<p>  格式如下<br>  HTTP-Version Staus-Code Reason-Phrase CRLF</p>
+<ul>
+<li>HTTP-Version表示HTTP协议版本</li>
+<li><p>Status-Code服务器返回的响应状态代码</p>
+<ul>
+<li>1xx:指示消息–表示请求已接收，继续处理</li>
+<li>2xx:成功– 表示请求一杯成功接收、理解、接收</li>
+<li>3xx:重定向–要完成请求必须进行更进一步的操作</li>
+<li>4xx:客户端错误–请求有语法或请求无法实现</li>
+<li>5xx:服务端错误–服务器未能实现合法的请求</li>
+</ul>
+</li>
+<li><p>Reason-Phrase状态代码的文本描述</p>
+<ul>
+<li>200 OK:客户端请求成功</li>
+<li>400 Bad Request:客户端请求有语法错误，不能被服务器所理解</li>
+<li>401 Unathorized:请求未经授权，必须和WWW-Authenticate报头域一起使用</li>
+<li>403 Forbidden:服务器接收到请求，但拒绝提供服务</li>
+<li>404 Not Found:请求资源不存在</li>
+<li>500 Internal Server Error:服务器发布不可预期的错误</li>
+<li>503 Server Unavailable:服务器当前不能处理客户端的请求，一段时间后可能恢复正常，</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消息报头</p>
+</li>
+<li><p>响应正文</p>
+<pre><code>HTTP/1.1 200 OK
+Date: Sat, 31 Dec 2005 23:59:59 GMT
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 122
+
+＜html＞
+＜head＞
+＜title＞Wrox Homepage＜/title＞
+＜/head＞
+＜body＞
+＜!-- body goes here --＞
+＜/body＞
+＜/html＞
+</code></pre></li>
+</ul>
+<p>GET及POST区别</p>
+<ul>
+<li><p>GET提交，请求的数据附加在URL之后，以？分割 URL和数据，多个参数&amp;连接，如果是英文字母/数字原样发送，空格转为+，中文或者其他字符使用BASE64加密,例%E4%BD%A0</p>
+</li>
+<li><p>POST提交,把提交的数据放于HTTP包包体中<request-body></request-body></p>
+</li>
+</ul>
+<p>传输数据的大小</p>
+<ul>
+<li><p>HTTP协议没有对传输的数据大小进行限制，HTTP规范也没对URL长度限制,实际开发过程中主要的限制有:</p>
+<ul>
+<li>GET:特定的浏览器及服务器对URL长度限制，例如IE(2K+35)字节。</li>
+<li>POST:由于不是通过URL传值，理论上数据不受限，但各个WEB服务器会规定对POST提交数据大小进行限制</li>
+</ul>
+</li>
+<li><p>安全性</p>
+<p>  POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了，</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjq850cka000mf0vc5l51i2ij" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/13/网络/OSI七层模型/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          OSI网络模型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/29/other/爬坑笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">爬坑笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

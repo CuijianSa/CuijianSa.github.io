@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>live555分析-RTSP通信 | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互    方法 作用     OPTIONS 获得服务器提供的可用方法   DESCRIBE 获得会话描述信息   SETUP 客户端请求建立会话，确定传输模式   TEARDOWN 客户端发起关闭会话请求   PLAY 客户端发起播放请求    https://blog.csdn.net/deliapu/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="live555分析-RTSP通信">
+<meta property="og:url" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互    方法 作用     OPTIONS 获得服务器提供的可用方法   DESCRIBE 获得会话描述信息   SETUP 客户端请求建立会话，确定传输模式   TEARDOWN 客户端发起关闭会话请求   PLAY 客户端发起播放请求    https://blog.csdn.net/deliapu/">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG">
+<meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header.JPG">
+<meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header_package.JPG">
+<meta property="og:updated_time" content="2018-12-27T14:43:36.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="live555分析-RTSP通信">
+<meta name="twitter:description" content="RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互    方法 作用     OPTIONS 获得服务器提供的可用方法   DESCRIBE 获得会话描述信息   SETUP 客户端请求建立会话，确定传输模式   TEARDOWN 客户端发起关闭会话请求   PLAY 客户端发起播放请求    https://blog.csdn.net/deliapu/">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-流媒体/live555分析-RTSP通信" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/26/流媒体/live555分析-RTSP通信/" class="article-date">
+  <time datetime="2018-12-25T16:03:00.000Z" itemprop="datePublished">2018-12-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      live555分析-RTSP通信
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPTIONS</td>
+<td>获得服务器提供的可用方法</td>
+</tr>
+<tr>
+<td>DESCRIBE</td>
+<td>获得会话描述信息</td>
+</tr>
+<tr>
+<td>SETUP</td>
+<td>客户端请求建立会话，确定传输模式</td>
+</tr>
+<tr>
+<td>TEARDOWN</td>
+<td>客户端发起关闭会话请求</td>
+</tr>
+<tr>
+<td>PLAY</td>
+<td>客户端发起播放请求</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://blog.csdn.net/deliapu/article/details/79199023" target="_blank" rel="noopener">https://blog.csdn.net/deliapu/article/details/79199023</a></p>
+<h1 id="RTSP-RTP-RTCP简介"><a href="#RTSP-RTP-RTCP简介" class="headerlink" title="RTSP/RTP/RTCP简介"></a>RTSP/RTP/RTCP简介</h1><ul>
+<li>RTP：实时传输协议（Real-time Transport Protocol）RTP/RTCP是实际传输数据的协议 RTP传输音频/视频数据，如果是PLAY，Server发送到Client端，如果是RECORD，可以由Client发送到Server 整个RTP协议由两个密切相关的部分组成：RTP数据协议和RTP控制协议（即RTCP)</li>
+<li>RTSP：实时流协议（Real Time Streaming Protocol，RTSP）RTSP的请求主要有DESCRIBE,SETUP,PLAY,PAUSE,TEARDOWN,OPTIONS等，顾名思义可以知道起对话和控制作用 RTSP的对话过程中SETUP可以确定RTP/RTCP使用的端口，PLAY/PAUSE/TEARDOWN可以开始或者停止RTP的发送，等等</li>
+<li>RTCP：RTP/RTCP是实际传输数据的协议 RTCP包括Sender Report和Receiver Report，用来进行音频/视频的同步以及其他用途，是一种控制协议</li>
+</ul>
+<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="rtsp_summary.JPG" alt=""></p>
+<p>由wireshark抓包来看，客户端地址为192.168.248.1,这是因为服务器是在虚拟机中跑的，采用NAT模式。故客户端连接服务端是通过虚拟网卡进行访问的，所以和客户端实际地址不符</p>
+<p>由图可知，vlc实际上是通过rtsp over tcp,首先客户端和服务端建连，进行三次握手</p>
+<pre><code>C                         S
+|    SYN,Seq = 0          |
+|    --------------&gt;      |
+|   SYN,Seq = 0, Ack = 1  | 
+|   &lt;---------------      |
+|   ACK, Seq = 1, Ack = 1 |
+|   ----------------&gt;     |
+</code></pre><ul>
+<li><p>建连成功后，vlc发送一个OPTIONS,请求获得服务器提供的可用方法</p>
+<pre><code>OPTIONS rtsp://192.168.248.128:8554/test.264 RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+
+RTSP/1.0 200 OK
+CSeq: 2
+Date: Wed, May 09 2018 16:47:04 GMT
+Public: OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER
+
+由OPTIONS Ack可知，live555 rtsp服务器支持OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER方法
+</code></pre></li>
+<li><p>请求获得SDP会话消息</p>
+<pre><code>DESCRIBE rtsp://192.168.248.128:8554/test.264 RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Accept: application/sdp
+
+RTSP/1.0 200 OK
+CSeq: 3
+Date: Wed, May 09 2018 16:47:04 GMT
+Content-Base: rtsp://192.168.248.128:8554/test.264/
+Content-Type: application/sdp
+Content-Length: 519
+
+v=0  //protocol version
+o=- 1525884424436139 1 IN IP4 192.168.248.128 //owner
+s=H.264 Video, streamed by the LIVE555 Media Server //session name
+i=test.264 //session info
+t=0 0 //time &lt;start&gt; &lt;end&gt;
+a=tool:LIVE555 Streaming Media v2017.10.28 //&lt;属性&gt;
+a=type:broadcast
+a=control:*
+a=range:npt=0-
+a=x-qt-text-nam:H.264 Video, streamed by the LIVE555 Media Server
+a=x-qt-text-inf:test.264
+m=video 0 RTP/AVP 96 //media name and transport address
+c=IN IP4 0.0.0.0 //connect info
+b=AS:500 // same as c
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1;profile-level-id=4D4033;sprop-parameter-sets=Z01AM5JUDAS0IAAAAwBAAAAM0eMGVA==,aO48gA==
+a=control:track1 //视频流通道1
+</code></pre><p>  SDP定义了一些对此会话的描述信息</p>
+</li>
+<li><p>建立会话，确定传输模式</p>
+<pre><code>SETUP rtsp://192.168.248.128:8554/test.264/track1 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Transport: RTP/AVP;unicast;client_port=57814-57815
+
+RTSP/1.0 200 OK
+CSeq: 4
+Date: Wed, May 09 2018 16:47:04 GMT
+Transport: RTP/AVP;unicast;destination=192.168.248.1;source=192.168.248.128;client_port=57814-57815;server_port=6970-6971
+Session: ECAAF3DE;timeout=65
+</code></pre><p>  确定RTP/AVP协议传输，确定ip和端口号，客户端ip:192.168.248.1,RTP port:57814, RTCP port:57815;服务端ip:192.168.248.128 RTP和RTCP端口号分别为6970-6971</p>
+</li>
+<li><p>发送播放请求</p>
+<pre><code>PLAY rtsp://192.168.248.128:8554/test.264/ RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Session: ECAAF3DE
+Range: npt=0.000-
+
+RTSP/1.0 200 OK
+CSeq: 5
+Date: Wed, May 09 2018 16:47:04 GMT
+Range: npt=0.000-
+Session: ECAAF3DE
+RTP-Info: url=rtsp://192.168.248.128:8554/test.264/track1;seq=54629;rtptime=1046126938
+</code></pre><p>  Range:0.000-标示播放到视频结束，客户端返回通道1,</p>
+</li>
+<li><p>关闭请求</p>
+<pre><code>TEARDOWN rtsp://192.168.248.128:8554/test.264/ RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Session: ECAAF3DE
+
+RTSP/1.0 200 OK
+CSeq: 6
+</code></pre></li>
+</ul>
+<p>RTSP已经分析完毕，现在对RTP H264进行梳理一下了</p>
+<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="rtp_header.JPG" alt=""></p>
+<ul>
+<li>V: RTP version</li>
+<li>P: 填充标志，if P = 1, 则在payload后面填充一个或者多个额外的8位组，非有效载荷的一部分</li>
+<li>X: 拓展标志，if X = 1, 则在RTP包头后有一个拓展报头(需特殊处理)</li>
+<li>CC: CSRC计数器，标示CSRC个数</li>
+<li>M:标记，不同载荷有不同含义，对于视频，标示一帧的结束；对于音频，标记会话的开始(Payload FU也有S和E)</li>
+<li>PT: 有效载荷类型</li>
+<li>squence number:序列号，标示RTP报文序列号，可用来检查丢包，音视频包sequence是分别计数的</li>
+<li>Timestamp:90HZ评率，用于计算延迟和延迟抖动，并进行同步控制</li>
+<li>SSRC： 标示同步信源，随机选择的，参加同一视频会议的两个SSRC不能相同</li>
+<li>CSRC: 可有0~15个，每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</li>
+</ul>
+<p><img src="rtp_header_package.JPG" alt=""></p>
+<ul>
+<li>V: rtp version, 2</li>
+<li>P: 0 无填充</li>
+<li>X: 0 无拓展</li>
+<li>CC: 0 CSRC</li>
+<li>M：0</li>
+<li>PT: DynamicRTP-Type-9</li>
+<li>Sequence number: 54629</li>
+<li>Timestamp:1046126938</li>
+<li>SSRC: 0x89312047</li>
+</ul>
+<h3 id="RTP-Payload"><a href="#RTP-Payload" class="headerlink" title="RTP Payload"></a>RTP Payload</h3><p>H264定义了三种不同的基本的载荷结构，接收端可通过RTP Payload的Type字段辨别</p>
+<pre><code>+---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI|  Type   |
++---------------+
+</code></pre><p>RTP payload H和H264的NALU头结构是一样的，但type是特殊的格式，而h264type只取1~23是有效值</p>
+<p>FH type:</p>
+<ul>
+<li>24 STAP-A 单一时间的组合包</li>
+<li>25 STAP-B 单一时间的组合包</li>
+<li>26 MTAP16 多个时间的组合包</li>
+<li>27 MTAP24 多个时间的组合包</li>
+<li>28 FU-A 分片的单元</li>
+<li>29 FU-B 分片的单元</li>
+<li>30-31 无定义</li>
+</ul>
+<h3 id="单一NAL单元模式"><a href="#单一NAL单元模式" class="headerlink" title="单一NAL单元模式"></a>单一NAL单元模式</h3><p>一个RTP仅仅由一个完整的NALU组成，此时RTP NAL Header和原始的H、264的头类型相同。</p>
+<p>对于NALU的长度小于MTU，一般采用单一NAL单元模式， 原始的H264 NALU单元常由[start code] [NALU header] [NALU Payload]三部分组成，start code必须是”00 00 00 01”或”00 00 01”，其后是FH, 然后都是Payload</p>
+<p>RTP打包时取出”00 00 00 01”或者”00 00 01”开始码，其他数据封包即可</p>
+<pre><code> 0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |F|NRI|  type  |                                              |
++-+-+-+-+-+-+-+-+                                              |
+|                                                              |
+|              Bytes 2..n of a Single NALunit                |
+|                                                              |
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><h3 id="组合封包模式"><a href="#组合封包模式" class="headerlink" title="组合封包模式"></a>组合封包模式</h3><p>当NALU长度特别小时，可将几个NALU单元封在一个RTP包中<br>，有四种组合方式STAP-A(24)、STAP-B(25)、MTAP16(26)、MTAP24(27)</p>
+<pre><code> 0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                         RTPHeader                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |STAP-A NAL HDR|         NALU 1Size           | NALU 1HDR    |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        NALU 1 Data                          |
+:                                                              :
++              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              | NALU 2Size                  | NALU 2 HDR    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        NALU 2 Data                          |
+:                                                              :
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><h3 id="分片封包模式"><a href="#分片封包模式" class="headerlink" title="分片封包模式"></a>分片封包模式</h3><p>FU-A</p>
+<pre><code>0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ | FU indicator  |   FUheader  |                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                              |
+|                                                              |
+|                        FU payload                           |
+|                                                              |
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><p>其中FU indicator格式</p>
+<pre><code>+---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI|  Type   |
++---------------+
+</code></pre><p>FU header格式<br>     +—————+<br>     |0|1|2|3|4|5|6|7|<br>     +-+-+-+-+-+-+-+-+<br>     |S|E|R|  Type   |<br>     +—————+</p>
+<ul>
+<li>S: 1是分片NAL单元的开始</li>
+<li>E: 1只是NAL单元的结束</li>
+<li>R: 必须为0</li>
+</ul>
+<p>其中FU indicator前三个bit = NALU的F和NRI,FU header的type = NALU的type</p>
+<p>nal_uniy_type = (fu_indicator &amp; 0xe0) | (fu_header &amp; 0x1f)</p>
+<p>-|-|-<br>0 | undefine |<br>1~23 | NALU | NAL单一NAL单元模式<br>24 | STAP-A |<br>25 | STAP-B |<br>26 | MTAP16 |<br>27 | MTAP24 |<br>28 | FU-A |<br>29 | FU-B |<br>30 ~31 | undefined</p>
+<p>当NALU长度超过MTU时，就必须对NALU单元进行分片分包</p>
+<p>Tips:<br>这两天对RTSP、RTP协议梳理了一下， 对以下还有疑问.<br>RTP可以跑在TCP或者UDP协议上 查看协议并未看到RTP Protocol有对粘包的问题有所处理(RTP header并无一个RTP包长度字段或者包界限符)。虽然RTP protocol规定了一个package不能大于MTU,避免被协议栈分包(TCP是传输的数据流,而RTP是数据报文,如果使用TCP传输就无法知道RTP包有多长,不知如何区分RTP包),但MTU分包只是粘包的其中一个原因</p>
+<ul>
+<li>应用层调用write方法，将应用层的缓冲区中的数据拷贝到套接字的发送缓冲区。而发送缓冲区有一个SO_SNDBUF的限制，如果应用层的缓冲区数据大小大于套接字发送缓冲区的大小，则数据需要进行多次的发送。</li>
+<li>TCP所传输的报文段有MSS的限制，如果套接字缓冲区的大小大于MSS，也会导致消息的分割发送。</li>
+<li>链路层最大发送单元MTU，在IP层会进行数据的分片。</li>
+<li>接收端接收BUF不足以接收所有的stream,故对数据分多次保存。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjq850ckd000of0vcin3zgzd7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/27/流媒体/H264/h264分析/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          h264分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">live555分析-rtsp_client接入</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
