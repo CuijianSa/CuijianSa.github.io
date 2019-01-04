@@ -66,6 +66,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/RTMP/RTMP" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/13/流媒体/RTMP/RTMP/" class="article-date">
+  <time datetime="2018-10-13T07:22:36.000Z" itemprop="datePublished">2018-10-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/13/流媒体/RTMP/RTMP/">RTMP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从腾讯云中看到一篇对RTMP介绍比较好的文章<br>转自<a href="https://cloud.tencent.com/developer/article/1004970" target="_blank" rel="noopener">视频协议学习：推流拉流都擅长的 RTMP</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>RTMP(Real Time Message Protocol)是进行实时通信协议的网络，用于Flash/AIR平台及支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信</p>
+<p>RTMP有多个变种</p>
+<ol>
+<li>RTMP工作在TCP之上，默认使用端口1935；</li>
+<li>RTMPE在RTMP的基础上增加了加密功能；</li>
+<li>RTMPT封装在HTTP请求之上，可穿透防火墙；</li>
+<li>RTMPS类似RTMPT，增加了TLS/SSL的安全功能；</li>
+<li>RTMFP使用UDP进行传输的RTMP</li>
+</ol>
+<p><strong>rtmp协议中基本的数据单元称为消息（Message）。当rtmp协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。Rtmp的交互过程可以理解成独有的握手过程、控制命令传输、音视频数据传输</strong></p>
+<h1 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h1><p>RTMP 握手由三个固定长度的块组成，而不是像其他协议一样的带有报头的可变长度的块。客户端 (发起连接请求的终端) 和服务器端各自发送相同的三块。便于演示，当发送自客户端时这些块被指定为 C0、C1 和 C2；当发送自服务器端时这些块分别被指定为 S0、S1 和 S2。以下是握手过程中传递的包格式介绍：</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png" alt=""></p>
+<p>RTMP握手以客户端发送 C0 和 C1 块开始，客户端必须接收到 S1 才能发送 C2，客户端必须接收到 S2 才能发送任何其他数据，服务器端必须接收到 C0 才能发送 S0 和 S1，也可以等待接收到 C1 再发送 S0 和 S1，服务器端必须接收到 C1 才能发送 S2，服务器端必须接收到 C2 才能发送任何其他数据。以下为RTMP的握手过程图介绍：</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshank_process.png" alt=""></p>
+<p>规范要求RTMP需要一个一个的发送握手包，但是实际上客户端发送C0+C1，服务端发送S0+S1+S2，再客户端在发送C2结束握手。</p>
+<h1 id="数据包格式"><a href="#数据包格式" class="headerlink" title="数据包格式"></a>数据包格式</h1><p>RTMP基础数据单位是消息，当RTMP协议在交互过程中，消息会被拆分成更小的单元，称为消息块（Chunk）。</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_chunk.png" alt=""></p>
+<h2 id="消息格式"><a href="#消息格式" class="headerlink" title="消息格式"></a>消息格式</h2><p>消息头包含以下信息</p>
+<ul>
+<li>MessageType: 消息类型,1Byte</li>
+<li>Length:有效负载字节数,3Byte大端</li>
+<li>Timestamp:时间戳，4Byte大端</li>
+<li>MessageStreamID：消息流ID</li>
+</ul>
+<p><a href="https://blog.csdn.net/defonds/article/details/17534903" target="_blank" rel="noopener">Adobe 官方公布的 RTMP 规范</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqi6tadz000yxkvchcq2hiv1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-架构/thinking-in-uml" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/31/架构/thinking-in-uml/" class="article-date">
@@ -116,7 +182,7 @@
 </li>
 </ul>
 <h2 id="类之间关系"><a href="#类之间关系" class="headerlink" title="类之间关系"></a>类之间关系</h2><ul>
-<li>关联 <img src="relation.jpg" alt=""></li>
+<li>关联 <img src="/2018/07/31/架构/thinking-in-uml/relation.jpg" alt=""></li>
 </ul>
 <p>描述不同类的对象的结构关系，强关联关系。用于定义对象之间静态的、天然的结构。和依赖关系不同，依赖关系表示对象之间临时性的、动态的关系。在最终代码中， 关联对象通常以成员变量的形式表示。与依赖相比，关联的两个对象不会互相直接使用，一般都是由外部对象来访问，例如， 外部访问者可以通过员工对象获得公司的对象。<br>关联关系一般不强调对象， 当A-B时，默认A和B之间相互知道对方的存在，表示对象相互拥有对方的实例变量<br>//单向关联</p>
 <pre><code>class Person{};
@@ -163,7 +229,7 @@ class C
 
 }
 </code></pre><ul>
-<li>依赖关系 <img src="depend.jpg" alt=""></li>
+<li>依赖关系 <img src="/2018/07/31/架构/thinking-in-uml/depend.jpg" alt=""></li>
 </ul>
 <p>描述一个对象在运行期会使用到另一个对象的关系，与关联关系不同，依赖关系是一种临时的关系，通常在运行期产生，并且随着场景的不同，依赖关系会发生变化。在代码中一般体现为类的构造方法，类方法的传入参数。依赖关系处理临时知道对方外， 还会使用对方的属性和方法。被依赖的对象改变会导致依赖对象的修改。例如A保存了B对象的实例，但A对象对B对象没有操作，A仅仅是知道B对象，应使用关联关系，并且B修改方法后，A并无变化。如果A对象在某个场景中使用B对象的属性或方法，则B的修改会导致A的修改，这时A依赖于B。</p>
 <pre><code>class Car{};
@@ -180,7 +246,7 @@ class Person
 
 };
 </code></pre><ul>
-<li>实现关系 <img src="realize.jpg" alt=""></li>
+<li>实现关系 <img src="/2018/07/31/架构/thinking-in-uml/realize.jpg" alt=""></li>
 </ul>
 <p>指的是一个class类实现interface接口（可以是多个）的功能；实现是类与接口之间最常见的关系</p>
 <pre><code>class FInterface{
@@ -191,12 +257,12 @@ class SC:public FInterface{
     void it(){}
 }
 </code></pre><ul>
-<li>泛化关系 <img src="generalization.jpg" alt=""></li>
+<li>泛化关系 <img src="/2018/07/31/架构/thinking-in-uml/generalization.jpg" alt=""></li>
 </ul>
 <p>说明两个对象之间的继承关系，表示一个类是另一类的继承，继承而的的类为子类，意味祖先的定义对于后代的对象也是有效的</p>
 <p><code>父类 父类实例＝new 子类();</code></p>
 <ul>
-<li>聚合关系 <img src="aggregation.jpg" alt=""></li>
+<li>聚合关系 <img src="/2018/07/31/架构/thinking-in-uml/aggregation.jpg" alt=""></li>
 </ul>
 <p>聚合是关联关系的一种特例，他体现的是整体与部分、拥有的关系，即has-a的关系，此时整体与部分之间是可分离的，他们可以具有各自的生命周期，部分可以属于多个整体对象，也可以为多个整体对象共享；比如计算机与CPU、公司与员工的关系等；表现在代码层面，和关联关系是一致的，只能从语义级别来区分； </p>
 <pre><code>class CPU{};
@@ -213,7 +279,7 @@ class Computer
 
 };
 </code></pre><ul>
-<li>组合关系 <img src="composition.jpg" alt=""></li>
+<li>组合关系 <img src="/2018/07/31/架构/thinking-in-uml/composition.jpg" alt=""></li>
 </ul>
 <p>组合也是关联关系的一种特例，他体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合；他同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束；比如你和你的大脑；表现在代码层面，和关联关系是一致的，只能从语义级别来区分； </p>
 <pre><code>class Leg{};
@@ -233,7 +299,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjqgv69wj0008dsvc69l4xigt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjqi6tadd0007xkvctg8rnutw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -331,7 +397,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjqgv69wd0004dsvc19d66vl6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjqi6tadc0005xkvchn3k4zov" class="article-share-link">Share</a>
       
       
     </footer>
@@ -429,9 +495,9 @@ C:c = ffffffc9
 </tr>
 </tbody>
 </table>
-<p><img src="osi_model.jpg" alt=""></p>
-<h2 id="数据包说明"><a href="#数据包说明" class="headerlink" title="数据包说明"></a>数据包说明</h2><p><img src="segment.gif" alt=""></p>
-<p><img src="segment_flow.jpg" alt=""></p>
+<p><img src="/2018/06/13/网络/OSI七层模型/osi_model.jpg" alt=""></p>
+<h2 id="数据包说明"><a href="#数据包说明" class="headerlink" title="数据包说明"></a>数据包说明</h2><p><img src="/2018/06/13/网络/OSI七层模型/segment.gif" alt=""></p>
+<p><img src="/2018/06/13/网络/OSI七层模型/segment_flow.jpg" alt=""></p>
 <p>参考</p>
 <blockquote>
 <p><a href="https://zhidao.baidu.com/question/192109576.html" target="_blank" rel="noopener">https://zhidao.baidu.com/question/192109576.html</a><br><a href="https://www.cnblogs.com/jeanschen/p/3762475.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeanschen/p/3762475.html</a></p>
@@ -440,7 +506,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjqgv69wg0006dsvcs229lsn0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjqi6tadf0009xkvcgngs31v0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -596,7 +662,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjqgv69wk0009dsvccufsphhp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjqi6tadf000axkvcguwsc4zl" class="article-share-link">Share</a>
       
       
     </footer>
@@ -983,7 +1049,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjqgv69x3000vdsvc1172mba9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjqi6tadx000wxkvcwp4543vz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1008,7 +1074,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -1023,7 +1089,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -1034,6 +1100,10 @@ a + 1 = 0x804a018
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -1049,10 +1119,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>

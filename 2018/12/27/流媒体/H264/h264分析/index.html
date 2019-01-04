@@ -346,11 +346,11 @@
 <li><p>流结束符在比特流中的最后</p>
 </li>
 </ol>
-<h3 id="H264元素分层结构"><a href="#H264元素分层结构" class="headerlink" title="H264元素分层结构"></a>H264元素分层结构</h3><p>H.264编码器输出的Bit流中，每个Bit都隶属于某个句法元素。句法元素被组织成有层次的结构，分别描述各个层次的信息。<br><img src="h264_bits.gif" alt=""></p>
-<p>句法元素被组织成序列、图像、片、宏块和子宏块5个层次，这样的结构中，每一层的头部和它的数据部分形成管理与被管理的强依赖关系，头部的句法元素是该层数据的核心，而一旦头部丢失，数据部分的信息几乎不可能再被正确解码出来，尤其在序列层及图像层。<br><img src="h264_layers.gif" alt=""></p>
-<p>在 H.264 中，分层结构最大的不同是取消了序列层和图像层，并将原本属于序列和图像头部的大部分句法元素游离出来形成序列和图像两级参数集，其余的部分则放入片层。<br>参数集是一个独立的数据单位，不依赖于参数集外的其他句法元素。一个参数集不对应某一个特定的图像或序列，同一序列参数集可以被多个图像参数集引用，同理，同一个图像参数集也可以被多个图像引用。只在编码器认为需要更新参数集的内容时，才会发出新的参数集。<br>复杂通信中的码流中可能出现的数据单位：<br><img src="h264_layers2.gif" alt=""></p>
+<h3 id="H264元素分层结构"><a href="#H264元素分层结构" class="headerlink" title="H264元素分层结构"></a>H264元素分层结构</h3><p>H.264编码器输出的Bit流中，每个Bit都隶属于某个句法元素。句法元素被组织成有层次的结构，分别描述各个层次的信息。<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_bits.gif" alt=""></p>
+<p>句法元素被组织成序列、图像、片、宏块和子宏块5个层次，这样的结构中，每一层的头部和它的数据部分形成管理与被管理的强依赖关系，头部的句法元素是该层数据的核心，而一旦头部丢失，数据部分的信息几乎不可能再被正确解码出来，尤其在序列层及图像层。<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_layers.gif" alt=""></p>
+<p>在 H.264 中，分层结构最大的不同是取消了序列层和图像层，并将原本属于序列和图像头部的大部分句法元素游离出来形成序列和图像两级参数集，其余的部分则放入片层。<br>参数集是一个独立的数据单位，不依赖于参数集外的其他句法元素。一个参数集不对应某一个特定的图像或序列，同一序列参数集可以被多个图像参数集引用，同理，同一个图像参数集也可以被多个图像引用。只在编码器认为需要更新参数集的内容时，才会发出新的参数集。<br>复杂通信中的码流中可能出现的数据单位：<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_layers2.gif" alt=""></p>
 <p>IDR: 在H.264中，图像以序列为单位进行组织。一个序列的第一个图像叫做 IDR 图像（立即刷新图像），IDR 图像都是 I 帧图像。H.264 引入 IDR 图像是为了解码的重同步，当解码器解码到 IDR 图像时，立即将参考帧队列清空，将已解码的数据全部输出或抛弃，重新查找参数集，开始一个新的序列。这样，如果前一个序列出现重大错误，在这里可以获得重新同步的机会。IDR图像之后的图像永远不会使用IDR之前的图像的数据来解码。      IDR 图像一定是 I 图像，但 I 图像不一定是 IDR 图像。I帧之后的图像有可能会使用I帧之前的图像做运动参考。</p>
-<p><img src="h264_stream.jpg" alt=""></p>
+<p><img src="/2018/12/27/流媒体/H264/h264分析/h264_stream.jpg" alt=""></p>
 <p>参考</p>
 <blockquote>
 <p><a href="http://www.360doc.com/content/14/0813/15/12697_401555631.shtml" title="H264编码原理和IBP帧" target="_blank" rel="noopener">H264编码原理和IBP帧</a></p>
@@ -362,7 +362,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqgv69x80011dsvca5bj902b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqi6tae20012xkvcuiw6sv99" class="article-share-link">Share</a>
       
       
     </footer>
@@ -370,6 +370,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/01/04/linux/mount/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mount
+        
+      </div>
+    </a>
   
   
     <a href="/2018/12/26/流媒体/live555分析-RTSP通信/" id="article-nav-older" class="article-nav-link-wrap">
@@ -390,7 +399,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -405,7 +414,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -416,6 +425,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -431,10 +444,6 @@
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>

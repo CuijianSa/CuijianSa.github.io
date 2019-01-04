@@ -110,12 +110,12 @@
 </ol>
 <p><strong>rtmp协议中基本的数据单元称为消息（Message）。当rtmp协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。Rtmp的交互过程可以理解成独有的握手过程、控制命令传输、音视频数据传输</strong></p>
 <h1 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h1><p>RTMP 握手由三个固定长度的块组成，而不是像其他协议一样的带有报头的可变长度的块。客户端 (发起连接请求的终端) 和服务器端各自发送相同的三块。便于演示，当发送自客户端时这些块被指定为 C0、C1 和 C2；当发送自服务器端时这些块分别被指定为 S0、S1 和 S2。以下是握手过程中传递的包格式介绍：</p>
-<p><img src="rtmp_handshake_package.png" alt=""></p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png" alt=""></p>
 <p>RTMP握手以客户端发送 C0 和 C1 块开始，客户端必须接收到 S1 才能发送 C2，客户端必须接收到 S2 才能发送任何其他数据，服务器端必须接收到 C0 才能发送 S0 和 S1，也可以等待接收到 C1 再发送 S0 和 S1，服务器端必须接收到 C1 才能发送 S2，服务器端必须接收到 C2 才能发送任何其他数据。以下为RTMP的握手过程图介绍：</p>
-<p><img src="rtmp_handshank_process.png" alt=""></p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshank_process.png" alt=""></p>
 <p>规范要求RTMP需要一个一个的发送握手包，但是实际上客户端发送C0+C1，服务端发送S0+S1+S2，再客户端在发送C2结束握手。</p>
 <h1 id="数据包格式"><a href="#数据包格式" class="headerlink" title="数据包格式"></a>数据包格式</h1><p>RTMP基础数据单位是消息，当RTMP协议在交互过程中，消息会被拆分成更小的单元，称为消息块（Chunk）。</p>
-<p><img src="rtmp_chunk.png" alt=""></p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_chunk.png" alt=""></p>
 <h2 id="消息格式"><a href="#消息格式" class="headerlink" title="消息格式"></a>消息格式</h2><p>消息头包含以下信息</p>
 <ul>
 <li>MessageType: 消息类型,1Byte</li>
@@ -128,7 +128,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqgv69x5000xdsvcqoy39m2s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqi6tadz000yxkvchcq2hiv1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -165,7 +165,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -180,7 +180,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -191,6 +191,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -206,10 +210,6 @@
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>

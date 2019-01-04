@@ -66,6 +66,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux/mount" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/04/linux/mount/" class="article-date">
+  <time datetime="2019-01-04T15:20:55.000Z" itemprop="datePublished">2019-01-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/04/linux/mount/">mount</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="peer-group"><a href="#peer-group" class="headerlink" title="peer group"></a>peer group</h2><p>peer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）</p>
+<ul>
+<li><p>利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点。</p>
+</li>
+<li><p>当创建新的mount namespace时，新namespace会拷贝一份老namespace的挂载点信息，于是新的和老的namespace里面的相同挂载点就会属于同一个peer group</p>
+</li>
+</ul>
+<h2 id="propagation-type"><a href="#propagation-type" class="headerlink" title="propagation type"></a>propagation type</h2><p>每个挂载点都有一个propagation type标志, 由它来决定当一个挂载点的下面创建和移除挂载点的时候，是否会传播到属于相同peer group的其他挂载点下去，也即同一个peer group里的其他的挂载点下面是不是也会创建和移除相应的挂载点.现在有4种不同类型的propagation type：</p>
+<ul>
+<li><p>MS_SHARED: 从名字就可以看出，挂载信息会在同一个peer group的不同挂载点之间共享传播. 当一个挂载点下面添加或者删除挂载点的时候，同一个peer group里的其他挂载点下面也会挂载和卸载同样的挂载点</p>
+</li>
+<li><p>MS_PRIVATE: 跟上面的刚好相反，挂载信息根本就不共享，也即private的挂载点不会属于任何peer group</p>
+</li>
+<li><p>MS_SLAVE: 跟名字一样，信息的传播是单向的，在同一个peer group里面，master的挂载点下面发生变化的时候，slave的挂载点下面也跟着变化，但反之则不然，slave下发生变化的时候不会通知master，master不会发生变化。</p>
+</li>
+<li><p>MS_UNBINDABLE: 这个和MS_PRIVATE相同，只是这种类型的挂载点不能作为bind mount的源，主要用来防止递归嵌套情况的出现</p>
+</li>
+</ul>
+<p>最近做自包含就由这个问题， 当把根目录下/dev /sys使用mount –rbind 到当前目录下， 卸载目录时出现Device Busy， 发现系统进程占用了当前挂载点下/sys …, 导致目录一直被占用</p>
+<p>解决方法</p>
+<ul>
+<li>使用umount -l ,  lazy可卸载当前挂载点, 但加上-l选项时出现/usr/…/cgroup也被卸载了…；原因如下，原先mount默认使用MS_SHARED，umount -l 挂载点会将挂载点下所有的挂载节点清除， 而；原因如下，原先mount默认使用MS_SHARED 则会共享挂载信息， 导致根目录下系节点也被卸载， mount 加上–make-slave时解决。猜测加上MS_SLAVE时， 源目录挂载消息可以通过内核消息传递给挂载点， 而SLAVE挂载点挂载信息则会被内核屏蔽。故虚拟化环境应当推荐使用MS_SLAVE</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-l, --lazy</span><br><span class="line">             Lazy unmount.  Detach the filesystem from the file hierarchy</span><br><span class="line">             now, and clean up all references to this filesystem as soon as</span><br><span class="line">             it is not busy anymore.</span><br><span class="line"></span><br><span class="line">             A system reboot would be expected in near future if you&apos;re</span><br><span class="line">             going to use this option for network filesystem or local</span><br><span class="line">             filesystem with submounts.  The recommended use-case for</span><br><span class="line">             umount -l is to prevent hangs on shutdown due to an</span><br><span class="line">             unreachable network share where a normal umount will hang due</span><br><span class="line">             to a downed server or a network partition. Remounts of the</span><br><span class="line">             share will not be possible.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqi75xtw000044vcwpngh028" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/H264/h264分析" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/27/流媒体/H264/h264分析/" class="article-date">
@@ -339,11 +403,11 @@
 <li><p>流结束符在比特流中的最后</p>
 </li>
 </ol>
-<h3 id="H264元素分层结构"><a href="#H264元素分层结构" class="headerlink" title="H264元素分层结构"></a>H264元素分层结构</h3><p>H.264编码器输出的Bit流中，每个Bit都隶属于某个句法元素。句法元素被组织成有层次的结构，分别描述各个层次的信息。<br><img src="h264_bits.gif" alt=""></p>
-<p>句法元素被组织成序列、图像、片、宏块和子宏块5个层次，这样的结构中，每一层的头部和它的数据部分形成管理与被管理的强依赖关系，头部的句法元素是该层数据的核心，而一旦头部丢失，数据部分的信息几乎不可能再被正确解码出来，尤其在序列层及图像层。<br><img src="h264_layers.gif" alt=""></p>
-<p>在 H.264 中，分层结构最大的不同是取消了序列层和图像层，并将原本属于序列和图像头部的大部分句法元素游离出来形成序列和图像两级参数集，其余的部分则放入片层。<br>参数集是一个独立的数据单位，不依赖于参数集外的其他句法元素。一个参数集不对应某一个特定的图像或序列，同一序列参数集可以被多个图像参数集引用，同理，同一个图像参数集也可以被多个图像引用。只在编码器认为需要更新参数集的内容时，才会发出新的参数集。<br>复杂通信中的码流中可能出现的数据单位：<br><img src="h264_layers2.gif" alt=""></p>
+<h3 id="H264元素分层结构"><a href="#H264元素分层结构" class="headerlink" title="H264元素分层结构"></a>H264元素分层结构</h3><p>H.264编码器输出的Bit流中，每个Bit都隶属于某个句法元素。句法元素被组织成有层次的结构，分别描述各个层次的信息。<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_bits.gif" alt=""></p>
+<p>句法元素被组织成序列、图像、片、宏块和子宏块5个层次，这样的结构中，每一层的头部和它的数据部分形成管理与被管理的强依赖关系，头部的句法元素是该层数据的核心，而一旦头部丢失，数据部分的信息几乎不可能再被正确解码出来，尤其在序列层及图像层。<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_layers.gif" alt=""></p>
+<p>在 H.264 中，分层结构最大的不同是取消了序列层和图像层，并将原本属于序列和图像头部的大部分句法元素游离出来形成序列和图像两级参数集，其余的部分则放入片层。<br>参数集是一个独立的数据单位，不依赖于参数集外的其他句法元素。一个参数集不对应某一个特定的图像或序列，同一序列参数集可以被多个图像参数集引用，同理，同一个图像参数集也可以被多个图像引用。只在编码器认为需要更新参数集的内容时，才会发出新的参数集。<br>复杂通信中的码流中可能出现的数据单位：<br><img src="/2018/12/27/流媒体/H264/h264分析/h264_layers2.gif" alt=""></p>
 <p>IDR: 在H.264中，图像以序列为单位进行组织。一个序列的第一个图像叫做 IDR 图像（立即刷新图像），IDR 图像都是 I 帧图像。H.264 引入 IDR 图像是为了解码的重同步，当解码器解码到 IDR 图像时，立即将参考帧队列清空，将已解码的数据全部输出或抛弃，重新查找参数集，开始一个新的序列。这样，如果前一个序列出现重大错误，在这里可以获得重新同步的机会。IDR图像之后的图像永远不会使用IDR之前的图像的数据来解码。      IDR 图像一定是 I 图像，但 I 图像不一定是 IDR 图像。I帧之后的图像有可能会使用I帧之前的图像做运动参考。</p>
-<p><img src="h264_stream.jpg" alt=""></p>
+<p><img src="/2018/12/27/流媒体/H264/h264分析/h264_stream.jpg" alt=""></p>
 <p>参考</p>
 <blockquote>
 <p><a href="http://www.360doc.com/content/14/0813/15/12697_401555631.shtml" title="H264编码原理和IBP帧" target="_blank" rel="noopener">H264编码原理和IBP帧</a></p>
@@ -355,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqgv69x80011dsvca5bj902b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqi6tae20012xkvcuiw6sv99" class="article-share-link">Share</a>
       
       
     </footer>
@@ -428,7 +492,7 @@
 <li>RTSP：实时流协议（Real Time Streaming Protocol，RTSP）RTSP的请求主要有DESCRIBE,SETUP,PLAY,PAUSE,TEARDOWN,OPTIONS等，顾名思义可以知道起对话和控制作用 RTSP的对话过程中SETUP可以确定RTP/RTCP使用的端口，PLAY/PAUSE/TEARDOWN可以开始或者停止RTP的发送，等等</li>
 <li>RTCP：RTP/RTCP是实际传输数据的协议 RTCP包括Sender Report和Receiver Report，用来进行音频/视频的同步以及其他用途，是一种控制协议</li>
 </ul>
-<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="rtsp_summary.JPG" alt=""></p>
+<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG" alt=""></p>
 <p>由wireshark抓包来看，客户端地址为192.168.248.1,这是因为服务器是在虚拟机中跑的，采用NAT模式。故客户端连接服务端是通过虚拟网卡进行访问的，所以和客户端实际地址不符</p>
 <p>由图可知，vlc实际上是通过rtsp over tcp,首先客户端和服务端建连，进行三次握手</p>
 <pre><code>C                         S
@@ -522,7 +586,7 @@ CSeq: 6
 </code></pre></li>
 </ul>
 <p>RTSP已经分析完毕，现在对RTP H264进行梳理一下了</p>
-<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="rtp_header.JPG" alt=""></p>
+<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header.JPG" alt=""></p>
 <ul>
 <li>V: RTP version</li>
 <li>P: 填充标志，if P = 1, 则在payload后面填充一个或者多个额外的8位组，非有效载荷的一部分</li>
@@ -535,7 +599,7 @@ CSeq: 6
 <li>SSRC： 标示同步信源，随机选择的，参加同一视频会议的两个SSRC不能相同</li>
 <li>CSRC: 可有0~15个，每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</li>
 </ul>
-<p><img src="rtp_header_package.JPG" alt=""></p>
+<p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header_package.JPG" alt=""></p>
 <ul>
 <li>V: rtp version, 2</li>
 <li>P: 0 无填充</li>
@@ -635,7 +699,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqgv69wu000mdsvcoe5c9fvf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqi6tadn000nxkvc3991u3bk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -679,7 +743,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqgv69ww000pdsvcuvhq6juz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqi6tado000oxkvccgujzuu7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -716,7 +780,7 @@ CSeq: 6
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="TaskScheduler类"><a href="#TaskScheduler类" class="headerlink" title="TaskScheduler类"></a>TaskScheduler类</h1><p>TaskScheduler是任务调度的基类， 其类关系如图所示</p>
-<p><img src="TaskScheduler.PNG" alt=""></p>
+<p><img src="/2018/12/21/流媒体/live555分析-TaskScheduler分析/TaskScheduler.PNG" alt=""></p>
 <p>首先可从代码调用关系开始着手分析</p>
 <p>BasicTaskScheduler0主要初始化一些参数，包括socket、 event handle</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BasicTaskScheduler0::BasicTaskScheduler0()</span><br><span class="line">  : fLastHandledSocketNum(-1), fTriggersAwaitingHandling(0), fLastUsedTriggerMask(1), fLastUsedTriggerNum(MAX_NUM_EVENT_TRIGGERS-1) &#123;</span><br><span class="line">  fHandlers = new HandlerSet;</span><br><span class="line">  for (unsigned i = 0; i &lt; MAX_NUM_EVENT_TRIGGERS; ++i) &#123;</span><br><span class="line">    fTriggeredEventHandlers[i] = NULL;</span><br><span class="line">    fTriggeredEventClientDatas[i] = NULL;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -743,7 +807,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqgv69wv000ndsvccyjlpki8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqi6tadp000qxkvcbksskrgx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -798,7 +862,7 @@ CSeq: 6
 <li>BasicUsageEnvironment</li>
 </ul>
 <p>该库定义了“UsageEnvironment”类的一个具体实现（即子类），用于简单的控制台应用程序。 使用select（）循环处理读取事件和延迟操作。</p>
-<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="live555_class.jpg" alt=""></p>
+<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="/2018/12/20/流媒体/live555分析/live555_class.jpg" alt=""></p>
 <h1 id="RTSP流程分析"><a href="#RTSP流程分析" class="headerlink" title="RTSP流程分析"></a>RTSP流程分析</h1><p>从RTSPServer::RTSPClientConnection::handleRequestBytes函数分析， 当socket接收到bytes,由handleRequestBytes进行拆包处理,一般的交互流程如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. C-&gt;S: OPTION request 询问S提供的方法</span><br><span class="line">1. S-&gt;C: OPTION response S回应提供的所有可用方法</span><br><span class="line"></span><br><span class="line">2. C-&gt;S: DESCRIBE request 要求得到S提供的媒体初始化描述信息</span><br><span class="line">2. S-&gt;C: DESCRIBE response S回应媒体初始化描述信息， 主要是SDP</span><br><span class="line"></span><br><span class="line">3. C-&gt;S: SETUP request 设置会话的属性，以及传输模式，并提醒S建立会话</span><br><span class="line">3. S-&gt;C: SETUP response S建立会话，返回会话标识符及会话相关信息</span><br><span class="line"></span><br><span class="line">4. C-&gt;S: PLAY request C请求播放</span><br><span class="line">4. S-&gt;C: PLAY response S回应请求信息</span><br><span class="line"></span><br><span class="line">5. S-&gt;C: 发送流媒体数据</span><br><span class="line"></span><br><span class="line">6. C-&gt;S: TEARDOWN request C请求关闭会话</span><br><span class="line">6. S-&gt;C: TEARDOWN response S回应请求</span><br></pre></td></tr></table></figure>
 <h2 id="OPTION"><a href="#OPTION" class="headerlink" title="OPTION"></a>OPTION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">char const* RTSPServer::allowedCommandNames() &#123;</span><br><span class="line">  return &quot;OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientConnection::handleCmd_OPTIONS() &#123;</span><br><span class="line">  snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">       &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n&quot;,</span><br><span class="line">       fCurrentCSeq, dateHeader(), fOurRTSPServer.allowedCommandNames());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -807,7 +871,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqgv69x4000wdsvc1u3e9fah" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqi6tady000xxkvceaq5ytq5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -857,7 +921,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjqgv69w80001dsvckamv0qg2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjqi6tad80002xkvcdjcsfi52" class="article-share-link">Share</a>
       
       
     </footer>
@@ -902,7 +966,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjqgv69va0000dsvczohyrrby" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjqi6tabn0000xkvccftx4nw0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -951,7 +1015,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjqgv69we0005dsvcw2bjpcv9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjqi6tada0003xkvc94d1bujw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1000,73 +1064,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjqgv69wa0002dsvcly1jfg4p" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/RTMP/RTMP" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/10/13/流媒体/RTMP/RTMP/" class="article-date">
-  <time datetime="2018-10-13T07:22:36.000Z" itemprop="datePublished">2018-10-13</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/13/流媒体/RTMP/RTMP/">RTMP</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>从腾讯云中看到一篇对RTMP介绍比较好的文章<br>转自<a href="https://cloud.tencent.com/developer/article/1004970" target="_blank" rel="noopener">视频协议学习：推流拉流都擅长的 RTMP</a></p>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>RTMP(Real Time Message Protocol)是进行实时通信协议的网络，用于Flash/AIR平台及支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信</p>
-<p>RTMP有多个变种</p>
-<ol>
-<li>RTMP工作在TCP之上，默认使用端口1935；</li>
-<li>RTMPE在RTMP的基础上增加了加密功能；</li>
-<li>RTMPT封装在HTTP请求之上，可穿透防火墙；</li>
-<li>RTMPS类似RTMPT，增加了TLS/SSL的安全功能；</li>
-<li>RTMFP使用UDP进行传输的RTMP</li>
-</ol>
-<p><strong>rtmp协议中基本的数据单元称为消息（Message）。当rtmp协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。Rtmp的交互过程可以理解成独有的握手过程、控制命令传输、音视频数据传输</strong></p>
-<h1 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h1><p>RTMP 握手由三个固定长度的块组成，而不是像其他协议一样的带有报头的可变长度的块。客户端 (发起连接请求的终端) 和服务器端各自发送相同的三块。便于演示，当发送自客户端时这些块被指定为 C0、C1 和 C2；当发送自服务器端时这些块分别被指定为 S0、S1 和 S2。以下是握手过程中传递的包格式介绍：</p>
-<p><img src="rtmp_handshake_package.png" alt=""></p>
-<p>RTMP握手以客户端发送 C0 和 C1 块开始，客户端必须接收到 S1 才能发送 C2，客户端必须接收到 S2 才能发送任何其他数据，服务器端必须接收到 C0 才能发送 S0 和 S1，也可以等待接收到 C1 再发送 S0 和 S1，服务器端必须接收到 C1 才能发送 S2，服务器端必须接收到 C2 才能发送任何其他数据。以下为RTMP的握手过程图介绍：</p>
-<p><img src="rtmp_handshank_process.png" alt=""></p>
-<p>规范要求RTMP需要一个一个的发送握手包，但是实际上客户端发送C0+C1，服务端发送S0+S1+S2，再客户端在发送C2结束握手。</p>
-<h1 id="数据包格式"><a href="#数据包格式" class="headerlink" title="数据包格式"></a>数据包格式</h1><p>RTMP基础数据单位是消息，当RTMP协议在交互过程中，消息会被拆分成更小的单元，称为消息块（Chunk）。</p>
-<p><img src="rtmp_chunk.png" alt=""></p>
-<h2 id="消息格式"><a href="#消息格式" class="headerlink" title="消息格式"></a>消息格式</h2><p>消息头包含以下信息</p>
-<ul>
-<li>MessageType: 消息类型,1Byte</li>
-<li>Length:有效负载字节数,3Byte大端</li>
-<li>Timestamp:时间戳，4Byte大端</li>
-<li>MessageStreamID：消息流ID</li>
-</ul>
-<p><a href="https://blog.csdn.net/defonds/article/details/17534903" target="_blank" rel="noopener">Adobe 官方公布的 RTMP 规范</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqgv69x5000xdsvcqoy39m2s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjqi6tadd0006xkvc70m50fcv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1091,7 +1089,7 @@ CSeq: 6
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -1106,7 +1104,7 @@ CSeq: 6
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -1117,6 +1115,10 @@ CSeq: 6
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -1132,10 +1134,6 @@ CSeq: 6
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>

@@ -15,7 +15,7 @@
 <meta property="og:description" content="简介是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输协议如RTP/RTCP、RTSP、SIP等的支持。Live555实现了对多种音视频编码格式的音视频数据的流化、接收和处理等支持，包括MPEG、H.263+、DV、JPEG视频和多种音频编码。同时由于良好的设计，Live555非常容易扩展对其他格">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2018/12/20/流媒体/live555分析/live555_class.jpg">
-<meta property="og:updated_time" content="2019-01-03T17:10:07.699Z">
+<meta property="og:updated_time" content="2019-01-04T15:22:42.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="live555分析">
 <meta name="twitter:description" content="简介是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输协议如RTP/RTCP、RTSP、SIP等的支持。Live555实现了对多种音视频编码格式的音视频数据的流化、接收和处理等支持，包括MPEG、H.263+、DV、JPEG视频和多种音频编码。同时由于良好的设计，Live555非常容易扩展对其他格">
@@ -115,7 +115,7 @@
 <li>BasicUsageEnvironment</li>
 </ul>
 <p>该库定义了“UsageEnvironment”类的一个具体实现（即子类），用于简单的控制台应用程序。 使用select（）循环处理读取事件和延迟操作。</p>
-<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="live555_class.jpg" alt=""></p>
+<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="/2018/12/20/流媒体/live555分析/live555_class.jpg" alt=""></p>
 <h1 id="RTSP流程分析"><a href="#RTSP流程分析" class="headerlink" title="RTSP流程分析"></a>RTSP流程分析</h1><p>从RTSPServer::RTSPClientConnection::handleRequestBytes函数分析， 当socket接收到bytes,由handleRequestBytes进行拆包处理,一般的交互流程如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. C-&gt;S: OPTION request 询问S提供的方法</span><br><span class="line">1. S-&gt;C: OPTION response S回应提供的所有可用方法</span><br><span class="line"></span><br><span class="line">2. C-&gt;S: DESCRIBE request 要求得到S提供的媒体初始化描述信息</span><br><span class="line">2. S-&gt;C: DESCRIBE response S回应媒体初始化描述信息， 主要是SDP</span><br><span class="line"></span><br><span class="line">3. C-&gt;S: SETUP request 设置会话的属性，以及传输模式，并提醒S建立会话</span><br><span class="line">3. S-&gt;C: SETUP response S建立会话，返回会话标识符及会话相关信息</span><br><span class="line"></span><br><span class="line">4. C-&gt;S: PLAY request C请求播放</span><br><span class="line">4. S-&gt;C: PLAY response S回应请求信息</span><br><span class="line"></span><br><span class="line">5. S-&gt;C: 发送流媒体数据</span><br><span class="line"></span><br><span class="line">6. C-&gt;S: TEARDOWN request C请求关闭会话</span><br><span class="line">6. S-&gt;C: TEARDOWN response S回应请求</span><br></pre></td></tr></table></figure>
 <h2 id="OPTION"><a href="#OPTION" class="headerlink" title="OPTION"></a>OPTION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">char const* RTSPServer::allowedCommandNames() &#123;</span><br><span class="line">  return &quot;OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientConnection::handleCmd_OPTIONS() &#123;</span><br><span class="line">  snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">       &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n&quot;,</span><br><span class="line">       fCurrentCSeq, dateHeader(), fOurRTSPServer.allowedCommandNames());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -124,7 +124,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqgv69x4000wdsvc1u3e9fah" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqi6tady000xxkvceaq5ytq5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -161,7 +161,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -176,7 +176,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -187,6 +187,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -202,10 +206,6 @@
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>

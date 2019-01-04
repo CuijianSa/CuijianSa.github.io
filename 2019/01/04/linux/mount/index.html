@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>mount | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）  利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点。  当创建新的mount namespac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mount">
+<meta property="og:url" content="http://yoursite.com/2019/01/04/linux/mount/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）  利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点。  当创建新的mount namespac">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-01-04T15:41:02.943Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mount">
+<meta name="twitter:description" content="概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）  利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点。  当创建新的mount namespac">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux/mount" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/04/linux/mount/" class="article-date">
+  <time datetime="2019-01-04T15:20:55.000Z" itemprop="datePublished">2019-01-04</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mount
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><h2 id="peer-group"><a href="#peer-group" class="headerlink" title="peer group"></a>peer group</h2><p>peer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）</p>
+<ul>
+<li><p>利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点。</p>
+</li>
+<li><p>当创建新的mount namespace时，新namespace会拷贝一份老namespace的挂载点信息，于是新的和老的namespace里面的相同挂载点就会属于同一个peer group</p>
+</li>
+</ul>
+<h2 id="propagation-type"><a href="#propagation-type" class="headerlink" title="propagation type"></a>propagation type</h2><p>每个挂载点都有一个propagation type标志, 由它来决定当一个挂载点的下面创建和移除挂载点的时候，是否会传播到属于相同peer group的其他挂载点下去，也即同一个peer group里的其他的挂载点下面是不是也会创建和移除相应的挂载点.现在有4种不同类型的propagation type：</p>
+<ul>
+<li><p>MS_SHARED: 从名字就可以看出，挂载信息会在同一个peer group的不同挂载点之间共享传播. 当一个挂载点下面添加或者删除挂载点的时候，同一个peer group里的其他挂载点下面也会挂载和卸载同样的挂载点</p>
+</li>
+<li><p>MS_PRIVATE: 跟上面的刚好相反，挂载信息根本就不共享，也即private的挂载点不会属于任何peer group</p>
+</li>
+<li><p>MS_SLAVE: 跟名字一样，信息的传播是单向的，在同一个peer group里面，master的挂载点下面发生变化的时候，slave的挂载点下面也跟着变化，但反之则不然，slave下发生变化的时候不会通知master，master不会发生变化。</p>
+</li>
+<li><p>MS_UNBINDABLE: 这个和MS_PRIVATE相同，只是这种类型的挂载点不能作为bind mount的源，主要用来防止递归嵌套情况的出现</p>
+</li>
+</ul>
+<p>最近做自包含就由这个问题， 当把根目录下/dev /sys使用mount –rbind 到当前目录下， 卸载目录时出现Device Busy， 发现系统进程占用了当前挂载点下/sys …, 导致目录一直被占用</p>
+<p>解决方法</p>
+<ul>
+<li>使用umount -l ,  lazy可卸载当前挂载点, 但加上-l选项时出现/usr/…/cgroup也被卸载了…；原因如下，原先mount默认使用MS_SHARED，umount -l 挂载点会将挂载点下所有的挂载节点清除， 而；原因如下，原先mount默认使用MS_SHARED 则会共享挂载信息， 导致根目录下系节点也被卸载， mount 加上–make-slave时解决。猜测加上MS_SLAVE时， 源目录挂载消息可以通过内核消息传递给挂载点， 而SLAVE挂载点挂载信息则会被内核屏蔽。故虚拟化环境应当推荐使用MS_SLAVE</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">-l, --lazy</span><br><span class="line">             Lazy unmount.  Detach the filesystem from the file hierarchy</span><br><span class="line">             now, and clean up all references to this filesystem as soon as</span><br><span class="line">             it is not busy anymore.</span><br><span class="line"></span><br><span class="line">             A system reboot would be expected in near future if you&apos;re</span><br><span class="line">             going to use this option for network filesystem or local</span><br><span class="line">             filesystem with submounts.  The recommended use-case for</span><br><span class="line">             umount -l is to prevent hangs on shutdown due to an</span><br><span class="line">             unreachable network share where a normal umount will hang due</span><br><span class="line">             to a downed server or a network partition. Remounts of the</span><br><span class="line">             share will not be possible.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqi75xtw000044vcwpngh028" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/12/27/流媒体/H264/h264分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">h264分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

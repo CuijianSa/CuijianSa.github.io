@@ -17,7 +17,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG">
 <meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header.JPG">
 <meta property="og:image" content="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header_package.JPG">
-<meta property="og:updated_time" content="2019-01-03T16:53:06.386Z">
+<meta property="og:updated_time" content="2019-01-04T15:24:44.154Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="live555分析-RTSP通信">
 <meta name="twitter:description" content="RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互    方法 作用     OPTIONS 获得服务器提供的可用方法   DESCRIBE 获得会话描述信息   SETUP 客户端请求建立会话，确定传输模式   TEARDOWN 客户端发起关闭会话请求   PLAY 客户端发起播放请求    https://blog.csdn.net/deliapu/">
@@ -135,7 +135,7 @@
 <li>RTSP：实时流协议（Real Time Streaming Protocol，RTSP）RTSP的请求主要有DESCRIBE,SETUP,PLAY,PAUSE,TEARDOWN,OPTIONS等，顾名思义可以知道起对话和控制作用 RTSP的对话过程中SETUP可以确定RTP/RTCP使用的端口，PLAY/PAUSE/TEARDOWN可以开始或者停止RTP的发送，等等</li>
 <li>RTCP：RTP/RTCP是实际传输数据的协议 RTCP包括Sender Report和Receiver Report，用来进行音频/视频的同步以及其他用途，是一种控制协议</li>
 </ul>
-<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="rtsp_summary.JPG" alt=""></p>
+<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG" alt=""></p>
 <p>由wireshark抓包来看，客户端地址为192.168.248.1,这是因为服务器是在虚拟机中跑的，采用NAT模式。故客户端连接服务端是通过虚拟网卡进行访问的，所以和客户端实际地址不符</p>
 <p>由图可知，vlc实际上是通过rtsp over tcp,首先客户端和服务端建连，进行三次握手</p>
 <pre><code>C                         S
@@ -229,7 +229,7 @@ CSeq: 6
 </code></pre></li>
 </ul>
 <p>RTSP已经分析完毕，现在对RTP H264进行梳理一下了</p>
-<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="rtp_header.JPG" alt=""></p>
+<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header.JPG" alt=""></p>
 <ul>
 <li>V: RTP version</li>
 <li>P: 填充标志，if P = 1, 则在payload后面填充一个或者多个额外的8位组，非有效载荷的一部分</li>
@@ -242,7 +242,7 @@ CSeq: 6
 <li>SSRC： 标示同步信源，随机选择的，参加同一视频会议的两个SSRC不能相同</li>
 <li>CSRC: 可有0~15个，每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</li>
 </ul>
-<p><img src="rtp_header_package.JPG" alt=""></p>
+<p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header_package.JPG" alt=""></p>
 <ul>
 <li>V: rtp version, 2</li>
 <li>P: 0 无填充</li>
@@ -342,7 +342,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqgv69wu000mdsvcoe5c9fvf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqi6tadn000nxkvc3991u3bk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -379,7 +379,7 @@ CSeq: 6
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -394,7 +394,7 @@ CSeq: 6
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -405,6 +405,10 @@ CSeq: 6
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/01/04/linux/mount/">mount</a>
+          </li>
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
@@ -420,10 +424,6 @@ CSeq: 6
         
           <li>
             <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/20/流媒体/live555分析/">live555分析</a>
           </li>
         
       </ul>
