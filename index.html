@@ -66,6 +66,114 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-other/指针数组和数组指针" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/other/指针数组和数组指针/" class="article-date">
+  <time datetime="2019-01-07T14:17:19.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h1><ul>
+<li>int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如要将二维数组赋给一指针，应这样赋值：</span><br><span class="line">int a[3][4];</span><br><span class="line">int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。</span><br><span class="line"> p=a;        //将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span><br><span class="line"> p++;       //该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span><br></pre></td></tr></table></figure>
+<h1 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h1><ul>
+<li>int <em>p[n];[]优先级高于</em>，故先于p组成数组， int*说明是整形指针数组它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素</li>
+</ul>
+<h1 id="引申"><a href="#引申" class="headerlink" title="引申"></a>引申</h1><ul>
+<li>指针数组：首先它是一个数组，数组的元素都是指针，数组占多少个字节由数组本身的大小决定，每一个元素都是一个指针，在32 位系统下任何类型的指针永远是占4 个字节。它是“储存指针的数组”的简称。</li>
+<li>数组指针：首先它是一个指针，它指向一个数组。在32 位系统下任何类型的指针永远是占4 个字节，至于它指向的数组占多少字节，不知道，具体要看数组大小。它是“指向数组的指针”的简称。</li>
+</ul>
+<p><img src="/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg" alt=""><br><img src="/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示2.jpg" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjqmff06000048wvc8j51b5k9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-other/函数指针和指针函数" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/other/函数指针和指针函数/" class="article-date">
+  <time datetime="2019-01-07T14:11:46.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h1><p>返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 </p>
+<p>声明格式为：类型标识符 *函数名(参数表)</p>
+<p>例如:<br>int *fun(int x,int y);</p>
+<h1 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h1><p>其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。</p>
+<p>声明格式：类型说明符 (*函数名) (参数) </p>
+<p>int (*fun)(int x,int y);</p>
+<p>函数指针是需要把一个函数的地址赋值给它，有两种写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fun = &amp;Function；</span><br><span class="line">fun = Function;</span><br></pre></td></tr></table></figure></p>
+<p>调用函数指针的方式也有两种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = (*fun)();</span><br><span class="line">x = fun();</span><br></pre></td></tr></table></figure></p>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><h2 id="定义不同"><a href="#定义不同" class="headerlink" title="定义不同"></a>定义不同</h2><ul>
+<li>指针函数本质是一个函数，其返回值为指针。 </li>
+<li>函数指针本质是一个指针，其指向一个函数。</li>
+</ul>
+<h2 id="写法"><a href="#写法" class="headerlink" title="写法"></a>写法</h2><ul>
+<li>指针函数：int* fun(int x,int y); </li>
+<li>函数指针：int (*fun)(int x,int y); </li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjqmff05v00018wvcy5hgae6l" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/live555分析-startStream" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/05/流媒体/live555分析-startStream/" class="article-date">
@@ -96,7 +204,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjqjprzus0009ngvcc4x9fasv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjqmff06o000f8wvchzph9n57" class="article-share-link">Share</a>
       
       
     </footer>
@@ -160,7 +268,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqjprzue0001ngvc5563jzhm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqmff06q000i8wvc90qw5hpj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -459,7 +567,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqjprzvr0013ngvctnxgurz6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqmff07q00198wvc040v97yu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -739,7 +847,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqjprzv8000qngvc6db40vbz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqmff079000w8wvc1y5ru2bp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -783,7 +891,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqjprzve000ungvcrx47mqm7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqmff07d000y8wvc7gjnbnr6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -847,7 +955,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqjprzv8000rngvcfp7kpgb9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqmff075000u8wvc67an1p9s" class="article-share-link">Share</a>
       
       
     </footer>
@@ -916,7 +1024,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqjprzvb000sngvc5tvmyped" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqmff076000v8wvc10teere6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -966,101 +1074,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjqjprzug0002ngvc2cbjw0s3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/19/hello-world/" class="article-date">
-  <time datetime="2018-12-18T17:00:04.475Z" itemprop="datePublished">2018-12-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/19/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjqjprzt40000ngvcm3gq7532" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-other/github访问提速" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/01/other/github访问提速/" class="article-date">
-  <time datetime="2018-12-01T13:34:05.000Z" itemprop="datePublished">2018-12-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/other/">other</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/01/other/github访问提速/">github访问提速</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>github的CDN被屏蔽，由于网络代理商的原因，所以访问下载很慢。Ping github.com 时，速度只有300多ms。</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>绕过dns解析，在本地直接绑定host，该方法也可加速其他因为CDN被屏蔽导致访问慢的网站</p>
-<ul>
-<li>访问ipaddress网站<a href="https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具" target="_blank" rel="noopener">https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具</a></li>
-<li>查询 github.global.ssl.fastly.net 和 github.com 两个地址</li>
-<li>将ip和domain name加到/etc/hosts中</li>
-<li>重启网络 /etc/init.d/networking restart</li>
-<li>Done</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjqjprzui0004ngvcsc5z8wxs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjqmff06s000j8wvckz2yuh2k" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1113,6 +1127,14 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/05/流媒体/live555分析-startStream/">live555分析-startStream</a>
           </li>
         
@@ -1122,14 +1144,6 @@ CSeq: 6
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
           </li>
         
       </ul>

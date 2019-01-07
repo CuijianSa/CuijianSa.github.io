@@ -66,6 +66,100 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/19/hello-world/" class="article-date">
+  <time datetime="2018-12-18T17:00:04.475Z" itemprop="datePublished">2018-12-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjqmff05g00008wvc3qkr084i" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-other/github访问提速" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/01/other/github访问提速/" class="article-date">
+  <time datetime="2018-12-01T13:34:05.000Z" itemprop="datePublished">2018-12-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/other/">other</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/01/other/github访问提速/">github访问提速</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>github的CDN被屏蔽，由于网络代理商的原因，所以访问下载很慢。Ping github.com 时，速度只有300多ms。</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>绕过dns解析，在本地直接绑定host，该方法也可加速其他因为CDN被屏蔽导致访问慢的网站</p>
+<ul>
+<li>访问ipaddress网站<a href="https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具" target="_blank" rel="noopener">https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具</a></li>
+<li>查询 github.global.ssl.fastly.net 和 github.com 两个地址</li>
+<li>将ip和domain name加到/etc/hosts中</li>
+<li>重启网络 /etc/init.d/networking restart</li>
+<li>Done</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjqmff06100058wvcga2jc9qv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-other/数组地址操作" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/11/14/other/数组地址操作/" class="article-date">
@@ -105,7 +199,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjqjprzuj0005ngvcx73fgn8b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjqmff05x00028wvcoe5gthwu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -171,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqjprzvl0010ngvcv7m7j7od" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjqmff07k00178wvcibqzlt10" class="article-share-link">Share</a>
       
       
     </footer>
@@ -348,7 +442,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjqjprzup0008ngvcv22pocqg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjqmff06p000g8wvc2w7kcvzb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -446,7 +540,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjqjprzuo0006ngvcvndsotq5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjqmff06200068wvcjbihdt2w" class="article-share-link">Share</a>
       
       
     </footer>
@@ -555,7 +649,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjqjprzv6000pngvc71885tka" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjqmff074000s8wvc0drrcsm8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -711,7 +805,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjqjprzut000cngvcf1x1e5cq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjqmff073000r8wvctrq6ynuf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1098,7 +1192,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjqjprzvk000zngvcb07mlnxu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjqmff07e00108wvct0mplc3q" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1151,6 +1245,14 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/05/流媒体/live555分析-startStream/">live555分析-startStream</a>
           </li>
         
@@ -1160,14 +1262,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
           </li>
         
       </ul>
