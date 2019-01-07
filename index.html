@@ -66,6 +66,1163 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux/用户态和内核态" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/linux/用户态和内核态/" class="article-date">
+  <time datetime="2019-01-07T14:49:33.905Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="date" content="2019-01-07 22:48:08">
+<meta name="categories" content="linux">
+<meta name="tags" content=""><style>body {
+  max-width: 980px;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 45px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAABE0AA8AAAAAHWwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABWAAAADsAAABUIIslek9TLzIAAAGUAAAAQwAAAFY3d1HZY21hcAAAAdgAAACqAAACOvWLi0FjdnQgAAAChAAAABMAAAAgBtX/BGZwZ20AAAKYAAAFkAAAC3CKkZBZZ2FzcAAACCgAAAAIAAAACAAAABBnbHlmAAAIMAAABdQAAAjkYT9TNWhlYWQAAA4EAAAAMwAAADYQ6WvNaGhlYQAADjgAAAAfAAAAJAc6A1pobXR4AAAOWAAAACAAAAA0Kmz/7mxvY2EAAA54AAAAHAAAABwQPBJubWF4cAAADpQAAAAgAAAAIAEHC/NuYW1lAAAOtAAAAYQAAALxhQT4h3Bvc3QAABA4AAAAfgAAAMS3SYh9cHJlcAAAELgAAAB6AAAAhuVBK7x4nGNgZGBg4GIwYLBjYHJx8wlh4MtJLMljkGJgYYAAkDwymzEnMz2RgQPGA8qxgGkOIGaDiAIAJjsFSAB4nGNgZHZmnMDAysDAVMW0h4GBoQdCMz5gMGRkAooysDIzYAUBaa4pDA4Pwz+yMwf9z2KIYg5imAYUZgTJAQDcoQvQAHic7ZHNDYJAFIRnBXf94cDRIiyCKkCpwFCPJ092RcKNDoYKcN4+EmMPvpdvk539zQyAPYBCXEUJhBcCrJ5SQ9YLnLJe4qF5rdb+uWPDngNHTkta101pNyWa8lMhn6xx2dqUnW4q9YOIhAOOeueMSgsR/6ry+P7O5s6xVNg4chBsHUuFnWNJ8uZYwrw7chrsHXkODo7cB0dHOYCTY8kv0VE2WJKD6gOlWjsxAAB4nGNgQAMSEMgc9D8LhAESbAPdAHicrVZpd9NGFB15SZyELCULLWphxMRpsEYmbMGACUGyYyBdnK2VoIsUO+m+8Ynf4F/zZNpz6Dd+Wu8bLySQtOdwmpOjd+fN1czbZRJaktgL65GUmy/F1NYmjew8CemGTctRfCg7eyFlisnfBVEQrZbatx2HREQiULWusEQQ+x5ZmmR86FFGy7akV03KLT3pLlvjQb1V334aOsqxO6GkZjN0aD2yJVUYVaJIpj1S0qZlqPorSSu8v8LMV81QwohOImm8GcbQSN4bZ7TKaDW24yiKbLLcKFIkmuFBFHmU1RLn5IoJDMoHzZDyyqcR5cP8iKzYo5xWsEu20/y+L3mndzk/sV9vUbbkQB/Ijuzg7HQlX4RbW2HctJPtKFQRdtd3QmzZ7FT/Zo/ymkYDtysyvdCMYKl8hRArP6HM/iFZLZxP+ZJHo1qykRNB62VO7Es+gdbjiClxzRhZ0N3RCRHU/ZIzDPaYPh788d4plgsTAngcy3pHJZwIEylhczRJ2jByYCVliyqp9a6YOOV1WsRbwn7t2tGXzmjjUHdiPFsPHVs5UcnxaFKnmUyd2knNoykNopR0JnjMrwMoP6JJXm1jNYmVR9M4ZsaERCICLdxLU0EsO7GkKQTNoxm9uRumuXYtWqTJA/Xco/f05la4udNT2g70s0Z/VqdiOtgL0+lp5C/xadrlIkXp+ukZfkziQdYCMpEtNsOUgwdv/Q7Sy9eWHIXXBtju7fMrqH3WRPCkAfsb0B5P1SkJTIWYVYhWQGKta1mWydWsFqnI1HdDmla+rNMEinIcF8e+jHH9XzMzlpgSvt+J07MjLj1z7UsI0xx8m3U9mtepxXIBcWZ5TqdZlu/rNMfyA53mWZ7X6QhLW6ejLD/UaYHlRzodY3lBC5p038GQizDkAg6QMISlA0NYXoIhLBUMYbkIQ1gWYQjLJRjC8mMYwnIZhrC8rGXV1FNJ49qZWAZsQmBijh65zEXlaiq5VEK7aFRqQ54SbpVUFM+qf2WgXjzyhjmwFkiXyJpfMc6Vj0bl+NYVLW8aO1fAsepvH472OfFS1ouFPwX/1dZUJb1izcOTq/Abhp5sJ6o2qXh0TZfPVT26/l9UVFgL9BtIhVgoyrJscGcihI86nYZqoJVDzGzMPLTrdcuan8P9NzFCFlD9+DcUGgvcg05ZSVnt4KzV19uy3DuDcjgTLEkxN/P6VvgiI7PSfpFZyp6PfB5wBYxKZdhqA60VvNknMQ+Z3iTPBHFbUTZI2tjOBIkNHPOAefOdBCZh6qoN5E7hhg34BWFuwXknXKJ6oyyH7kXs8yik/Fun4kT2qGiMwLPZG2Gv70LKb3EMJDT5pX4MVBWhqRg1FdA0Um6oBl/G2bptQsYO9CMqdsOyrOLDxxb3lZJtGYR8pIjVo6Of1l6iTqrcfmYUl++dvgXBIDUxf3vfdHGQyrtayTJHbQNTtxqVU9eaQ+NVh+rmUfW94+wTOWuabronHnpf06rbwcVcLLD2bQ7SUiYX1PVhhQ2iy8WlUOplNEnvuAcYFhjQ71CKjf+r+th8nitVhdFxJN9O1LfR52AM/A/Yf0f1A9D3Y+hyDS7P95oTn2704WyZrqIX66foNzBrrblZugbc0HQD4iFHrY64yg18pwZxeqS5HOkh4GPdFeIBwCaAxeAT3bWM5lMAo/mMOT7A58xh0GQOgy3mMNhmzhrADnMY7DKHwR5zGHzBnHWAL5nDIGQOg4g5DJ4wJwB4yhwGXzGHwdfMYfANc+4DfMscBjFzGCTMYbCv6dYwzC1e0F2gtkFVoANTT1jcw+JQU2XI/o4Xhv29Qcz+wSCm/qjp9pD6Ey8M9WeDmPqLQUz9VdOdIfU3Xhjq7wYx9Q+DmPpMvxjLZQa/jHyXCgeUXWw+5++J9w/bxUC5AAEAAf//AA94nIVVX2hbZRQ/5/t7893s5ja9f7ouzdZ0TTqz3bRJmogbWya6bG6Cq0VbSV2ddIJjFtfIQHEig80Hda8yUN/0YQz8AyriiyD+xQd92R4HCnaCb3samnpumrpsCsLlfPf7zvedc37nL3CAtc/5W/wQZGA3tOBSY/g+TMjHmwzEoM1Q8+ZjRZY4oJhmBw5/YB6Za0yC5AkhlwA1A1yCBIBOwCII0Cj0U8BAMdUCzq05sKwkP7SlUY6fcJk4Fb/RyE79/6P5hjM/F4aZiXBoeMgzcqQ4Xi1hPqfDLG5FT+lchCVU3lYMyvuwhl1mqndQL0RsuloLywHtthLXI06OblTrhfWVnpSJ5+mwu/JdbtuN3IAnkW0LLMcRwaC7ktrlzridM6kVdyf9uO1UNBByI7JhwtG2sEwab07ORBeilWhqavJCqV0qzZTOl/7ZXQ5TbTcdcFelyGhhRDAQpdqp1FEX3w3cFTc1k9pJQkmm4ySCbSikxRP2QOfN+0tHS5MrpQuTU1Mk5nw0E5Xa0WvrOwDyGax9yB9ma6DAg82wHc43SAGTI4GjBWebOePAERFE8/AHaQpZASSTy8A4WwZiLQMQ82mFKATO0ILicRAoDm9p5P99E5b/fXG+kQYY3TYUuqmERWYoT0u/GNYL2q/4WB3LaVS+VynXsVYIcWw6DkCh3nX1D+VzlYN4LClF5yexSQos8exqZ3KVP+wtrC54u4Nznq6cq+xpMpUUnZ8FUYzE86ud0g28NOIv3Gj5/rmA3ABs7S/ywzFuQ4qyd6QxfNtiQIaEgp3w/entQg4Vcbqa16M5FfpeUB8t1+qeg7mI7cUyOe79wOk86gSxkVec4KPTX69++5x68Yubn5/F+w52z7u08sJX7fZXv8ekT/d2mILJxq6sn+SC6qEJknzLJCxyZEKwWVqYmAPBxBE/9DLeZiWHu7lcr/VytrCRuHojncNuTt9h46tmacmYisnSamdN2bZptcsmSysdVsy1PrOvOzF3xN64Rb937t/og9KHxYdcjIUqFAmIAHGHNzlns+RTPgeUYAQm9DwpNxfxbhhBHPaw3/gfTcXO2L+eJVIx5nsyGkvm9X4/f+bGkH45G0PaSjcMXTjcZyTvi3UdHoCDjQd3IDUVsgwYmUoJK/gp4JJxeRI0MKHZIkgynyIBqBTOUs6rOVCojvjZ4mCQz49ZMlMcp8QoYk6NoBfsxnJtsBohpa8iGJS+ZH7gU7NxME6cmF+t7cO9vB8d3jTWSct0ycW9ranXmolNDwmVkNnxe+8JtoztwS5rKJ0xWS95tQ/1zMYzg69MzUZnNtl1ofNbsml/OJm6f9wjRjpnu2o4MzHzn77IQkRd+1DjwMQ2pqSjGMMhyjrgTbBAKksuUm0iU7hI0aN2wOKOq7WYBSH0HGihj/jkiPxAfmwsEbfYrjMG+j3ij932Db/LV7I/xruNrhnroxjR9HRMb2nTvO0ZXOoHPk8H2ZhDPx93qcE/53sH5np/dkIP7zzhTVKdR/BAY/9ElkkR+A6lJGsqpJ4oQcTxpvBT3Kn58VkaJjgHyPEIws57xkaHh9KuVpDEpJZeMbZ5w/zBHi5NMQ4r5VphsFqID7TyB9eR4pX216c3AHxpdAwoqU9qg0ZJ6yVLKmMSz1iG2z27ifx18NkY0LPx1W/wCc2l5LrznrIsiKsqbmB78A9wIGx4tI8rjihVHJyY9pgMirenVq0yWg7Iw7eogG7ZgYM3qR9959A/fZkg6MnD/exlkmc+jWV4SB15XUR+eqC6l6ZmgPtN9z5JMfik05OV8ljylunJ4J+wA/FUaQSSKotsYsCWqaPBidBLcxkWx7XKFRIb45TGaEhjlF9uUVPqXOtcIwsXbBvfoZXIyRYFdkfnqjExH98xpnPczqzjX/uNdO1Y17Wpi5+6Ts8BXtjVFasp9KZ1mOiNbH65c5w6HgmyF2jFCZywM8mWjRc7T5Pmt0lRy7Y71+jYbpGyvwG4sH0XeJxjYGRgYADiwBB/53h+m68M3MwvgCIM1z5N/g6j///9v5H5BbMnkMvBwAQSBQCIcA9gAHicY2BkYGAO+p8FJF/8//v/F/MLBqAICuAFALYQB5kAeJxjfsHAwLwAiCNB+P9fbJjJmoGBMRUo/wKCAfO2EnQAAAAAANoBXgGcAgICVALaA1IDvAPkBAYEPARyAAEAAAANAF0ABAAAAAAAAgAUACQAcwAAAG4LcAAAAAB4nHWRzWrCQBSFT+pPqUIXLXTTzayKUohGKIibCoLuhbrrYtTRxCYZmYyKyz5Fd32HvlDfoO/QkziIFJtw9bvnnpl7ZwLgBt/wcHieGAf2UGd24Atcou+4RH3kuEweO66QXx1XyaHjGh6ROa7jFp/cwStfMVvhy7GHO+/e8QWuvcBxifqz4zL5xXGF/Oa4Sn53XMPE+3Bcx4P3M9DrvYmWoRWNQVN02kFXTPdCU4pSGQu5saE2meiLhU6timPtz3SSs9ypTCdqrJabWJoT5QQnymSRTkXgt0/UkUqVkVbN807ZdtmxdiEWRidi6HqItdErNbN+aO2612qd9sYAGmvsYRBhyUu0EGhQbfK/gzYCdElTOgSdB1eEFBIxFYkNV4RFJWPeZyyYpVQVHTHZx4y/yVGX2LGWFZri51TccUOn5B7nPefVCSPvGhVVwUl9znveO2KkhV8Wk82PZ8qwZf8OVcu1+fSmWCMw/HMOwXvKaysqM+p+cVuWag8tvv+c+xdd+4+teJxtjUEOwiAURJla24KliQfhUA2g/Sl+CKXx+loNrpzVezOLEY34Ron/0WhwQoszOvQYIKFwwQiNSbSBeO2SZ0tBP4j3zVjKNng32ZmtD1VVXCuOiw/pJ8S3WOU6l+K5UOTaDC4+2TjKMtN9KQf1ezLx/Sg/00FCvABHhjDjAAB4nGPw3sFwIihiIyNjX+QGxp0cDBwMyQUbGVidNjEwMmiBGJu5mBg5ICw+BjCLzWkX0wGgNCeQze60i8EBwmZmcNmowtgRGLHBoSNiI3OKy0Y1EG8XRwMDI4tDR3JIBEhJJBBs5mFi5NHawfi/dQNL70YmBhcADHYj9AAA) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headerlink {
+  font: normal 400 16px fontawesome-mini;
+  vertical-align: middle;
+  margin-left: -16px;
+  float: left;
+  display: inline-block;
+  text-decoration: none;
+  opacity: 0;
+  color: #333;
+}
+
+.markdown-body .headerlink:focus {
+  outline: none;
+}
+
+.markdown-body h1 .headerlink {
+  margin-top: 0.8rem;
+}
+
+.markdown-body h2 .headerlink,
+.markdown-body h3 .headerlink {
+  margin-top: 0.6rem;
+}
+
+.markdown-body h4 .headerlink {
+  margin-top: 0.2rem;
+}
+
+.markdown-body h5 .headerlink,
+.markdown-body h6 .headerlink {
+  margin-top: 0;
+}
+
+.markdown-body .headerlink:hover,
+.markdown-body h1:hover .headerlink,
+.markdown-body h2:hover .headerlink,
+.markdown-body h3:hover .headerlink,
+.markdown-body h4:hover .headerlink,
+.markdown-body h5:hover .headerlink,
+.markdown-body h6:hover .headerlink {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* MultiMarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px fontawesome-mini;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\e157';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><style>/*GitHub*/
+.codehilite {background-color:#fff;color:#333333;}
+.codehilite .hll {background-color:#ffffcc;}
+.codehilite .c{color:#999988;font-style:italic}
+.codehilite .err{color:#a61717;background-color:#e3d2d2}
+.codehilite .k{font-weight:bold}
+.codehilite .o{font-weight:bold}
+.codehilite .cm{color:#999988;font-style:italic}
+.codehilite .cp{color:#999999;font-weight:bold}
+.codehilite .c1{color:#999988;font-style:italic}
+.codehilite .cs{color:#999999;font-weight:bold;font-style:italic}
+.codehilite .gd{color:#000000;background-color:#ffdddd}
+.codehilite .ge{font-style:italic}
+.codehilite .gr{color:#aa0000}
+.codehilite .gh{color:#999999}
+.codehilite .gi{color:#000000;background-color:#ddffdd}
+.codehilite .go{color:#888888}
+.codehilite .gp{color:#555555}
+.codehilite .gs{font-weight:bold}
+.codehilite .gu{color:#800080;font-weight:bold}
+.codehilite .gt{color:#aa0000}
+.codehilite .kc{font-weight:bold}
+.codehilite .kd{font-weight:bold}
+.codehilite .kn{font-weight:bold}
+.codehilite .kp{font-weight:bold}
+.codehilite .kr{font-weight:bold}
+.codehilite .kt{color:#445588;font-weight:bold}
+.codehilite .m{color:#009999}
+.codehilite .s{color:#dd1144}
+.codehilite .n{color:#333333}
+.codehilite .na{color:teal}
+.codehilite .nb{color:#0086b3}
+.codehilite .nc{color:#445588;font-weight:bold}
+.codehilite .no{color:teal}
+.codehilite .ni{color:purple}
+.codehilite .ne{color:#990000;font-weight:bold}
+.codehilite .nf{color:#990000;font-weight:bold}
+.codehilite .nn{color:#555555}
+.codehilite .nt{color:navy}
+.codehilite .nv{color:teal}
+.codehilite .ow{font-weight:bold}
+.codehilite .w{color:#bbbbbb}
+.codehilite .mf{color:#009999}
+.codehilite .mh{color:#009999}
+.codehilite .mi{color:#009999}
+.codehilite .mo{color:#009999}
+.codehilite .sb{color:#dd1144}
+.codehilite .sc{color:#dd1144}
+.codehilite .sd{color:#dd1144}
+.codehilite .s2{color:#dd1144}
+.codehilite .se{color:#dd1144}
+.codehilite .sh{color:#dd1144}
+.codehilite .si{color:#dd1144}
+.codehilite .sx{color:#dd1144}
+.codehilite .sr{color:#009926}
+.codehilite .s1{color:#dd1144}
+.codehilite .ss{color:#990073}
+.codehilite .bp{color:#999999}
+.codehilite .vc{color:teal}
+.codehilite .vg{color:teal}
+.codehilite .vi{color:teal}
+.codehilite .il{color:#009999}
+.codehilite .gc{color:#999;background-color:#EAF2F5}
+</style><title>用户态和内核态</title></head><body><article class="markdown-body"><p><img alt="" src="///E://share/do/hexo/source/_posts/linux/%E7%94%A8%E6%88%B7%E6%80%81%E5%92%8C%E5%86%85%E6%A0%B8%E6%80%81/Unix_Linux%E7%9A%84%E4%BD%93%E7%B3%BB%E6%9E%B6%E6%9E%84.png"></p>
+<p>从宏观上来看，Linux操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。内核从本质上看是一种软件——控制计算机的硬件资源，并提供上层应用程序运行的环境。用户态即上层应用程序的活动空间，应用程序的执行必须依托于内核提供的资源，包括CPU资源、存储资源、I/O资源等。为了使上层应用能够访问到这些资源，内核必须为上层应用提供访问的接口：即系统调用。</p>
+<h1 id="reference">reference<a class="headerlink" href="#reference" title="Permanent link"></a></h1>
+<p><a href="https://www.cnblogs.com/bakari/p/5520860.html" target="_blank" rel="noopener">Linux探秘之用户态与内核态</a></p></article></body></html>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cjqmiww0j001d1ovccwowr6mo" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-linux/用户态和内核态" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/linux/用户态和内核态/" class="article-date">
+  <time datetime="2019-01-07T14:48:08.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="用户态及内核态介绍"><a href="#用户态及内核态介绍" class="headerlink" title="用户态及内核态介绍"></a>用户态及内核态介绍</h1><p><img src="/2019/01/07/linux/用户态和内核态/Unix_Linux的体系架构.png" alt=""></p>
+<p>从宏观上来看，Linux操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。<em>内核从本质上看是一种软件——控制计算机的硬件资源，并提供上层应用程序运行的环境</em>。用户态即上层应用程序的活动空间，应用程序的执行必须依托于内核提供的资源，包括CPU资源、存储资源、I/O资源等。为了使上层应用能够访问到这些资源，内核必须为上层应用提供访问的接口：即系统调用。</p>
+<p>系统调用是操作系统的最小功能单位，这些系统调用根据不同的应用场景可以进行扩展和裁剪，现在各种版本的Unix实现都提供了不同数量的系统调用，如Linux的不同版本提供了240-260个系统调用，FreeBSD大约提供了320个（reference：UNIX环境高级编程）。我们可以把系统调用看成是一种不能再化简的操作（类似于原子操作，但是不同概念），有人把它比作一个汉字的一个“笔画”，而一个“汉字”就代表一个上层应用，我觉得这个比喻非常贴切。因此，有时候如果要实现一个完整的汉字（给某个变量分配内存空间），就必须调用很多的系统调用。如果从实现者（程序员）的角度来看，这势必会加重程序员的负担，良好的程序设计方法是：重视上层的业务逻辑操作，而尽可能避免底层复杂的实现细节。库函数正是为了将程序员从复杂的细节中解脱出来而提出的一种有效方法。它实现对系统调用的封装，将简单的业务逻辑接口呈现给用户，方便用户调用，从这个角度上看，库函数就像是组成汉字的“偏旁”。这样的一种组成方式极大增强了程序设计的灵活性，对于简单的操作，我们可以直接调用系统调用来访问资源，如“人”，对于复杂操作，我们借助于库函数来实现，如“仁”。显然，这样的库函数依据不同的标准也可以有不同的实现版本，如ISO C 标准库，POSIX标准库等。</p>
+<p>　　Shell是一个特殊的应用程序，俗称命令行，本质上是一个命令解释器，它下通系统调用，上通各种应用，通常充当着一种“胶水”的角色，来连接各个小功能程序，让不同程序能够以一个清晰的接口协同工作，从而增强各个程序的功能。同时，Shell是可编程的，它可以执行符合Shell语法的文本，这样的文本称为Shell脚本，通常短短的几行Shell脚本就可以实现一个非常大的功能，原因就是这些Shell语句通常都对系统调用做了一层封装。为了方便用户和系统交互，一般，一个Shell对应一个终端，终端是一个硬件设备，呈现给用户的是一个图形化窗口。我们可以通过这个窗口输入或者输出文本。这个文本直接传递给shell进行分析解释，然后执行。</p>
+<p>总结一下，用户态的应用程序可以通过三种方式来访问内核态的资源：<br>1) 系统调用<br>2) 库函数<br>3) Shell脚本</p>
+<ul>
+<li>向下控制硬件资源</li>
+<li>向内管理操作系统资源<ul>
+<li>进程的调度和管理</li>
+<li>内存的管理</li>
+<li>文件系统的管理</li>
+<li>设备驱动</li>
+<li>网络资源的管理</li>
+</ul>
+</li>
+<li>向上则向应用程序提供系统调用的接口</li>
+</ul>
+<p>整个操作系统分为两层：用户态和内核态，这种分层的架构极大地提高了资源管理的可扩展性和灵活性，而且方便用户对资源的调用和集中式的管理，带来一定的安全性</p>
+<p><img src="/2019/01/07/linux/用户态和内核态/kernal_framework.jpg" alt=""></p>
+<h1 id="用户态及内核态的切换"><a href="#用户态及内核态的切换" class="headerlink" title="用户态及内核态的切换"></a>用户态及内核态的切换</h1><p>因为操作系统的资源是有限的，如果访问资源的操作过多，必然会消耗过多的资源，而且如果不对这些操作加以区分，很可能造成资源访问的冲突。所以，为了减少有限资源的访问和使用冲突，Unix/Linux的设计哲学之一就是：对不同的操作赋予不同的执行等级，就是所谓特权的概念。简单说就是有多大能力做多大的事，与系统相关的一些特别关键的操作必须由最高特权的程序来完成。Intel的X86架构的CPU提供了0到3四个特权级，数字越小，特权越高，Linux操作系统中主要采用了0和3两个特权级，分别对应的就是内核态和用户态。运行于用户态的进程可以执行的操作和访问的资源都会受到极大的限制，而运行在内核态的进程则可以执行任何操作并且在资源的使用上没有限制。很多程序开始时运行于用户态，但在执行的过程中，一些操作需要在内核权限下才能执行，这就涉及到一个从用户态切换到内核态的过程。比如C函数库中的内存分配函数malloc()，它具体是使用sbrk()系统调用来分配内存，当malloc调用sbrk()的时候就涉及一次从用户态到内核态的切换，类似的函数还有printf()，调用的是wirte()系统调用来输出字符串，等等。</p>
+<p><img src="/2019/01/07/linux/用户态和内核态/mode_change.gif" alt=""></p>
+<p>从用户态到内核态的切换:</p>
+<ol>
+<li>系统调用</li>
+<li>异常事件： 当CPU正在执行运行在用户态的程序时，突然发生某些预先不可知的异常事件，这个时候就会触发从当前用户态执行的进程转向内核态执行相关的异常事件，典型的如缺页异常。</li>
+<li>外围设备的中断：当外围设备完成用户的请求操作后，会像CPU发出中断信号，此时，CPU就会暂停执行下一条即将要执行的指令，转而去执行中断信号对应的处理程序，如果先前执行的指令是在用户态下，则自然就发生从用户态到内核态的转换。</li>
+</ol>
+<p>系统调用的本质其实也是中断，相对于外围设备的硬中断，这种中断称为软中断，这是操作系统为用户特别开放的一种中断，如Linux int 80h中断。所以，从触发方式和效果上来看，这三种切换方式是完全一样的，都相当于是执行了一个中断响应的过程。但是从触发的对象来看，系统调用是进程主动请求切换的，而异常和硬中断则是被动的。</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.cnblogs.com/bakari/p/5520860.html" target="_blank" rel="noopener">Linux探秘之用户态与内核态</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cjqmiwvzi00041ovczkdj8se3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-other/指针数组和数组指针" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/07/other/指针数组和数组指针/" class="article-date">
@@ -108,7 +1265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjqmff06000048wvc8j51b5k9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjqmiwvzm00091ovcsatwtq1u" class="article-share-link">Share</a>
       
       
     </footer>
@@ -164,7 +1321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjqmff05v00018wvcy5hgae6l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjqmiwvzl00081ovc14znrrrn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -204,7 +1361,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjqmff06o000f8wvchzph9n57" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjqmiwvzr000g1ovcpvgu20iz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -268,7 +1425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqmff06q000i8wvc90qw5hpj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjqmiwvze00011ovcdxoh07pp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -567,7 +1724,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqmff07q00198wvc040v97yu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjqmiww0l001e1ovcwk60lltg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -847,7 +2004,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqmff079000w8wvc1y5ru2bp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjqmiww0300111ovc6hxc0lxi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -891,7 +2048,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqmff07d000y8wvc7gjnbnr6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjqmiww0800141ovcq7fm3afk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -955,126 +2112,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqmff075000u8wvc67an1p9s" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/live555分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/20/流媒体/live555分析/" class="article-date">
-  <time datetime="2018-12-19T16:14:10.000Z" itemprop="datePublished">2018-12-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/流媒体/live555分析/">live555分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输协议如RTP/RTCP、RTSP、SIP等的支持。Live555实现了对多种音视频编码格式的音视频数据的流化、接收和处理等支持，包括MPEG、H.263+、DV、JPEG视频和多种音频编码。同时由于良好的设计，Live555非常容易扩展对其他格式的支持。</p>
-<p><a href="http://www.live555.com/" target="_blank" rel="noopener">live555官网</a></p>
-<p>live555被设计为单线程，不知为何没有设计为多线程模式。<br>其事件调度比较巧妙， 使用事件性驱动框架设计架构。底层select或epool实现</p>
-<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><ul>
-<li>UsageEnvironment</li>
-</ul>
-<p>UsageEnvironment和TaskScheduler类用于事件条用， 异步读取事件分配处理程序及输出error、warning消息。此外HashTable类定义了哈希表，这些都是基类必须被子类实现</p>
-<ul>
-<li>groupsock</li>
-</ul>
-<p>此库中的类封装了网络接口和套接字。 特别是，“Groupsock”类封装了一个用于发送（和/或接收）多播数据报的套接字。</p>
-<ul>
-<li>liveMedia</li>
-</ul>
-<p>该库定义了一个类层次结构 - 以“Medium”类为基类，适用于各种流媒体类型和编解码器。</p>
-<ul>
-<li>BasicUsageEnvironment</li>
-</ul>
-<p>该库定义了“UsageEnvironment”类的一个具体实现（即子类），用于简单的控制台应用程序。 使用select（）循环处理读取事件和延迟操作。</p>
-<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="/2018/12/20/流媒体/live555分析/live555_class.jpg" alt=""></p>
-<h1 id="RTSP流程分析"><a href="#RTSP流程分析" class="headerlink" title="RTSP流程分析"></a>RTSP流程分析</h1><p>从RTSPServer::RTSPClientConnection::handleRequestBytes函数分析， 当socket接收到bytes,由handleRequestBytes进行拆包处理,一般的交互流程如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. C-&gt;S: OPTION request 询问S提供的方法</span><br><span class="line">1. S-&gt;C: OPTION response S回应提供的所有可用方法</span><br><span class="line"></span><br><span class="line">2. C-&gt;S: DESCRIBE request 要求得到S提供的媒体初始化描述信息</span><br><span class="line">2. S-&gt;C: DESCRIBE response S回应媒体初始化描述信息， 主要是SDP</span><br><span class="line"></span><br><span class="line">3. C-&gt;S: SETUP request 设置会话的属性，以及传输模式，并提醒S建立会话</span><br><span class="line">3. S-&gt;C: SETUP response S建立会话，返回会话标识符及会话相关信息</span><br><span class="line"></span><br><span class="line">4. C-&gt;S: PLAY request C请求播放</span><br><span class="line">4. S-&gt;C: PLAY response S回应请求信息</span><br><span class="line"></span><br><span class="line">5. S-&gt;C: 发送流媒体数据</span><br><span class="line"></span><br><span class="line">6. C-&gt;S: TEARDOWN request C请求关闭会话</span><br><span class="line">6. S-&gt;C: TEARDOWN response S回应请求</span><br></pre></td></tr></table></figure>
-<h2 id="OPTION"><a href="#OPTION" class="headerlink" title="OPTION"></a>OPTION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">char const* RTSPServer::allowedCommandNames() &#123;</span><br><span class="line">  return &quot;OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientConnection::handleCmd_OPTIONS() &#123;</span><br><span class="line">  snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">       &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n&quot;,</span><br><span class="line">       fCurrentCSeq, dateHeader(), fOurRTSPServer.allowedCommandNames());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="DESCRIBE"><a href="#DESCRIBE" class="headerlink" title="DESCRIBE"></a>DESCRIBE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientConnection</span><br><span class="line">::handleCmd_DESCRIBE(char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">  do &#123;</span><br><span class="line">    if (!authenticationOK(&quot;DESCRIBE&quot;, urlTotalSuffix, fullRequestStr)) break; //验证username passwd</span><br><span class="line">    session = fOurServer.lookupServerMediaSession(urlTotalSuffix);//根据suffix查找session</span><br><span class="line">    if (session == NULL) &#123;</span><br><span class="line">      handleCmd_notFound();</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sdpDescription = session-&gt;generateSDPDescription();</span><br><span class="line"></span><br><span class="line">    rtspURL = fOurRTSPServer.rtspURL(session, fClientInputSocket);</span><br><span class="line">    </span><br><span class="line">    snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">         &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n&quot;</span><br><span class="line">         &quot;%s&quot;</span><br><span class="line">         &quot;Content-Base: %s/\r\n&quot;</span><br><span class="line">         &quot;Content-Type: application/sdp\r\n&quot;</span><br><span class="line">         &quot;Content-Length: %d\r\n\r\n&quot;</span><br><span class="line">         &quot;%s&quot;,</span><br><span class="line">         fCurrentCSeq,</span><br><span class="line">         dateHeader(),</span><br><span class="line">         rtspURL,</span><br><span class="line">         sdpDescriptionSize,</span><br><span class="line">         sdpDescription);</span><br><span class="line">  &#125; while (0);</span><br><span class="line">  </span><br><span class="line">  if (session != NULL) &#123;</span><br><span class="line">    // Decrement its reference count, now that we&apos;re done using it:</span><br><span class="line">    session-&gt;decrementReferenceCount();</span><br><span class="line">    if (session-&gt;referenceCount() == 0 &amp;&amp; session-&gt;deleteWhenUnreferenced()) &#123;</span><br><span class="line">      fOurServer.removeServerMediaSession(session);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  delete[] sdpDescription;</span><br><span class="line">  delete[] rtspURL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="SETUP"><a href="#SETUP" class="headerlink" title="SETUP"></a>SETUP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">void OnDemandServerMediaSubsession</span><br><span class="line">::getStreamParameters(unsigned clientSessionId,</span><br><span class="line">              netAddressBits clientAddress,</span><br><span class="line">              Port const&amp; clientRTPPort,</span><br><span class="line">              Port const&amp; clientRTCPPort,</span><br><span class="line">              int tcpSocketNum,</span><br><span class="line">              unsigned char rtpChannelId,</span><br><span class="line">              unsigned char rtcpChannelId,</span><br><span class="line">              netAddressBits&amp; destinationAddress,</span><br><span class="line">              u_int8_t&amp; /*destinationTTL*/,</span><br><span class="line">              Boolean&amp; isMulticast,</span><br><span class="line">              Port&amp; serverRTPPort,</span><br><span class="line">              Port&amp; serverRTCPPort,</span><br><span class="line">              void*&amp; streamToken) &#123;</span><br><span class="line">    if (fLastStreamToken != NULL &amp;&amp; fReuseFirstSource) &#123;</span><br><span class="line">        // Special case: Rather than creating a new &apos;StreamState&apos;,</span><br><span class="line">        // we reuse the one that we&apos;ve already created:</span><br><span class="line">        serverRTPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTPPort();</span><br><span class="line">        serverRTCPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTCPPort();</span><br><span class="line">        ++((StreamState*)fLastStreamToken)-&gt;referenceCount();</span><br><span class="line">        streamToken = fLastStreamToken;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        //创建流媒体源</span><br><span class="line">        FramedSource* mediaSource = createNewStreamSource(clientSessionId, streamBitrate);</span><br><span class="line">        if (clientRTPPort.num() != 0 || tcpSocketNum &gt;= 0) &#123;</span><br><span class="line">            //创建server RTP port,从fInitialPortNum开始+1尝试创建port</span><br><span class="line">            rtpGroupsock = createGroupsock(dummyAddr, serverRTPPort);</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">        rtpSink = createNewRTPSink(rtpGroupsock, rtpPayloadType, mediaSource);</span><br><span class="line">        //并记录stream的状态</span><br><span class="line">        streamToken = fLastStreamToken</span><br><span class="line">          = new StreamState(*this, serverRTPPort, serverRTCPPort, rtpSink, udpSink,</span><br><span class="line">                streamBitrate, mediaSource,</span><br><span class="line">                rtpGroupsock, rtcpGroupsock);</span><br><span class="line">        //并将clientSessionId及destinations保存到hash表中</span><br><span class="line">        fDestinationsHashTable-&gt;Add((char const*)clientSessionId, destinations);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_SETUP(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">        do &#123;</span><br><span class="line">          ServerMediaSession* sms</span><br><span class="line">      = fOurServer.lookupServerMediaSession(streamName, fOurServerMediaSession == NULL);//查找session</span><br><span class="line">            if(sms) &#123;</span><br><span class="line">              //返回失败</span><br><span class="line">            &#125;</span><br><span class="line">            if(fStreamStates == NULL) &#123;</span><br><span class="line">              //第一次设置SETUP</span><br><span class="line">              //初始化环境</span><br><span class="line">              fNumStreamStates = fOurServerMediaSession-&gt;numSubsessions();</span><br><span class="line">              fStreamStates = new struct streamState[fNumStreamStates];</span><br><span class="line">              </span><br><span class="line">              ServerMediaSubsessionIterator iter(*fOurServerMediaSession);</span><br><span class="line">              ServerMediaSubsession* subsession;</span><br><span class="line">              for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">                  subsession = iter.next();</span><br><span class="line">                  fStreamStates[i].subsession = subsession;</span><br><span class="line">                  fStreamStates[i].tcpSocketNum = -1; // for now; may get set for RTP-over-TCP streaming</span><br><span class="line">                  fStreamStates[i].streamToken = NULL; // for now; it may be changed by the &quot;getStreamParameters()&quot; call that comes later</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //根据url的后缀，一般用来确定媒体类型，例如mp4、h264...</span><br><span class="line">            if (trackId != NULL &amp;&amp; trackId[0] != &apos;\0&apos;) &#123; // normal case</span><br><span class="line">              for (trackNum = 0; trackNum &lt; fNumStreamStates; ++trackNum) &#123;</span><br><span class="line">            subsession = fStreamStates[trackNum].subsession;</span><br><span class="line">            if (subsession != NULL &amp;&amp; strcmp(trackId, subsession-&gt;trackId()) == 0) break;</span><br><span class="line">              &#125;</span><br><span class="line">              if (trackNum &gt;= fNumStreamStates) &#123;</span><br><span class="line">            // The specified track id doesn&apos;t exist, so this request fails:</span><br><span class="line">            ourClientConnection-&gt;handleCmd_notFound();</span><br><span class="line">            break;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //解析客户端SETUP消息， Transport类型， client-port</span><br><span class="line">            parseTransportHeader(fullRequestStr, streamingMode, streamingModeString,</span><br><span class="line">             clientsDestinationAddressStr, clientsDestinationTTL,</span><br><span class="line">             clientRTPPortNum, clientRTCPPortNum,</span><br><span class="line">             rtpChannelId, rtcpChannelId);</span><br><span class="line"></span><br><span class="line">             subsession-&gt;getStreamParameters(fOurSessionId, ourClientConnection-&gt;fClientAddr.sin_addr.s_addr,</span><br><span class="line">                    clientRTPPort, clientRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].tcpSocketNum, rtpChannelId, rtcpChannelId,</span><br><span class="line">                    destinationAddress, destinationTTL, fIsMulticast,</span><br><span class="line">                    serverRTPPort, serverRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].streamToken);</span><br><span class="line"></span><br><span class="line">            //拼接RESPONSE包</span><br><span class="line"></span><br><span class="line">          &#125;while(0)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="PLAY"><a href="#PLAY" class="headerlink" title="PLAY"></a>PLAY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PLAY(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession, char const* fullRequestStr) &#123;</span><br><span class="line">            //解析scale、range</span><br><span class="line">            //根据scale、range设置session   setStreamScale、seekStream or nullSeekStream</span><br><span class="line"></span><br><span class="line">        for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">            fStreamStates[i].subsession-&gt;startStream(...)</span><br><span class="line">        &#125;</span><br><span class="line">        //拼接PLAY RESPONSE</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void OnDemandServerMediaSubsession::startStream()</span><br><span class="line">&#123;</span><br><span class="line">  StreamState* streamState = (StreamState*)streamToken;</span><br><span class="line">  Destinations* destinations</span><br><span class="line">    = (Destinations*)(fDestinationsHashTable-&gt;Lookup((char const*)clientSessionId));</span><br><span class="line">  if (streamState != NULL) &#123;</span><br><span class="line">    streamState-&gt;startPlaying(destinations, clientSessionId,</span><br><span class="line">                  rtcpRRHandler, rtcpRRHandlerClientData,</span><br><span class="line">                  serverRequestAlternativeByteHandler, serverRequestAlternativeByteHandlerClientData);</span><br><span class="line">    RTPSink* rtpSink = streamState-&gt;rtpSink(); // alias</span><br><span class="line">    if (rtpSink != NULL) &#123;</span><br><span class="line">      //返回rtp seqNum及timestamp</span><br><span class="line">      rtpSeqNum = rtpSink-&gt;currentSeqNo();</span><br><span class="line">      rtpTimestamp = rtpSink-&gt;presetNextTimestamp();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体的startPlaying流程单独开一篇处理</p>
-<h2 id="PAUSE"><a href="#PAUSE" class="headerlink" title="PAUSE"></a>PAUSE</h2><p>调用session-&gt;pauseStream(), 并发送RESPONSE</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PAUSE(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fStreamStates[i].subsession-&gt;pauseStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;, fOurSessionId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="TEARDOWN"><a href="#TEARDOWN" class="headerlink" title="TEARDOWN"></a>TEARDOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_TEARDOWN(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  unsigned i;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fOurRTSPServer.unnoteTCPStreamingOnSocket(fStreamStates[i].tcpSocketNum, this, i);</span><br><span class="line">  fStreamStates[i].subsession-&gt;deleteStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">  fStreamStates[i].subsession = NULL;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;);</span><br><span class="line">  </span><br><span class="line">  // Optimization: If all subsessions have now been torn down, then we know that we can reclaim our object now.</span><br><span class="line">  // (Without this optimization, however, this object would still get reclaimed later, as a result of a &apos;liveness&apos; timeout.)</span><br><span class="line">  Boolean noSubsessionsRemain = True;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">      noSubsessionsRemain = False;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (noSubsessionsRemain) delete this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjqmff076000v8wvc10teere6" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-C++/C-回调函数的实现" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/19/C++/C-回调函数的实现/" class="article-date">
-  <time datetime="2018-12-19T15:05:28.000Z" itemprop="datePublished">2018-12-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/C/">C++</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/19/C++/C-回调函数的实现/">C++回调函数的实现</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在c++中，回调函数是一个非常常用的一种解耦技巧， 实际上通过函数指针作为参数传递给另一个函数，当这个指针被用来调用其指向的函数，回调函数通常在特定的事件或者条件发生时由另外一方调用， 用于对该事件或者条件进行响应</p>
-<h1 id="C-成员函数作为回调函数"><a href="#C-成员函数作为回调函数" class="headerlink" title="C++成员函数作为回调函数"></a>C++成员函数作为回调函数</h1><p>对于非静态成员来说， 默认情况下参数列表都包含this指针，such as ‘void Method:fun(<em>**, Method</em> this)’,C++通过传递一个指向自身的指针给其成员函数从而实现成员函数可以访问C++的数据成员， 由于this指针的作用，使得一个CALLBACK型的成员函数作为回调函数安装就会因为隐含的this指针使得函数参数个数不匹配</p>
-<p>解决方法:</p>
-<ul>
-<li><p>回调函数为普通函数， 在函数体内执行成员函数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class MyClass  </span><br><span class="line">&#123;  </span><br><span class="line">    pthread_t TID;  </span><br><span class="line">public:  </span><br><span class="line">    void func()  </span><br><span class="line">    &#123;  </span><br><span class="line">        //子线程执行代码  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    bool startThread()  </span><br><span class="line">    &#123;//启动子线程  </span><br><span class="line">        int ret = pthread_create( &amp;TID , NULL , callback , this );  </span><br><span class="line">        if( ret != 0 )  </span><br><span class="line">            return false;  </span><br><span class="line">        else  </span><br><span class="line">            return true;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line">static void* callback( void* arg )  </span><br><span class="line">&#123;//回调函数  </span><br><span class="line">    ((MyClass*)arg)-&gt;func();调用成员函数  </span><br><span class="line">    return NULL;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    MyClass a;  </span><br><span class="line">    a.startThread();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>回调函数为类静态函数， 在内部调用其成员函数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class MyClass  </span><br><span class="line">&#123;  </span><br><span class="line">    static MyClass* CurMy;//存储回调函数调用的对象  </span><br><span class="line">    static void* callback(void*);//回调函数  </span><br><span class="line">    pthread_t TID;  </span><br><span class="line">    void func()  </span><br><span class="line">    &#123;  </span><br><span class="line">        //子线程执行代码  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    void setCurMy()  </span><br><span class="line">    &#123;//设置当前对象为回调函数调用的对象  </span><br><span class="line">        CurMy = this;  </span><br><span class="line">    &#125;  </span><br><span class="line">public:  </span><br><span class="line">    bool startThread()  </span><br><span class="line">    &#123;//启动子线程  </span><br><span class="line">        setCurMy();  </span><br><span class="line">        int ret = pthread_create( &amp;TID , NULL , MyClass::callback , NULL );  </span><br><span class="line">        if( ret != 0 )  </span><br><span class="line">            return false;  </span><br><span class="line">        else  </span><br><span class="line">            return true;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line">MyClass* MyClass::CurMy = NULL;  </span><br><span class="line">void* MyClass::callback(void*)  </span><br><span class="line">&#123;  </span><br><span class="line">    CurMy-&gt;func();  </span><br><span class="line">    return NULL;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    MyClass a;  </span><br><span class="line">    a.startThread();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjqmff06s000j8wvckz2yuh2k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjqmiww0400131ovc9pl86rhp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1088,7 +2126,7 @@ CSeq: 6
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1127,6 +2165,14 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/01/07/linux/用户态和内核态/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
           </li>
         
@@ -1136,14 +2182,6 @@ CSeq: 6
         
           <li>
             <a href="/2019/01/05/流媒体/live555分析-startStream/">live555分析-startStream</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/04/linux/mount/">mount</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/27/流媒体/H264/h264分析/">h264分析</a>
           </li>
         
       </ul>
