@@ -66,6 +66,271 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-网络/OSI七层模型" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/13/网络/OSI七层模型/" class="article-date">
+  <time datetime="2018-06-13T14:38:34.000Z" itemprop="datePublished">2018-06-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/06/13/网络/OSI七层模型/">OSI网络模型</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="OSI网络模型"><a href="#OSI网络模型" class="headerlink" title="OSI网络模型"></a>OSI网络模型</h1><table>
+<thead>
+<tr>
+<th>OSI七层网络模型</th>
+<th>TCP/IP四层模型</th>
+<th>功能</th>
+<th>协议</th>
+<th>数据单位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用层</td>
+<td>应用层</td>
+<td>面向用户应用，为用户提供对各种网络资源的方便访问服务</td>
+<td>TFTP、HTTP、SNMP</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>-</td>
+<td>对来自应用层的命令和数据进行解析，对各种语法赋予相应的含义，并按照一定的格式传送给会话层</td>
+<td>Telnet、SNMP</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>-</td>
+<td>向两个实体提供建立和使用连接的方法</td>
+<td>SMTP、DNS</td>
+<td>消息</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>传输层</td>
+<td>向用户提供可靠的端到端差错和流量控制，保证报文的正确传输</td>
+<td>TCP UDP</td>
+<td>段segment / 数据包Packet</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>网络层</td>
+<td>控制数据链路层和传输层之间的信息转发、建立、维持和中指网络连接</td>
+<td>IP 、ICMP、ARP、RARP</td>
+<td>包packet</td>
+</tr>
+<tr>
+<td>数据链路层</td>
+<td>数据链路层</td>
+<td>负责建立和管理节点间链路</td>
+<td>Ethernet、Arpanet、PPP</td>
+<td>帧Frame</td>
+</tr>
+<tr>
+<td>物理层</td>
+<td>-</td>
+<td>利用传输介质为数据链路层提供物理连接，实现比特流的透明传输</td>
+<td>IEEE 802.A, IEEE 802.2 -  IEEE 802.11</td>
+<td>比特流Bit</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2018/06/13/网络/OSI七层模型/osi_model.jpg" alt=""></p>
+<h2 id="数据包说明"><a href="#数据包说明" class="headerlink" title="数据包说明"></a>数据包说明</h2><p><img src="/2018/06/13/网络/OSI七层模型/segment.gif" alt=""></p>
+<p><img src="/2018/06/13/网络/OSI七层模型/segment_flow.jpg" alt=""></p>
+<p>参考</p>
+<blockquote>
+<p><a href="https://zhidao.baidu.com/question/192109576.html" target="_blank" rel="noopener">https://zhidao.baidu.com/question/192109576.html</a><br><a href="https://www.cnblogs.com/jeanschen/p/3762475.html" target="_blank" rel="noopener">https://www.cnblogs.com/jeanschen/p/3762475.html</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjserkv99000m50vc92joj6c4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-网络/HTTP" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/29/网络/HTTP/" class="article-date">
+  <time datetime="2018-05-28T17:54:38.000Z" itemprop="datePublished">2018-05-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/29/网络/HTTP/">HTTP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定</p>
+<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><ul>
+<li><p>request line</p>
+<p>  由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1</p>
+<ul>
+<li><p>Get</p>
+<p>  常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表URL的结束和请求参数的开始，长度受限制, 一般最多1024byte。/index.jsp?id=100&amp;op=bind</p>
+</li>
+<li><p>POST</p>
+<p>  POST会将请求参数封装到HTTP请求数据中，以名称/值得形式出现,可以传输大量的数据，传送的数据大小没有显示也不会显示在URL</p>
+<pre><code>POST /search HTTP/1.1
+Accept:image/git,image/x-xbitmap,image/jpeg,image/pjpeg
+Referer:&lt;a href=&quot;http://www.google.cn/&quot;&gt;http://www.google.cn&lt;/a&gt;
+Accept-Langel:zh-cn
+Accept-Encoding:gzip,deflate
+Host:&lt;a href=&quot;http://www.google.cn&quot;&gt;www.google.cn&lt;/a&gt;
+Connection:Keep-Alive
+Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; 
+NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-
+FxlRugatx63JLv7CWMD6UB_O_r
+
+hl=zh-CN&amp;source=hp&amp;q=domety
+</code></pre><p>POST请求行中不包含数据字符串，数据保存在”请求内容部分”，各数据&amp;符号个靠,POST大多用于页面的表单中</p>
+</li>
+<li><p>HEAD</p>
+<p>   类似于GET，只不过服务端接受到HEAD请求后只返回响应头，而不会发送响应内容，当只需要查看页面状态时,使用HEAD非常高效，省去页面的内容</p>
+</li>
+<li>PUT</li>
+<li>DELETE</li>
+<li>OPTIONS</li>
+<li>TRACE</li>
+<li>CONNECT</li>
+</ul>
+</li>
+<li><p>header 由关键字/值对组成,每行一堆，”:”分隔</p>
+<ul>
+<li>User-Agent:产生请求的浏览器类型</li>
+<li>Accept:客户端可识别的内容类型列表</li>
+<li>Host:请求的主机名</li>
+</ul>
+</li>
+<li><p>blank line</p>
+<p>  每个请求头之间是一个空行，发送回车符和换行符，通知服务器以下不再有请求头。</p>
+</li>
+<li><p>request body</p>
+<p>  请求数据不再GET中使用，而是在POST方法中使用，适用于需要客户需要填写表单的场合。最常用的请求头是Content-Type和Content-Length。</p>
+</li>
+</ul>
+<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><pre><code>&lt;status-line&gt;
+&lt;headers&gt;
+&lt;blank link&gt;
+[&lt;response-body&gt;]
+</code></pre><ul>
+<li><p>状态行</p>
+<p>  格式如下<br>  HTTP-Version Staus-Code Reason-Phrase CRLF</p>
+<ul>
+<li>HTTP-Version表示HTTP协议版本</li>
+<li><p>Status-Code服务器返回的响应状态代码</p>
+<ul>
+<li>1xx:指示消息–表示请求已接收，继续处理</li>
+<li>2xx:成功– 表示请求一杯成功接收、理解、接收</li>
+<li>3xx:重定向–要完成请求必须进行更进一步的操作</li>
+<li>4xx:客户端错误–请求有语法或请求无法实现</li>
+<li>5xx:服务端错误–服务器未能实现合法的请求</li>
+</ul>
+</li>
+<li><p>Reason-Phrase状态代码的文本描述</p>
+<ul>
+<li>200 OK:客户端请求成功</li>
+<li>400 Bad Request:客户端请求有语法错误，不能被服务器所理解</li>
+<li>401 Unathorized:请求未经授权，必须和WWW-Authenticate报头域一起使用</li>
+<li>403 Forbidden:服务器接收到请求，但拒绝提供服务</li>
+<li>404 Not Found:请求资源不存在</li>
+<li>500 Internal Server Error:服务器发布不可预期的错误</li>
+<li>503 Server Unavailable:服务器当前不能处理客户端的请求，一段时间后可能恢复正常，</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消息报头</p>
+</li>
+<li><p>响应正文</p>
+<pre><code>HTTP/1.1 200 OK
+Date: Sat, 31 Dec 2005 23:59:59 GMT
+Content-Type: text/html;charset=ISO-8859-1
+Content-Length: 122
+
+＜html＞
+＜head＞
+＜title＞Wrox Homepage＜/title＞
+＜/head＞
+＜body＞
+＜!-- body goes here --＞
+＜/body＞
+＜/html＞
+</code></pre></li>
+</ul>
+<p>GET及POST区别</p>
+<ul>
+<li><p>GET提交，请求的数据附加在URL之后，以？分割 URL和数据，多个参数&amp;连接，如果是英文字母/数字原样发送，空格转为+，中文或者其他字符使用BASE64加密,例%E4%BD%A0</p>
+</li>
+<li><p>POST提交,把提交的数据放于HTTP包包体中<request-body></request-body></p>
+</li>
+</ul>
+<p>传输数据的大小</p>
+<ul>
+<li><p>HTTP协议没有对传输的数据大小进行限制，HTTP规范也没对URL长度限制,实际开发过程中主要的限制有:</p>
+<ul>
+<li>GET:特定的浏览器及服务器对URL长度限制，例如IE(2K+35)字节。</li>
+<li>POST:由于不是通过URL传值，理论上数据不受限，但各个WEB服务器会规定对POST提交数据大小进行限制</li>
+</ul>
+</li>
+<li><p>安全性</p>
+<p>  POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了，</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjserkv94000j50vcir6t4j93" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-other/爬坑笔记" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/05/29/other/爬坑笔记/" class="article-date">
@@ -443,7 +708,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjr9ee3mi001bggvc98rsoff1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjserkvb9001e50vcio6xienv" class="article-share-link">Share</a>
       
       
     </footer>
@@ -483,7 +748,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -496,6 +761,14 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
           </li>
         
@@ -505,14 +778,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/05/流媒体/live555分析-startStream/">live555分析-startStream</a>
           </li>
         
       </ul>

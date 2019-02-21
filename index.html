@@ -66,6 +66,220 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-other/getaddrinfo爬坑" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/21/other/getaddrinfo爬坑/" class="article-date">
+  <time datetime="2019-02-21T14:49:41.000Z" itemprop="datePublished">2019-02-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近发现了客户一个问题， LE程序自启动一直连接不上服务端， 重启程序后成功</p>
+<p>查看日志， getaddrinfo一直打印Tempoary failed in name soluation</p>
+<p>开机时由systemd拉起程序, 此时网络服务并没有初始化成功， 此时连接失败时符合预期的， 间隔一段时间后， 发现还一直报域名服务失败</p>
+<ol>
+<li>此时采用ping 服务器域名， 发现网络正常</li>
+<li>编写demo, 手动执行发现可以正常获取域名</li>
+</ol>
+<p>一开始被getaddrinfo文档误导了,一开始也考虑过缓存的问题，但getaddrinfow文档显示为MT-safe， 就首先排除这个选项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────┬───────────────┬────────────────────┐</span><br><span class="line">│Interface       │ Attribute     │ Value              │</span><br><span class="line">├────────────────┼───────────────┼────────────────────┤</span><br><span class="line">│getaddrinfo()   │ Thread safety │ MT-Safe env locale │</span><br><span class="line">├────────────────┼───────────────┼────────────────────┤</span><br><span class="line">│freeaddrinfo(), │ Thread safety │ MT-Safe            │</span><br><span class="line">│gai_strerror()  │               │                    │</span><br><span class="line">└────────────────┴───────────────┴────────────────────┘</span><br></pre></td></tr></table></figure>
+<p>后期发现DNS做了一次缓存…….</p>
+<p>在使用 getaddrinfo 函数的时候，实际会使用 glibc 的相关函数，glibc 在应用第一次域名解析的时候会触发 res_init() 函数的调用，res_init() 函数的作用是读取 /etc/resolv.conf 的内容, 如 nameserver 地址、负载均衡策略、重试次数、超时时间等，并将读取的这些数据放到 static 类型的 <em>res</em> 结构体中。</p>
+<p>由于 Linux 的进程在使用 glibc 动态链接库全局静态变量的时候，都会在用户进程空间生成自己独立的变量副本（感兴趣的同学可以查看每个进程的 smaps 文件，glibc 在每个用户进程空间都有可读、可写的 segment），所以每个发起 DNS 解析的进程都具有独立的 <em>res</em> 结构体变量。</p>
+<p>回到 salt-minio 这个具体案例，salt-minion 进程启动后发起第一次域名解析请求，该请求最后会调用底层的 res_query，第一次 res_query 会调用 res_init()，res_init() 初始化后，nameserver 地址被初始化到当前进程的 <em>res</em> 结构体中， 然而 res_init() 对于每个进程来说，只会执行一次。</p>
+<p>运维同学在用户进程运行的时候修改掉 /etc/resolv.conf 中的配置，但修改配置后无法生效的根本原因就在此（因为用户进程空间的 _res 结构体中仍然存放的是老的 nameserver 配置）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The functions described below make queriesto and interpret the responses from Internet domain name servers.The API consists of a set of more modern, reentrant functions and an older set of nonreentrant functions that have been superseded. The traditional resolver interfaces such as res_init() and res_query() use some static (global) state stored in the _res structure, rendering these functions non-thread-safe. BIND 8.2 introduced a set of new interfaces res_ninit(), res_nquery(), and so on, which take a res_state as their first argument, so you can use a per-thread</span><br><span class="line"></span><br><span class="line">resolver state.The res_ninit() and res_init() functions read the configuration files (see resolv.conf(5)) to get the default domain name and name server address(es).If no server isgiven, the local host is tried. If no domain is given, that associated with thelocal host is used. It can be overridden with the environment variable LOCALDOMAIN. res_ninit() or res_init() is normally executed by the first call to one of the other functions.</span><br></pre></td></tr></table></figure>
+<p>解决方法:</p>
+<ol>
+<li>用户进程直接调用底层的接口，并且定期调用 res_init() 以防止 /etc/resolov.conf 文件被修改而无法感知(有一定的实现成本)。</li>
+<li>直接重启用户进程，使用户进程在做第一次域名解析的时候触发 res_init()</li>
+<li>用户进程实现 DNS 的 client 全部功能</li>
+<li>通过非常规手段修改用户进程空间的数据</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/21/other/getaddrinfo爬坑/" data-id="cjserkv68000150vc8olu7dq3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-流媒体/rtmp-specification-1-0" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/27/流媒体/rtmp-specification-1-0/" class="article-date">
+  <time datetime="2019-01-27T15:44:15.000Z" itemprop="datePublished">2019-01-27</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>//<a href="https://www.cnblogs.com/Kingfans/p/7083100.html" target="_blank" rel="noopener">https://www.cnblogs.com/Kingfans/p/7083100.html</a></p>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Adobe 公司的实时消息传输协议 (RTMP) 通过一个可靠地流传输提供了一个双向多通道消息服务，比如 TCP [RFC0793]，意图在通信端之间传递带有时间信息的视频、音频和数据消息流。实现通常对不同类型的消息分配不同的优先级，当运载能力有限时，这会影响等待流传输的消息的次序。本文档将对实时流传输协议 (Real Time Messaging Protocol) 的语法和操作进行描述。</p>
+<h1 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h1><ul>
+<li>Payload(有效载荷): 包含于一个数据包中的数据，例如音频采样或者压缩的视频数据</li>
+<li>Package(数据包): 一个数据包由一个固定头和有效载荷数据构成。一些个底层协议可能会要求对数据包定义封装。</li>
+<li>Port (端口):”传输协议用以区分开指定一台主机的不同目的地的一个抽象。TCP/IP 使用小的正整数对端口进行标识。” OSI 传输层使用的运输选择器 (TSEL) 相当于端口</li>
+<li>Transport address (传输地址): 用以识别传输层端点的网络地址和端口的组合，例如一个 IP 地址和一个 TCP 端口。数据包由一个源传输地址传送到一个目的传输地址。</li>
+<li>Message stream (消息流): 通信中消息流通的一个逻辑通道。</li>
+<li>Message stream ID (消息流 ID)：每个消息有一个关联的 ID，使用 ID 可以识别出流通中的消息流<br>Multiplexing (合成)：将独立的音频/视频数据合成为一个连续的音频/视频流的加工，这样可以同时发送几个视频和音频。</li>
+<li>DeMultiplexing (分解): Multiplexing 的逆向处理，将交叉的音频和视频数据还原成原始音频和视频数据的格式。</li>
+<li>Remote Procedure Call (RPC 远程方法调用): 允许客户端或服务器调用对端的一个子程序或者程序的请求。</li>
+<li>Metadata (元数据): 关于数据的一个描述。一个电影的 metadata 包括电影标题、持续时间、创建时间等等。</li>
+<li>Application Instance (应用实例): 服务器上应用的实例，客户端可以连接这个实例并发送连接请求。</li>
+<li>Action Message Format (AMF 动作消息格式协议): 一个用于序列化 ActionScript 对象图的紧凑的二进制格式。AMF 有两个版本：AMF 0 [AMF0] 和 AMF 3 [AMF3]。</li>
+</ul>
+<h1 id="字节序、对齐和时间格式"><a href="#字节序、对齐和时间格式" class="headerlink" title="字节序、对齐和时间格式"></a>字节序、对齐和时间格式</h1><p>所有整数型属性以网络字节顺序传输，字节 0 代表第一个字节，零位是一个单词或字段最常用的有效位。字节序通常是大端排序。关于传输顺序的更多细节描述参考 IP 协议[RFC0791]</p>
+<p>RTMP 中的所有数据都是字节对准的；例如，一个十六位的属性可能会在一个奇字节偏移上。填充后，填充字节应该有零值。</p>
+<p>RTMP 中的 Timestamps 以一个整数形式给出，表示一个未指明的时间点。典型地，每个流会以一个为 0 的 timestamp 起始，但这不是必须的，只要双端能够就时间点达成一致。注意这意味着任意不同流 (尤其是来自不同主机的) 的同步需要 RTMP 之外的机制。</p>
+<p>因为 timestamp 的长度为 32 位，每隔 49 天 17 小时 2 分钟和 47.296 秒就要重来一次。因为允许流连续传输，有可能要多年，RTMP 应用在处理 timestamp 时应该使用序列码算法 [RFC1982]，并且能够处理无限循环。例如，一个应用假定所有相邻的 timestamp 都在 2^31 - 1 毫秒之内，因此 10000 在 4000000000 之后，而 3000000000 在 4000000000 之前。</p>
+<p>timestamp 也可以使用无符整数定义，相对于前面的 timestamp。timestamp 的长度可能会是 24 位或者 32 位。</p>
+<h1 id="RTMP块流"><a href="#RTMP块流" class="headerlink" title="RTMP块流"></a>RTMP块流</h1><p>实时消息传输协议的块流 (RTMP 块流)。 它为上层多媒体流协议提供合并和打包的服务。</p>
+<p>RTMP使用实时消息传输协议时，它可以处理任何发送消息流的协议。每个消息包含timestamp和payload类型标识，RTMP 块流和 RTMP 一起适合各种音频-视频应用，从一对一和一对多直播到点播服务，到互动会议应用。</p>
+<p>当使用可靠传输协议时，比如 TCP [RFC0793]，RTMP 块流能够对于多流提供所有消息可靠的 timestamp 有序端对端传输。RTMP 块流并不提供任何优先权或类似形式的控制，但是可以被上层协议用来提供这种优先级。例如，一个直播视频服务器可能会基于发送时间或者每个消息的确认时间丢弃一个传输缓慢的客户端的视频消息以确保及时获取其音频消息。</p>
+<p>RTMP 块流包括其自身的带内协议控制信息，并且提供机制为上层协议植入用户控制消息。</p>
+<h2 id="消息格式"><a href="#消息格式" class="headerlink" title="消息格式"></a>消息格式</h2><p>可以被分割为块以支持组合的消息的格式取决于上层协议。消息格式必须包含以下创建块所需的字段</p>
+<ul>
+<li>Timestamp: message timestamp, 4Byte</li>
+<li>Length: 消息的有效负载长度。如果不能省略掉消息头，那它也被包括进这个长度。这个字段占用了块头的三个字节。</li>
+<li>Type Id：一些类型 ID 保留给协议控制消息使用。这些传播信息的消息由 RTMP 块流协议和上层协议共同处理。其他的所有类型 ID 可用于上层协议，它们被 RTMP 块流处理为不透明值。事实上，RTMP 块流中没有任何地方要把这些值当做类型使用；所有消息必须是同一类型，或者应用使用这一字段来区分同步跟踪，而不是类型。这一字段占用了块头的一个字节</li>
+<li>Message Stream ID：message stream (消息流) ID 可以使任意值。合并到同一个块流的不同的消息流是根据各自的消息流 ID 进行分解。除此之外，对 RTMP 块流而言，这是一个不透明的值。这个字段以小端格式占用了块头的四个字节</li>
+</ul>
+<h2 id="握手"><a href="#握手" class="headerlink" title="握手"></a>握手</h2><p>一个 RTMP 连接以握手开始。RTMP 的握手不同于其他协议；RTMP 握手由三个固定长度的块组成，而不是像其他协议一样的带有报头的可变长度的块。</p>
+<p>客户端 (发起连接请求的终端) 和服务器端各自发送相同的三块。便于演示，当发送自客户端时这些块被指定为 C0、C1 和 C2；当发送自服务器端时这些块分别被指定为 S0、S1 和 S2</p>
+<h3 id="握手顺序"><a href="#握手顺序" class="headerlink" title="握手顺序"></a>握手顺序</h3><ul>
+<li>握手以客户端发送C0和C1开始</li>
+<li>客户端必须等到S1才能发送C2</li>
+<li>客户端必须受到S2才能发送任何其他数据</li>
+<li>服务端必须等待接收到C0才能发送S0、S1，也可以等待接收到C1再发送S0和S1.服务器端必须等待接收到 C1 才能发送 S2。服务器端必须等待接收到 C2 才能发送任何其他数据。</li>
+</ul>
+<h3 id="C0和S0的格式"><a href="#C0和S0的格式" class="headerlink" title="C0和S0的格式"></a>C0和S0的格式</h3><p>C0 和 S0 包都是一个单一的八位字节，以一个单独的八位整型域进行处理：</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/C0_S0.png" alt=""></p>
+<ul>
+<li>version: 本文档中规范的版本号为 3。0、1、2 三个值是由早期其他产品使用的，是废弃值；4 - 31 被保留为 RTMP 协议的未来实现版本使用；32 - 255 不允许使用 (以区分开 RTMP 和其他常以一个可打印字符开始的文本协议)。无法识别客户端所请求版本号的服务器应该以版本 3 响应，(收到响应的) 客户端可以选择降低到版本 3，或者放弃握手。</li>
+</ul>
+<h3 id="C1和S1的格式"><a href="#C1和S1的格式" class="headerlink" title="C1和S1的格式"></a>C1和S1的格式</h3><p>C1 和 S1 数据包的长度都是 1536 字节，包含以下字段：</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/C1_S1.png" alt=""></p>
+<ul>
+<li>time:包含一个timestamp,用于本终端发送的所有后续块的时间起点。这个值可以是 0，或者一些任意值。要同步多个块流，终端可以发送其他块流当前的 timestamp 的值</li>
+<li>zero:must be 0</li>
+<li>random data(1528 Byte): 这个字段可以包含任意值。终端需要区分出响应来自它发起的握手还是对端发起的握手，这个数据应该发送一些足够随机的数。这个不需要对随机数进行加密保护，也不需要动态值</li>
+</ul>
+<h3 id="C2和S2的格式"><a href="#C2和S2的格式" class="headerlink" title="C2和S2的格式"></a>C2和S2的格式</h3><p>C2 和 S2 数据包长度都是 1536 字节，包含有以下字段：<br><img src="/2019/01/27/流媒体/rtmp-specification-1-0/C2_S2.png" alt=""></p>
+<ul>
+<li><p>time (四个字节)：这个字段必须包含终端在 S1 (给 C2) 或者 C1 (给 S2) 发的 timestamp。</p>
+</li>
+<li><p>time2 (四个字节)：这个字段必须包含终端先前发出数据包 (s1 或者 c1) timestamp。</p>
+</li>
+<li><p>random echo (1528 个字节)：这个字段必须包含终端发的 S1 (给 C2) 或者 S2 (给 C1) 的随机数。两端都可以一起使用 time 和 time2 字段再加当前 timestamp 以快速估算带宽和/或者连接延迟</p>
+</li>
+</ul>
+<h3 id="握手示意图"><a href="#握手示意图" class="headerlink" title="握手示意图"></a>握手示意图</h3><p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/hangshark.png" alt=""></p>
+<ul>
+<li>Uninitalized(未初始化)：协议的版本号在这个阶段被发送。客户端和服务器都是 uninitialized (未初始化) 状态。之后客户端在数据包 C0 中将协议版本号发出。如果服务器支持这个版本，它将在回应中发送 S0 和 S1。如果不支持呢，服务器会才去适当的行为进行响应。在 RTMP 协议中，这个行为就是终止连接。</li>
+<li>Version Send(版本已发送): 在未初始化状态之后，客户端和服务器都进入 Version Sent (版本已发送) 状态。客户端会等待接收数据包 S1 而服务器在等待 C1。一旦拿到期待的包，客户端会发送数据包 C2 而服务器发送数据包 S2。(客户端和服务器各自的)状态随即变为 Ack Sent (确认已发送)</li>
+<li>Ack Sent(确认)：客户端和服务器分别等待 S2 和 C2。</li>
+<li>Handshake Done(握手结束)：客户端和服务器可以开始交换消息了。</li>
+</ul>
+<h2 id="分块"><a href="#分块" class="headerlink" title="分块"></a>分块</h2><p>握手之后，连接开始对一个或多个块流进行合并。创建的每个块都有一个唯一ID对其进行关联。这个ID为chunk stream ID,这些块通过网络进行传输。传递时，每个块必须被完全发送才可以发送下一块。在接收端，这些块被根据块流 ID 被组装成消息。</p>
+<p>分块允许上层协议将大的消息分解为更小的消息，例如，防止体积大的但优先级小的消息 (比如视频) 阻碍体积较小但优先级高的消息 (比如音频或者控制命令)。</p>
+<p>分块也让我们能够使用较小开销发送小消息，因为块头包含包含在消息内部的信息压缩提示。</p>
+<p>块的大小是可以配置的。它可以使用一个设置块大小的控制消息进行设置 (参考 5.4.1)。更大的块大小可以降低 CPU 开销，但在低带宽连接时因为它的大量的写入也会延迟其他内容的传递。更小的块不利于高比特率的流化。所以块的大小设置取决于具体情况。</p>
+<h3 id="块格式"><a href="#块格式" class="headerlink" title="块格式"></a>块格式</h3><p>每个块包含一个头和数据体，块头包含三个部分</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_header.png" alt=""></p>
+<ul>
+<li>Basic Header(1-3Byte):这个字段对块流ID和块类型进行编码。块类型决定了消息头的编码格式，长度完全取决于块流 ID，因为块流 ID 是一个可变长度的字段</li>
+<li>Message Header(0,3,7或者11个字节):这一字段对正在发送的消息 (不管是整个消息，还是只是一小部分) 的信息进行编码。这一字段的长度可以使用块头中定义的块类型进行决定</li>
+<li>Extended Timestamp (扩展 timestamp，0 或 4 字节)：这一字段是否出现取决于块消息头中的 timestamp 或者 timestamp delta 字段</li>
+<li>ChunkData(有效大小): 当前块的有效负载，相当于定义的最大块大小</li>
+</ul>
+<h4 id="块基本头"><a href="#块基本头" class="headerlink" title="块基本头"></a>块基本头</h4><p>块基本头对块流ID和块类型进行编码，字段可能或者有1,2或者3，取决于块流ID</p>
+<p>一个RTMP实现应该使用能够容纳这个ID的最小容量进行表示</p>
+<p>RTMP 协议最多支持 65597 个流，流 ID 范围 3 - 65599。ID 0、1、2 被保留。0 值表示二字节形式，并且 ID 范围 64 - 319 (第二个字节 + 64)。1 值表示三字节形式，并且 ID 范围为 64 - 65599 ((第三个字节) * 256 + 第二个字节 + 64)。3 - 63 范围内的值表示整个流 ID。带有 2 值的块流 ID 被保留，用于下层协议控制消息和命令。</p>
+<p>块基本头中的 0 - 5 位 (最低有效) 代表块流 ID。<br>块流 ID 2 - 63 可以编进这一字段的一字节版本中。</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_basic_header1.jpg" alt=""></p>
+<p>块流 ID 64 - 319 可以以二字节的形式编码在头中。ID 计算为 (第二个字节 + 64)</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_basic_header2.jpg" alt=""></p>
+<p>块流 ID 64 - 65599 可以编码在这个字段的三字节版本中。ID 计算为 ((第三个字节) * 256 + (第二个字节) + 64)。</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_basic_header3.jpg" alt=""></p>
+<ul>
+<li>cs id (六位)：这一字段包含有块流 ID，值的范围是 2 - 63。值 0 和 1 用于指示这一字段是 2- 或者 3- 字节版本。</li>
+<li>fmt (两个字节)：这一字段指示 ‘chunk message header’ 使用的四种格式之一。没中块类型的 ‘chunk message header’ 会在下一小节解释</li>
+<li>cs id - 64 (8 或者 16 位)：这一字段包含了块流 ID 减掉 64 后的值。例如，ID 365 在 cs id 中会以一个 1 进行表示，和这里的一个 16 位 的 301 (cs id - 64)。</li>
+<li>块流 ID 64 - 319 可以使用 2-byte 或者 3-byte 的形式在头中表示。</li>
+</ul>
+<h4 id="块消息头"><a href="#块消息头" class="headerlink" title="块消息头"></a>块消息头</h4><p>块消息头又四种不同的格式，由块基本头中的 “fmt” 字段进行选择。</p>
+<p>一个 (RTMP) 实现应该为每个块消息头使用最紧凑的表示。</p>
+<ul>
+<li>type0</li>
+</ul>
+<p>类型0块头的长度为11字节，这已类型必须用在块流的起始位置，每当流回退的时候，例如充值<br><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_message_header_type0.jpg" alt=""></p>
+<p>timestamp(三个字节): 对于type-0块，当前消息的绝对timestamp在这边发送. 如果 timestamp 大于或者等于 16777215 (十六进制 0xFFFFFF)，这一字段必须是 16777215，表明有扩展 timestamp 字段来补充完整的 32 位 timestamp。否则的话，这一字段必须是整个的 timestamp。</p>
+<p>-type1</p>
+<p>类型 1 块头长为 7 个字节。不包含消息流 ID；这一块使用前一块一样的流 ID。可变长度消息的流 (例如，一些视频格式) 应该在第一块之后使用这一格式表示之后的每个新消息</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_message_header_type1.jpg" alt=""></p>
+<ul>
+<li>type2 </li>
+</ul>
+<p>类型 2 块头长度为 3 个字节。既不包含流 ID 也不包含消息长度；这一块具有和前一块相同的流 ID 和消息长度。具有不变长度的消息 (例如，一些音频和数据格式) 应该在第一块之后使用这一格式表示之后的每个新消息。</p>
+<p><img src="/2019/01/27/流媒体/rtmp-specification-1-0/chunk_message_header_type2.jpg" alt=""></p>
+<ul>
+<li>type3</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/27/流媒体/rtmp-specification-1-0/" data-id="cjserkvat001450vceo8sl53z" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/nginx-rtmp" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/23/流媒体/nginx-rtmp/" class="article-date">
@@ -106,7 +320,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/23/流媒体/nginx-rtmp/" data-id="cjr9ee3ky0008ggvclm6xbnki" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/23/流媒体/nginx-rtmp/" data-id="cjserkv9c000o50vck9qn3p8g" class="article-share-link">Share</a>
       
       
     </footer>
@@ -175,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cjr9ee3js0002ggvck6aucf8u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cjserkv8i000850vcduomk5m5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -227,7 +441,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjr9ee3lc000gggvcvoewg1fx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjserkv8p000950vco1qu65zs" class="article-share-link">Share</a>
       
       
     </footer>
@@ -283,7 +497,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjr9ee3ko0006ggvcemdkhfob" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjserkv7x000550vcv4dv0l1e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -323,7 +537,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjr9ee3kk0005ggvcpg6wn7h3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjserkv8t000c50vc95kzyesp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -387,7 +601,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjr9ee3jf0001ggvcywisyrdu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjserkv87000650vc24lnvfy7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -686,7 +900,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjr9ee3n5001gggvcegllp6ux" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjserkvbq001i50vcfvxj7lu4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -966,115 +1180,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjr9ee3ma0011ggvcvgzfag2r" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/live555分析-rtsp-client接入" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/" class="article-date">
-  <time datetime="2018-12-24T15:43:34.000Z" itemprop="datePublished">2018-12-24</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/24/流媒体/live555分析-rtsp-client接入/">live555分析-rtsp_client接入</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>live555 在accept新的socket client， 保存其socket,addr,并将rtspServer保存在成员变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">createNewClientConnection(clientSocket, clientAddr);</span><br><span class="line"></span><br><span class="line">GenericMediaServer::ClientConnection</span><br><span class="line">::ClientConnection(GenericMediaServer&amp; ourServer, int clientSocket, struct sockaddr_in clientAddr)</span><br><span class="line">  : fOurServer(ourServer), fOurSocket(clientSocket), fClientAddr(clientAddr) &#123;</span><br><span class="line">  // Add ourself to our &apos;client connections&apos; table:</span><br><span class="line">  fOurServer.fClientConnections-&gt;Add((char const*)this, this);</span><br><span class="line">  </span><br><span class="line">  // Arrange to handle incoming requests:</span><br><span class="line">  resetRequestBuffer();</span><br><span class="line">  envir().taskScheduler()</span><br><span class="line">    .setBackgroundHandling(fOurSocket, SOCKET_READABLE|SOCKET_EXCEPTION, incomingRequestHandler, this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>并为socket注册readable handle <code>incomingRequestHandler</code>,接下来进入rtsp协议处理部分</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void GenericMediaServer::ClientConnection::incomingRequestHandler() &#123;</span><br><span class="line">  struct sockaddr_in dummy; // &apos;from&apos; address, meaningless in this case</span><br><span class="line">  </span><br><span class="line">  int bytesRead = readSocket(envir(), fOurSocket, &amp;fRequestBuffer[fRequestBytesAlreadySeen], fRequestBufferBytesLeft, dummy);</span><br><span class="line">  handleRequestBytes(bytesRead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>读取的data保存在fRequestBuffer</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientConnection::handleRequestBytes(int newBytesRead) &#123;</span><br><span class="line">  int numBytesRemaining = 0;</span><br><span class="line">  ++fRecursionCount;</span><br><span class="line">  </span><br><span class="line">  do &#123;</span><br><span class="line">    RTSPServer::RTSPClientSession* clientSession = NULL;</span><br><span class="line"></span><br><span class="line">    //如果BufferLeftSpace不足已接收new byte, 丢弃</span><br><span class="line">    if (newBytesRead &lt; 0 || (unsigned)newBytesRead &gt;= fRequestBufferBytesLeft) &#123;</span><br><span class="line">      // Either the client socket has died, or the request was too big for us.</span><br><span class="line">      // Terminate this connection:</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">      fprintf(stderr, &quot;RTSPClientConnection[%p]::handleRequestBytes() read %d new bytes (of %d); terminating connection!\n&quot;, this, newBytesRead, fRequestBufferBytesLeft);</span><br><span class="line">#endif</span><br><span class="line">      fIsActive = False;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    Boolean endOfMsg = False;</span><br><span class="line">    unsigned char* ptr = &amp;fRequestBuffer[fRequestBytesAlreadySeen];</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">    ptr[newBytesRead] = &apos;\0&apos;;</span><br><span class="line">    fprintf(stderr, &quot;RTSPClientConnection[%p]::handleRequestBytes() %s %d new bytes:%s\n&quot;,</span><br><span class="line">      this, numBytesRemaining &gt; 0 ? &quot;processing&quot; : &quot;read&quot;, newBytesRead, ptr);</span><br><span class="line">#endif</span><br><span class="line">    </span><br><span class="line">    if (fClientOutputSocket != fClientInputSocket &amp;&amp; numBytesRemaining == 0) &#123;</span><br><span class="line">      // We&apos;re doing RTSP-over-HTTP tunneling, and input commands are assumed to have been Base64-encoded.</span><br><span class="line">      // We therefore Base64-decode as much of this new data as we can (i.e., up to a multiple of 4 bytes).</span><br><span class="line">      </span><br><span class="line">      // But first, we remove any whitespace that may be in the input data:</span><br><span class="line">      unsigned toIndex = 0;</span><br><span class="line">      for (int fromIndex = 0; fromIndex &lt; newBytesRead; ++fromIndex) &#123;</span><br><span class="line">  char c = ptr[fromIndex];</span><br><span class="line">  if (!(c == &apos; &apos; || c == &apos;\t&apos; || c == &apos;\r&apos; || c == &apos;\n&apos;)) &#123; // not &apos;whitespace&apos;: space,tab,CR,NL</span><br><span class="line">    ptr[toIndex++] = c;</span><br><span class="line">  &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      newBytesRead = toIndex;//跳过无效字符</span><br><span class="line">      </span><br><span class="line">      unsigned numBytesToDecode = fBase64RemainderCount + newBytesRead;</span><br><span class="line">      unsigned newBase64RemainderCount = numBytesToDecode%4;</span><br><span class="line">      numBytesToDecode -= newBase64RemainderCount;</span><br><span class="line">      if (numBytesToDecode &gt; 0) &#123;</span><br><span class="line">  ptr[newBytesRead] = &apos;\0&apos;;</span><br><span class="line">  unsigned decodedSize;</span><br><span class="line">  unsigned char* decodedBytes = base64Decode((char const*)(ptr-fBase64RemainderCount), numBytesToDecode, decodedSize);</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">  fprintf(stderr, &quot;Base64-decoded %d input bytes into %d new bytes:&quot;, numBytesToDecode, decodedSize);</span><br><span class="line">  for (unsigned k = 0; k &lt; decodedSize; ++k) fprintf(stderr, &quot;%c&quot;, decodedBytes[k]);</span><br><span class="line">  fprintf(stderr, &quot;\n&quot;);</span><br><span class="line">#endif</span><br><span class="line">  </span><br><span class="line">  // Copy the new decoded bytes in place of the old ones (we can do this because there are fewer decoded bytes than original):</span><br><span class="line">  unsigned char* to = ptr-fBase64RemainderCount;</span><br><span class="line">  for (unsigned i = 0; i &lt; decodedSize; ++i) *to++ = decodedBytes[i];</span><br><span class="line">  </span><br><span class="line">  // Then copy any remaining (undecoded) bytes to the end:</span><br><span class="line">  for (unsigned j = 0; j &lt; newBase64RemainderCount; ++j) *to++ = (ptr-fBase64RemainderCount+numBytesToDecode)[j];</span><br><span class="line">  </span><br><span class="line">  newBytesRead = decodedSize - fBase64RemainderCount + newBase64RemainderCount;</span><br><span class="line">    // adjust to allow for the size of the new decoded data (+ remainder)</span><br><span class="line">  delete[] decodedBytes;</span><br><span class="line">      &#125;</span><br><span class="line">      fBase64RemainderCount = newBase64RemainderCount;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    unsigned char* tmpPtr = fLastCRLF + 2;</span><br><span class="line">    if (fBase64RemainderCount == 0) &#123; // no more Base-64 bytes remain to be read/decoded</span><br><span class="line">      // Look for the end of the message: &lt;CR&gt;&lt;LF&gt;&lt;CR&gt;&lt;LF&gt;</span><br><span class="line">      if (tmpPtr &lt; fRequestBuffer) tmpPtr = fRequestBuffer;</span><br><span class="line">      while (tmpPtr &lt; &amp;ptr[newBytesRead-1]) &#123;</span><br><span class="line">  if (*tmpPtr == &apos;\r&apos; &amp;&amp; *(tmpPtr+1) == &apos;\n&apos;) &#123;</span><br><span class="line">    if (tmpPtr - fLastCRLF == 2) &#123; // This is it:</span><br><span class="line">      endOfMsg = True;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">    fLastCRLF = tmpPtr;</span><br><span class="line">  &#125;</span><br><span class="line">  ++tmpPtr;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    /************************************************/</span><br><span class="line">    fRequestBuffer</span><br><span class="line">    --------------------------------------------------</span><br><span class="line">    |fRequestBytesAlreadySeen|fRequestBufferBytesLeft|</span><br><span class="line">    --------------------------------------------------</span><br><span class="line">    /************************************************/</span><br><span class="line"></span><br><span class="line">    fRequestBufferBytesLeft -= newBytesRead;</span><br><span class="line">    fRequestBytesAlreadySeen += newBytesRead;</span><br><span class="line">    </span><br><span class="line">    if (!endOfMsg) break; // subsequent reads will be needed to complete the request</span><br><span class="line">    </span><br><span class="line">    // Parse the request string into command name and &apos;CSeq&apos;, then handle the command:</span><br><span class="line">    fRequestBuffer[fRequestBytesAlreadySeen] = &apos;\0&apos;;</span><br><span class="line">    char cmdName[RTSP_PARAM_STRING_MAX];</span><br><span class="line">    char urlPreSuffix[RTSP_PARAM_STRING_MAX];</span><br><span class="line">    char urlSuffix[RTSP_PARAM_STRING_MAX];</span><br><span class="line">    char cseq[RTSP_PARAM_STRING_MAX];</span><br><span class="line">    char sessionIdStr[RTSP_PARAM_STRING_MAX];</span><br><span class="line">    unsigned contentLength = 0;</span><br><span class="line">    fLastCRLF[2] = &apos;\0&apos;; // temporarily, for parsing</span><br><span class="line"></span><br><span class="line">    //解析rtsp消息</span><br><span class="line">    Boolean parseSucceeded = parseRTSPRequestString((char*)fRequestBuffer, fLastCRLF+2 - fRequestBuffer,</span><br><span class="line">                cmdName, sizeof cmdName,</span><br><span class="line">                urlPreSuffix, sizeof urlPreSuffix,</span><br><span class="line">                urlSuffix, sizeof urlSuffix,</span><br><span class="line">                cseq, sizeof cseq,</span><br><span class="line">                sessionIdStr, sizeof sessionIdStr,</span><br><span class="line">                contentLength);</span><br><span class="line">    fLastCRLF[2] = &apos;\r&apos;; // restore its value</span><br><span class="line">    Boolean playAfterSetup = False;</span><br><span class="line"></span><br><span class="line">    //解析成功，处理RTSP command</span><br><span class="line">    //OPTIONS DESCRIBE SETUP TEARDOWN PLAY PAUSE </span><br><span class="line">    if (parseSucceeded) &#123;</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">      fprintf(stderr, &quot;parseRTSPRequestString() succeeded, returning cmdName \&quot;%s\&quot;, urlPreSuffix \&quot;%s\&quot;, urlSuffix \&quot;%s\&quot;, CSeq \&quot;%s\&quot;, Content-Length %u, with %d bytes following the message.\n&quot;, cmdName, urlPreSuffix, urlSuffix, cseq, contentLength, ptr + newBytesRead - (tmpPtr + 2));</span><br><span class="line">#endif</span><br><span class="line">      // If there was a &quot;Content-Length:&quot; header, then make sure we&apos;ve received all of the data that it specified:</span><br><span class="line">      if (ptr + newBytesRead &lt; tmpPtr + 2 + contentLength) break; // we still need more data; subsequent reads will give it to us </span><br><span class="line">      </span><br><span class="line">      // If the request included a &quot;Session:&quot; id, and it refers to a client session that&apos;s</span><br><span class="line">      // current ongoing, then use this command to indicate &apos;liveness&apos; on that client session:</span><br><span class="line">      Boolean const requestIncludedSessionId = sessionIdStr[0] != &apos;\0&apos;;</span><br><span class="line">      if (requestIncludedSessionId) &#123;</span><br><span class="line">  clientSession</span><br><span class="line">    = (RTSPServer::RTSPClientSession*)(fOurRTSPServer.lookupClientSession(sessionIdStr));</span><br><span class="line">  if (clientSession != NULL) clientSession-&gt;noteLiveness();</span><br><span class="line">      &#125;</span><br><span class="line">    </span><br><span class="line">      // We now have a complete RTSP request.</span><br><span class="line">      // Handle the specified command (beginning with commands that are session-independent):</span><br><span class="line">      fCurrentCSeq = cseq;</span><br><span class="line">      if (strcmp(cmdName, &quot;OPTIONS&quot;) == 0) &#123;</span><br><span class="line">  // If the &quot;OPTIONS&quot; command included a &quot;Session:&quot; id for a session that doesn&apos;t exist,</span><br><span class="line">  // then treat this as an error:</span><br><span class="line">  if (requestIncludedSessionId &amp;&amp; clientSession == NULL) &#123;</span><br><span class="line">    handleCmd_sessionNotFound();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // Normal case:</span><br><span class="line">    handleCmd_OPTIONS();</span><br><span class="line">  &#125;</span><br><span class="line">      &#125; else if (urlPreSuffix[0] == &apos;\0&apos; &amp;&amp; urlSuffix[0] == &apos;*&apos; &amp;&amp; urlSuffix[1] == &apos;\0&apos;) &#123;</span><br><span class="line">  // The special &quot;*&quot; URL means: an operation on the entire server.  This works only for GET_PARAMETER and SET_PARAMETER:</span><br><span class="line">  if (strcmp(cmdName, &quot;GET_PARAMETER&quot;) == 0) &#123;</span><br><span class="line">    handleCmd_GET_PARAMETER((char const*)fRequestBuffer);</span><br><span class="line">  &#125; else if (strcmp(cmdName, &quot;SET_PARAMETER&quot;) == 0) &#123;</span><br><span class="line">    handleCmd_SET_PARAMETER((char const*)fRequestBuffer);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    handleCmd_notSupported();</span><br><span class="line">  &#125;</span><br><span class="line">      &#125; else if (strcmp(cmdName, &quot;DESCRIBE&quot;) == 0) &#123;</span><br><span class="line">  handleCmd_DESCRIBE(urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">      &#125; else if (strcmp(cmdName, &quot;SETUP&quot;) == 0) &#123;</span><br><span class="line">  Boolean areAuthenticated = True;</span><br><span class="line"></span><br><span class="line">  if (!requestIncludedSessionId) &#123;</span><br><span class="line">    // No session id was present in the request.</span><br><span class="line">    // So create a new &quot;RTSPClientSession&quot; object for this request.</span><br><span class="line"></span><br><span class="line">    // But first, make sure that we&apos;re authenticated to perform this command:</span><br><span class="line">    char urlTotalSuffix[2*RTSP_PARAM_STRING_MAX];</span><br><span class="line">        // enough space for urlPreSuffix/urlSuffix&apos;\0&apos;</span><br><span class="line">    urlTotalSuffix[0] = &apos;\0&apos;;</span><br><span class="line">    if (urlPreSuffix[0] != &apos;\0&apos;) &#123;</span><br><span class="line">      strcat(urlTotalSuffix, urlPreSuffix);</span><br><span class="line">      strcat(urlTotalSuffix, &quot;/&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    strcat(urlTotalSuffix, urlSuffix);</span><br><span class="line">    if (authenticationOK(&quot;SETUP&quot;, urlTotalSuffix, (char const*)fRequestBuffer)) &#123;</span><br><span class="line">      clientSession</span><br><span class="line">        = (RTSPServer::RTSPClientSession*)fOurRTSPServer.createNewClientSessionWithId();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      areAuthenticated = False;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (clientSession != NULL) &#123;</span><br><span class="line">    clientSession-&gt;handleCmd_SETUP(this, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">    playAfterSetup = clientSession-&gt;fStreamAfterSETUP;</span><br><span class="line">  &#125; else if (areAuthenticated) &#123;</span><br><span class="line">    handleCmd_sessionNotFound();</span><br><span class="line">  &#125;</span><br><span class="line">      &#125; else if (strcmp(cmdName, &quot;TEARDOWN&quot;) == 0</span><br><span class="line">     || strcmp(cmdName, &quot;PLAY&quot;) == 0</span><br><span class="line">     || strcmp(cmdName, &quot;PAUSE&quot;) == 0</span><br><span class="line">     || strcmp(cmdName, &quot;GET_PARAMETER&quot;) == 0</span><br><span class="line">     || strcmp(cmdName, &quot;SET_PARAMETER&quot;) == 0) &#123;</span><br><span class="line">  if (clientSession != NULL) &#123;</span><br><span class="line">    clientSession-&gt;handleCmd_withinSession(this, cmdName, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    handleCmd_sessionNotFound();</span><br><span class="line">  &#125;</span><br><span class="line">      &#125; else if (strcmp(cmdName, &quot;REGISTER&quot;) == 0 || strcmp(cmdName, &quot;DEREGISTER&quot;) == 0) &#123;</span><br><span class="line">  // Because - unlike other commands - an implementation of this command needs</span><br><span class="line">  // the entire URL, we re-parse the command to get it:</span><br><span class="line">  char* url = strDupSize((char*)fRequestBuffer);</span><br><span class="line">  if (sscanf((char*)fRequestBuffer, &quot;%*s %s&quot;, url) == 1) &#123;</span><br><span class="line">    // Check for special command-specific parameters in a &quot;Transport:&quot; header:</span><br><span class="line">    Boolean reuseConnection, deliverViaTCP;</span><br><span class="line">    char* proxyURLSuffix;</span><br><span class="line">    parseTransportHeaderForREGISTER((const char*)fRequestBuffer, reuseConnection, deliverViaTCP, proxyURLSuffix);</span><br><span class="line"></span><br><span class="line">    handleCmd_REGISTER(cmdName, url, urlSuffix, (char const*)fRequestBuffer, reuseConnection, deliverViaTCP, proxyURLSuffix);</span><br><span class="line">    delete[] proxyURLSuffix;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    handleCmd_bad();</span><br><span class="line">  &#125;</span><br><span class="line">  delete[] url;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">  // The command is one that we don&apos;t handle:</span><br><span class="line">  handleCmd_notSupported();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">      fprintf(stderr, &quot;parseRTSPRequestString() failed; checking now for HTTP commands (for RTSP-over-HTTP tunneling)...\n&quot;);</span><br><span class="line">#endif</span><br><span class="line">      // The request was not (valid) RTSP, but check for a special case: HTTP commands (for setting up RTSP-over-HTTP tunneling):</span><br><span class="line">      char sessionCookie[RTSP_PARAM_STRING_MAX];</span><br><span class="line">      char acceptStr[RTSP_PARAM_STRING_MAX];</span><br><span class="line">      *fLastCRLF = &apos;\0&apos;; // temporarily, for parsing</span><br><span class="line">      parseSucceeded = parseHTTPRequestString(cmdName, sizeof cmdName,</span><br><span class="line">                urlSuffix, sizeof urlPreSuffix,</span><br><span class="line">                sessionCookie, sizeof sessionCookie,</span><br><span class="line">                acceptStr, sizeof acceptStr);</span><br><span class="line">      *fLastCRLF = &apos;\r&apos;;</span><br><span class="line">      if (parseSucceeded) &#123;</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">  fprintf(stderr, &quot;parseHTTPRequestString() succeeded, returning cmdName \&quot;%s\&quot;, urlSuffix \&quot;%s\&quot;, sessionCookie \&quot;%s\&quot;, acceptStr \&quot;%s\&quot;\n&quot;, cmdName, urlSuffix, sessionCookie, acceptStr);</span><br><span class="line">#endif</span><br><span class="line">  // Check that the HTTP command is valid for RTSP-over-HTTP tunneling: There must be a &apos;session cookie&apos;.</span><br><span class="line">  Boolean isValidHTTPCmd = True;</span><br><span class="line">  if (strcmp(cmdName, &quot;OPTIONS&quot;) == 0) &#123;</span><br><span class="line">    handleHTTPCmd_OPTIONS();</span><br><span class="line">  &#125; else if (sessionCookie[0] == &apos;\0&apos;) &#123;</span><br><span class="line">    // There was no &quot;x-sessioncookie:&quot; header.  If there was an &quot;Accept: application/x-rtsp-tunnelled&quot; header,</span><br><span class="line">    // then this is a bad tunneling request.  Otherwise, assume that it&apos;s an attempt to access the stream via HTTP.</span><br><span class="line">    if (strcmp(acceptStr, &quot;application/x-rtsp-tunnelled&quot;) == 0) &#123;</span><br><span class="line">      isValidHTTPCmd = False;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      handleHTTPCmd_StreamingGET(urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else if (strcmp(cmdName, &quot;GET&quot;) == 0) &#123;</span><br><span class="line">    handleHTTPCmd_TunnelingGET(sessionCookie);</span><br><span class="line">  &#125; else if (strcmp(cmdName, &quot;POST&quot;) == 0) &#123;</span><br><span class="line">    // We might have received additional data following the HTTP &quot;POST&quot; command - i.e., the first Base64-encoded RTSP command.</span><br><span class="line">    // Check for this, and handle it if it exists:</span><br><span class="line">    unsigned char const* extraData = fLastCRLF+4;</span><br><span class="line">    unsigned extraDataSize = &amp;fRequestBuffer[fRequestBytesAlreadySeen] - extraData;</span><br><span class="line">    if (handleHTTPCmd_TunnelingPOST(sessionCookie, extraData, extraDataSize)) &#123;</span><br><span class="line">      // We don&apos;t respond to the &quot;POST&quot; command, and we go away:</span><br><span class="line">      fIsActive = False;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    isValidHTTPCmd = False;</span><br><span class="line">  &#125;</span><br><span class="line">  if (!isValidHTTPCmd) &#123;</span><br><span class="line">    handleHTTPCmd_notSupported();</span><br><span class="line">  &#125;</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">#ifdef DEBUG</span><br><span class="line">  fprintf(stderr, &quot;parseHTTPRequestString() failed!\n&quot;);</span><br><span class="line">#endif</span><br><span class="line">  handleCmd_bad();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">#ifdef DEBUG</span><br><span class="line">    fprintf(stderr, &quot;sending response: %s&quot;, fResponseBuffer);</span><br><span class="line">#endif</span><br><span class="line">    send(fClientOutputSocket, (char const*)fResponseBuffer, strlen((char*)fResponseBuffer), 0);</span><br><span class="line">    </span><br><span class="line">    if (playAfterSetup) &#123;</span><br><span class="line">      // The client has asked for streaming to commence now, rather than after a</span><br><span class="line">      // subsequent &quot;PLAY&quot; command.  So, simulate the effect of a &quot;PLAY&quot; command:</span><br><span class="line">      clientSession-&gt;handleCmd_withinSession(this, &quot;PLAY&quot;, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // Check whether there are extra bytes remaining in the buffer, after the end of the request (a rare case).</span><br><span class="line">    // If so, move them to the front of our buffer, and keep processing it, because it might be a following, pipelined request.</span><br><span class="line">    unsigned requestSize = (fLastCRLF+4-fRequestBuffer) + contentLength;</span><br><span class="line">    numBytesRemaining = fRequestBytesAlreadySeen - requestSize;</span><br><span class="line">    resetRequestBuffer(); // to prepare for any subsequent request</span><br><span class="line">    </span><br><span class="line">    if (numBytesRemaining &gt; 0) &#123;</span><br><span class="line">      memmove(fRequestBuffer, &amp;fRequestBuffer[requestSize], numBytesRemaining);</span><br><span class="line">      newBytesRead = numBytesRemaining;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; while (numBytesRemaining &gt; 0);</span><br><span class="line">  </span><br><span class="line">  --fRecursionCount;</span><br><span class="line">  if (!fIsActive) &#123;</span><br><span class="line">    if (fRecursionCount &gt; 0) closeSockets(); else delete this;</span><br><span class="line">    // Note: The &quot;fRecursionCount&quot; test is for a pathological situation where we reenter the event loop and get called recursively</span><br><span class="line">    // while handling a command (e.g., while handling a &quot;DESCRIBE&quot;, to get a SDP description).</span><br><span class="line">    // In such a case we don&apos;t want to actually delete ourself until we leave the outermost call.</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjr9ee3mb0012ggvck9ubluw1" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/live555分析-TaskScheduler分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/" class="article-date">
-  <time datetime="2018-12-21T15:57:21.000Z" itemprop="datePublished">2018-12-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="TaskScheduler类"><a href="#TaskScheduler类" class="headerlink" title="TaskScheduler类"></a>TaskScheduler类</h1><p>TaskScheduler是任务调度的基类， 其类关系如图所示</p>
-<p><img src="/2018/12/21/流媒体/live555分析-TaskScheduler分析/TaskScheduler.PNG" alt=""></p>
-<p>首先可从代码调用关系开始着手分析</p>
-<p>BasicTaskScheduler0主要初始化一些参数，包括socket、 event handle</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BasicTaskScheduler0::BasicTaskScheduler0()</span><br><span class="line">  : fLastHandledSocketNum(-1), fTriggersAwaitingHandling(0), fLastUsedTriggerMask(1), fLastUsedTriggerNum(MAX_NUM_EVENT_TRIGGERS-1) &#123;</span><br><span class="line">  fHandlers = new HandlerSet;</span><br><span class="line">  for (unsigned i = 0; i &lt; MAX_NUM_EVENT_TRIGGERS; ++i) &#123;</span><br><span class="line">    fTriggeredEventHandlers[i] = NULL;</span><br><span class="line">    fTriggeredEventClientDatas[i] = NULL;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>TaskScheduler* scheduler = BasicTaskScheduler::createNew();</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">BasicTaskScheduler::BasicTaskScheduler(unsigned maxSchedulerGranularity)</span><br><span class="line">  : fMaxSchedulerGranularity(maxSchedulerGranularity), fMaxNumSockets(0)</span><br><span class="line">#if defined(__WIN32__) || defined(_WIN32)</span><br><span class="line">  , fDummySocketNum(-1)</span><br><span class="line">#endif</span><br><span class="line">&#123;</span><br><span class="line">  FD_ZERO(&amp;fReadSet);</span><br><span class="line">  FD_ZERO(&amp;fWriteSet);</span><br><span class="line">  FD_ZERO(&amp;fExceptionSet);</span><br><span class="line"></span><br><span class="line">  if (maxSchedulerGranularity &gt; 0) schedulerTickTask(); // ensures that we handle events frequently</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>UsageEnvironment<em> env = BasicUsageEnvironment::createNew(</em>scheduler);</p>
-<p>scheduler作为一个参数作为UsageEnvironment的构造参数， 实际上UsageEnvironment是将其作为一个成员变量进行保存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UsageEnvironment::UsageEnvironment(TaskScheduler&amp; scheduler)</span><br><span class="line">  : liveMediaPriv(NULL), groupsockPriv(NULL), fScheduler(scheduler) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>现在开始分析live555 server创建过程可以看出,使用引用的taskScheduler将readhandle注册到taskscheduler,当read event触发时，taskscheduer进入注册的event进行处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">rtspServer = RTSPServer::createNew(*env, rtspServerPortNum, authDB);</span><br><span class="line"></span><br><span class="line">GenericMediaServer</span><br><span class="line">::GenericMediaServer(UsageEnvironment&amp; env, int ourSocket, Port ourPort,</span><br><span class="line">             unsigned reclamationSeconds)</span><br><span class="line">  : Medium(env),</span><br><span class="line">    fServerSocket(ourSocket), fServerPort(ourPort), fReclamationSeconds(reclamationSeconds),</span><br><span class="line">    fServerMediaSessions(HashTable::create(STRING_HASH_KEYS)),</span><br><span class="line">    fClientConnections(HashTable::create(ONE_WORD_HASH_KEYS)),</span><br><span class="line">    fClientSessions(HashTable::create(STRING_HASH_KEYS)) &#123;</span><br><span class="line">  ignoreSigPipeOnSocket(fServerSocket); // so that clients on the same host that are killed don&apos;t also kill us</span><br><span class="line">  </span><br><span class="line">  // Arrange to handle connections from others:</span><br><span class="line">  env.taskScheduler().turnOnBackgroundReadHandling(fServerSocket, incomingConnectionHandler, this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="setBackgroundHandling分析"><a href="#setBackgroundHandling分析" class="headerlink" title="setBackgroundHandling分析"></a>setBackgroundHandling分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void BasicTaskScheduler</span><br><span class="line">  ::setBackgroundHandling(int socketNum, int conditionSet, BackgroundHandlerProc* handlerProc, void* clientData) &#123;</span><br><span class="line">  if (socketNum &lt; 0) return;</span><br><span class="line">#if !defined(__WIN32__) &amp;&amp; !defined(_WIN32) &amp;&amp; defined(FD_SETSIZE)</span><br><span class="line">  if (socketNum &gt;= (int)(FD_SETSIZE)) return;</span><br><span class="line">#endif</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fReadSet);</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fWriteSet);</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fExceptionSet);</span><br><span class="line">  if (conditionSet == 0) &#123;</span><br><span class="line">    fHandlers-&gt;clearHandler(socketNum);</span><br><span class="line">    if (socketNum+1 == fMaxNumSockets) &#123;</span><br><span class="line">      --fMaxNumSockets;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    fHandlers-&gt;assignHandler(socketNum, conditionSet, handlerProc, clientData);</span><br><span class="line">    if (socketNum+1 &gt; fMaxNumSockets) &#123;</span><br><span class="line">      fMaxNumSockets = socketNum+1;</span><br><span class="line">    &#125;</span><br><span class="line">    if (conditionSet&amp;SOCKET_READABLE) FD_SET((unsigned)socketNum, &amp;fReadSet);</span><br><span class="line">    if (conditionSet&amp;SOCKET_WRITABLE) FD_SET((unsigned)socketNum, &amp;fWriteSet);</span><br><span class="line">    if (conditionSet&amp;SOCKET_EXCEPTION) FD_SET((unsigned)socketNum, &amp;fExceptionSet);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>利用hash进行sockerNum &lt;====&gt; handlerProc,client映射；具体可见HandlerSet<br>::assignHandler</p>
-<p>至此rtspservice初始化已经完成，下面介绍client connect处理<br>GenericMediaServer::incomingConnectionHandlerOnSocket</p>
-<ul>
-<li>监听connect消息，accept serverSocket</li>
-<li>ignoreSigPipeOnSocket,send已经的关闭的套接字时,收到SIGPIPE信号,系统对该信号的默认处理方式是程序直接退出</li>
-<li>makeSocketNonBlocking,设置socket no block</li>
-<li>设置client send buffer,默认50K</li>
-<li>创建client connection</li>
-</ul>
-<p>client connection处理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RTSPServer::RTSPClientConnection</span><br><span class="line">::RTSPClientConnection(RTSPServer&amp; ourServer, int clientSocket, struct sockaddr_in clientAddr)</span><br><span class="line">  : GenericMediaServer::ClientConnection(ourServer, clientSocket, clientAddr),</span><br><span class="line">    fOurRTSPServer(ourServer), fClientInputSocket(fOurSocket), fClientOutputSocket(fOurSocket),</span><br><span class="line">    fIsActive(True), fRecursionCount(0), fOurSessionCookie(NULL) &#123;</span><br><span class="line">  resetRequestBuffer();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>clientConnection保存RTSPServer、clientSocket、clientAddr</p>
-<p>接下来进入TaskScheduler的doEventLoop函数,taskscheduler yield函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) &#123;</span><br><span class="line">  fd_set readSet = fReadSet; // make a copy for this select() call</span><br><span class="line">  fd_set writeSet = fWriteSet; // ditto</span><br><span class="line">  fd_set exceptionSet = fExceptionSet; // ditto</span><br><span class="line"></span><br><span class="line">  DelayInterval const&amp; timeToDelay = fDelayQueue.timeToNextAlarm();</span><br><span class="line">  struct timeval tv_timeToDelay;</span><br><span class="line">  tv_timeToDelay.tv_sec = timeToDelay.seconds();</span><br><span class="line">  tv_timeToDelay.tv_usec = timeToDelay.useconds();</span><br><span class="line">  // Very large &quot;tv_sec&quot; values cause select() to fail.</span><br><span class="line">  // Don&apos;t make it any larger than 1 million seconds (11.5 days)</span><br><span class="line">  const long MAX_TV_SEC = MILLION;</span><br><span class="line">  if (tv_timeToDelay.tv_sec &gt; MAX_TV_SEC) &#123;</span><br><span class="line">    tv_timeToDelay.tv_sec = MAX_TV_SEC;</span><br><span class="line">  &#125;</span><br><span class="line">  // Also check our &quot;maxDelayTime&quot; parameter (if it&apos;s &gt; 0):</span><br><span class="line">  if (maxDelayTime &gt; 0 &amp;&amp;</span><br><span class="line">      (tv_timeToDelay.tv_sec &gt; (long)maxDelayTime/MILLION ||</span><br><span class="line">       (tv_timeToDelay.tv_sec == (long)maxDelayTime/MILLION &amp;&amp;</span><br><span class="line">    tv_timeToDelay.tv_usec &gt; (long)maxDelayTime%MILLION))) &#123;</span><br><span class="line">    tv_timeToDelay.tv_sec = maxDelayTime/MILLION;</span><br><span class="line">    tv_timeToDelay.tv_usec = maxDelayTime%MILLION;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int selectResult = select(fMaxNumSockets, &amp;readSet, &amp;writeSet,  &amp;exceptionSet, &amp;tv_timeToDelay);  //监听事件</span><br><span class="line">  if (selectResult &lt; 0) &#123;</span><br><span class="line">#if defined(__WIN32__) || defined(_WIN32)</span><br><span class="line">    int err = WSAGetLastError();</span><br><span class="line">    // For some unknown reason, select() in Windoze sometimes fails with WSAEINVAL if</span><br><span class="line">    // it was called with no entries set in &quot;readSet&quot;.  If this happens, ignore it:</span><br><span class="line">    if (err == WSAEINVAL &amp;&amp; readSet.fd_count == 0) &#123;</span><br><span class="line">      err = EINTR;</span><br><span class="line">      // To stop this from happening again, create a dummy socket:</span><br><span class="line">      if (fDummySocketNum &gt;= 0) closeSocket(fDummySocketNum);</span><br><span class="line">      fDummySocketNum = socket(AF_INET, SOCK_DGRAM, 0);</span><br><span class="line">      FD_SET((unsigned)fDummySocketNum, &amp;fReadSet);</span><br><span class="line">    &#125;</span><br><span class="line">    if (err != EINTR) &#123;</span><br><span class="line">#else</span><br><span class="line">    if (errno != EINTR &amp;&amp; errno != EAGAIN) &#123;</span><br><span class="line">#endif</span><br><span class="line">    // Unexpected error - treat this as fatal:</span><br><span class="line">#if !defined(_WIN32_WCE)</span><br><span class="line">    perror(&quot;BasicTaskScheduler::SingleStep(): select() fails&quot;);</span><br><span class="line">    // Because this failure is often &quot;Bad file descriptor&quot; - which is caused by an invalid socket number (i.e., a socket number</span><br><span class="line">    // that had already been closed) being used in &quot;select()&quot; - we print out the sockets that were being used in &quot;select()&quot;,</span><br><span class="line">    // to assist in debugging:</span><br><span class="line">    fprintf(stderr, &quot;socket numbers used in the select() call:&quot;);</span><br><span class="line">    for (int i = 0; i &lt; 10000; ++i) &#123;</span><br><span class="line">      if (FD_ISSET(i, &amp;fReadSet) || FD_ISSET(i, &amp;fWriteSet) || FD_ISSET(i, &amp;fExceptionSet)) &#123;</span><br><span class="line">        fprintf(stderr, &quot; %d(&quot;, i);</span><br><span class="line">        if (FD_ISSET(i, &amp;fReadSet)) fprintf(stderr, &quot;r&quot;);</span><br><span class="line">        if (FD_ISSET(i, &amp;fWriteSet)) fprintf(stderr, &quot;w&quot;);</span><br><span class="line">        if (FD_ISSET(i, &amp;fExceptionSet)) fprintf(stderr, &quot;e&quot;);</span><br><span class="line">        fprintf(stderr, &quot;)&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fprintf(stderr, &quot;\n&quot;);</span><br><span class="line">#endif</span><br><span class="line">    internalError();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  //调用注册的event handle</span><br><span class="line">  // Call the handler function for one readable socket:</span><br><span class="line">  HandlerIterator iter(*fHandlers);</span><br><span class="line">  HandlerDescriptor* handler;</span><br><span class="line">  // To ensure forward progress through the handlers, begin past the last</span><br><span class="line">  // socket number that we handled:</span><br><span class="line">  if (fLastHandledSocketNum &gt;= 0) &#123;</span><br><span class="line">    while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">      if (handler-&gt;socketNum == fLastHandledSocketNum) break;</span><br><span class="line">    &#125;</span><br><span class="line">    if (handler == NULL) &#123;</span><br><span class="line">      fLastHandledSocketNum = -1;</span><br><span class="line">      iter.reset(); // start from the beginning instead</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">    int sock = handler-&gt;socketNum; // alias</span><br><span class="line">    int resultConditionSet = 0;</span><br><span class="line">    if (FD_ISSET(sock, &amp;readSet) &amp;&amp; FD_ISSET(sock, &amp;fReadSet)/*sanity check*/) resultConditionSet |= SOCKET_READABLE;</span><br><span class="line">    if (FD_ISSET(sock, &amp;writeSet) &amp;&amp; FD_ISSET(sock, &amp;fWriteSet)/*sanity check*/) resultConditionSet |= SOCKET_WRITABLE;</span><br><span class="line">    if (FD_ISSET(sock, &amp;exceptionSet) &amp;&amp; FD_ISSET(sock, &amp;fExceptionSet)/*sanity check*/) resultConditionSet |= SOCKET_EXCEPTION;</span><br><span class="line">    if ((resultConditionSet&amp;handler-&gt;conditionSet) != 0 &amp;&amp; handler-&gt;handlerProc != NULL) &#123;</span><br><span class="line">      fLastHandledSocketNum = sock;</span><br><span class="line">          // Note: we set &quot;fLastHandledSocketNum&quot; before calling the handler,</span><br><span class="line">          // in case the handler calls &quot;doEventLoop()&quot; reentrantly.</span><br><span class="line">      (*handler-&gt;handlerProc)(handler-&gt;clientData, resultConditionSet);</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (handler == NULL &amp;&amp; fLastHandledSocketNum &gt;= 0) &#123;</span><br><span class="line">    // We didn&apos;t call a handler, but we didn&apos;t get to check all of them,</span><br><span class="line">    // so try again from the beginning:</span><br><span class="line">    iter.reset();</span><br><span class="line">    while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">      int sock = handler-&gt;socketNum; // alias</span><br><span class="line">      int resultConditionSet = 0;</span><br><span class="line">      if (FD_ISSET(sock, &amp;readSet) &amp;&amp; FD_ISSET(sock, &amp;fReadSet)/*sanity check*/) resultConditionSet |= SOCKET_READABLE;</span><br><span class="line">      if (FD_ISSET(sock, &amp;writeSet) &amp;&amp; FD_ISSET(sock, &amp;fWriteSet)/*sanity check*/) resultConditionSet |= SOCKET_WRITABLE;</span><br><span class="line">      if (FD_ISSET(sock, &amp;exceptionSet) &amp;&amp; FD_ISSET(sock, &amp;fExceptionSet)/*sanity check*/) resultConditionSet |= SOCKET_EXCEPTION;</span><br><span class="line">      if ((resultConditionSet&amp;handler-&gt;conditionSet) != 0 &amp;&amp; handler-&gt;handlerProc != NULL) &#123;</span><br><span class="line">    fLastHandledSocketNum = sock;</span><br><span class="line">        // Note: we set &quot;fLastHandledSocketNum&quot; before calling the handler,</span><br><span class="line">            // in case the handler calls &quot;doEventLoop()&quot; reentrantly.</span><br><span class="line">    (*handler-&gt;handlerProc)(handler-&gt;clientData, resultConditionSet);</span><br><span class="line">    break;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (handler == NULL) fLastHandledSocketNum = -1;//because we didn&apos;t call a handler</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Also handle any newly-triggered event (Note that we do this *after* calling a socket handler,</span><br><span class="line">  // in case the triggered event handler modifies The set of readable sockets.)</span><br><span class="line">  if (fTriggersAwaitingHandling != 0) &#123;</span><br><span class="line">    if (fTriggersAwaitingHandling == fLastUsedTriggerMask) &#123;</span><br><span class="line">      // Common-case optimization for a single event trigger:</span><br><span class="line">      fTriggersAwaitingHandling &amp;=~ fLastUsedTriggerMask;</span><br><span class="line">      if (fTriggeredEventHandlers[fLastUsedTriggerNum] != NULL) &#123;</span><br><span class="line">    (*fTriggeredEventHandlers[fLastUsedTriggerNum])(fTriggeredEventClientDatas[fLastUsedTriggerNum]);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      // Look for an event trigger that needs handling (making sure that we make forward progress through all possible triggers):</span><br><span class="line">      unsigned i = fLastUsedTriggerNum;</span><br><span class="line">      EventTriggerId mask = fLastUsedTriggerMask;</span><br><span class="line"></span><br><span class="line">      do &#123;</span><br><span class="line">    i = (i+1)%MAX_NUM_EVENT_TRIGGERS;</span><br><span class="line">    mask &gt;&gt;= 1;</span><br><span class="line">    if (mask == 0) mask = 0x80000000;</span><br><span class="line"></span><br><span class="line">    if ((fTriggersAwaitingHandling&amp;mask) != 0) &#123;</span><br><span class="line">      fTriggersAwaitingHandling &amp;=~ mask;</span><br><span class="line">      if (fTriggeredEventHandlers[i] != NULL) &#123;</span><br><span class="line">        (*fTriggeredEventHandlers[i])(fTriggeredEventClientDatas[i]);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      fLastUsedTriggerMask = mask;</span><br><span class="line">      fLastUsedTriggerNum = i;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">      &#125; while (i != fLastUsedTriggerNum);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Also handle any delayed event that may have come due.</span><br><span class="line">  fDelayQueue.handleAlarm();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjr9ee3m9000zggvcji5djqo1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjserkvap001250vcwz8a1ohu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1114,7 +1220,7 @@ CSeq: 6
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -1127,6 +1233,14 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
           </li>
         
@@ -1136,14 +1250,6 @@ CSeq: 6
         
           <li>
             <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/05/流媒体/live555分析-startStream/">live555分析-startStream</a>
           </li>
         
       </ul>
