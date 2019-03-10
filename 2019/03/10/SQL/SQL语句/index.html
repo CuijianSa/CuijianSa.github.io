@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>SQL语句 | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据类型   存储类 Describe     NULL NULL值   INTEGER 带符号整数，size=1,2,3,4,6 or 8   REAL 浮点值,size=8的IEEE浮点数字   TEXT 文本字符串   BLOB blob数据， 类型由输入存储    创建表1234567CREATE TABLE if not exists database_name.table_name(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL语句">
+<meta property="og:url" content="http://yoursite.com/2019/03/10/SQL/SQL语句/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="数据类型   存储类 Describe     NULL NULL值   INTEGER 带符号整数，size=1,2,3,4,6 or 8   REAL 浮点值,size=8的IEEE浮点数字   TEXT 文本字符串   BLOB blob数据， 类型由输入存储    创建表1234567CREATE TABLE if not exists database_name.table_name(">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-10T09:13:47.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL语句">
+<meta name="twitter:description" content="数据类型   存储类 Describe     NULL NULL值   INTEGER 带符号整数，size=1,2,3,4,6 or 8   REAL 浮点值,size=8的IEEE浮点数字   TEXT 文本字符串   BLOB blob数据， 类型由输入存储    创建表1234567CREATE TABLE if not exists database_name.table_name(">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-SQL/SQL语句" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/10/SQL/SQL语句/" class="article-date">
+  <time datetime="2019-03-10T08:06:36.000Z" itemprop="datePublished">2019-03-10</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SQL/">SQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SQL语句
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><table>
+<thead>
+<tr>
+<th>存储类</th>
+<th>Describe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NULL</td>
+<td>NULL值</td>
+</tr>
+<tr>
+<td>INTEGER</td>
+<td>带符号整数，size=1,2,3,4,6 or 8</td>
+</tr>
+<tr>
+<td>REAL</td>
+<td>浮点值,size=8的IEEE浮点数字</td>
+</tr>
+<tr>
+<td>TEXT</td>
+<td>文本字符串</td>
+</tr>
+<tr>
+<td>BLOB</td>
+<td>blob数据， 类型由输入存储</td>
+</tr>
+</tbody>
+</table>
+<h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE if not exists database_name.table_name(</span><br><span class="line">   column1 datatype  PRIMARY KEY(one or more columns),</span><br><span class="line">   column2 datatype,</span><br><span class="line">   column3 datatype,</span><br><span class="line">   .....</span><br><span class="line">   columnN datatype,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE database_name.table_name;</span><br></pre></td></tr></table></figure>
+<h1 id="插入表"><a href="#插入表" class="headerlink" title="插入表"></a>插入表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TABLE_NAME(column1, column2, ... columnN)</span><br><span class="line">VALUES (value1, value2, ... valueN)</span><br></pre></td></tr></table></figure>
+<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2, columnN FROM table_name;</span><br></pre></td></tr></table></figure>
+<h1 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h1><p>可应用于SELCT、UPDATE、DELETE,用来过滤记录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2, columnN FROM table_name</span><br><span class="line">WHERE[CONDITION | EXPRESSION];</span><br></pre></td></tr></table></figure>
+<h1 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UPDATE table_name </span><br><span class="line">set column1=value1, column2=value2...., columnN=valueN</span><br><span class="line">where[CONDITION];</span><br></pre></td></tr></table></figure>
+<h1 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM table_name</span><br><span class="line">WHERE[CONDITION];</span><br></pre></td></tr></table></figure>
+<h1 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h1><p>LINK匹配通配符</p>
+<ul>
+<li>%：表示0、1或者多个数字或字符</li>
+<li>_：表示单一的数字或字符</li>
+</ul>
+<p>such as:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET column_list FROM table_name</span><br><span class="line">where column LIKE &apos;xxx%&apos;;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Glob"><a href="#Glob" class="headerlink" title="Glob"></a>Glob</h1><p>Glob匹配通配符， 大小敏感</p>
+<ul>
+<li>*：表示0、1或者多个数字或字符</li>
+<li>?： 表示单一的数字或字符</li>
+</ul>
+<h1 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h1><p>Limit限制SELECT 返回的数据量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT cloumn1, column2 ...</span><br><span class="line">FROM table_name</span><br><span class="line">LIMIT [no of rows]</span><br><span class="line"></span><br><span class="line">such as:</span><br><span class="line">SELECT * FROM COMPANY LIMIT 3 OFFSET 2;</span><br></pre></td></tr></table></figure>
+<h1 id="Order-By"><a href="#Order-By" class="headerlink" title="Order By"></a>Order By</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT column-list</span><br><span class="line">FROM table_name</span><br><span class="line">[WHERE condition]</span><br><span class="line">[ORDER BY column1, coulum2, ...][ASC|DESC];</span><br></pre></td></tr></table></figure>
+<h1 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h1><p>SQLite 的 GROUP BY 子句用于与 SELECT 语句一起使用，来对相同的数据进行分组。<br>在 SELECT 语句中，GROUP BY 子句放在 WHERE 子句之后，放在 ORDER BY 子句之前。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT column-list </span><br><span class="line">FROM table_name</span><br><span class="line">WHERE[conditions]</span><br><span class="line">GROUP BY column1, ....</span><br><span class="line">ORDER BY column1,....;</span><br></pre></td></tr></table></figure>
+<h1 id="Having-子句"><a href="#Having-子句" class="headerlink" title="Having 子句"></a>Having 子句</h1><p>Having子句允许指定条件来过滤将出现在最终结果的分组<br>WHERE 子句在所选列上设置条件，而 HAVING 子句则在由 GROUP BY 子句创建的分组上设置条件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">FROM</span><br><span class="line">WHERE</span><br><span class="line">GROUP BY</span><br><span class="line">HAVING</span><br><span class="line">ORDER BY</span><br><span class="line"></span><br><span class="line">such as:</span><br><span class="line">SELECT * FROM COMPANY GROUP BY name HAVING count(name) &lt; 2;</span><br></pre></td></tr></table></figure>
+<h1 id="DISTINCT"><a href="#DISTINCT" class="headerlink" title="DISTINCT"></a>DISTINCT</h1><p>DISTINCT 关键字与 SELECT 语句一起使用，来消除所有重复的记录，并只获取唯一一次记录。</p>
+<p>有可能出现一种情况，在一个表中有多个重复的记录。当提取这样的记录时，DISTINCT 关键字就显得特别有意义，它只获取唯一一次记录，而不是获取重复记录。</p>
+<h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1><ul>
+<li>NOT NULL: 确保某列不能为NULL</li>
+<li>DEFAULT: 当莫列没有指定值时， 为该列提供默认值</li>
+<li>UNIQUE: 确保某列的所有值不同</li>
+<li>PRIMARY Key: 为一标识数据库表的各行和数据</li>
+<li>CHECK 约束：CHECK 约束确保某列中的所有值满足一定条件</li>
+</ul>
+<h1 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h1><p>SQLite 的 Join 子句用于结合两个或多个数据库中表的记录。JOIN 是一种通过共同值来结合两个表中字段的手段</p>
+<ul>
+<li>交叉连接 - CROSS JOIN</li>
+<li>内连接 - INNER JOIN</li>
+<li>外连接 - OUTER JOIN</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cjt2pb6we0001tovc4qf1dns3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/21/other/getaddrinfo爬坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">getaddrinfo爬坑</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

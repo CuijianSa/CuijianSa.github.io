@@ -66,6 +66,104 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-other/unsigned关键字" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/14/other/unsigned关键字/" class="article-date">
+  <time datetime="2018-07-14T05:33:51.000Z" itemprop="datePublished">2018-07-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/14/other/unsigned关键字/">unsigned关键字</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>[转] <a href="https://blog.csdn.net/a997013919/article/details/76684179" target="_blank" rel="noopener">无法忽视的unsigned关键字</a></p>
+</blockquote>
+<h2 id="对unsigned解释"><a href="#对unsigned解释" class="headerlink" title="对unsigned解释"></a>对unsigned解释</h2><p>整型的每一种都分有无符号（unsigned）和有符号（signed）两种类型（float和double总是带符号的），在默认情况下声明的整型变量都是有符号的类型（char有点特别），如果需声明无符号类型的话就需要在类型前加上unsigned。无符号版本和有符号版本的区别就是无符号类型能保存2倍于有符号类型的正整数数据，比如16位系统中一个short能存储的数据的范围为-32768~32767，而unsigned能存储的数据范围则是0~65535。由于在计算机中,整数是以补码形式存放的。根据最高位的不同，如果是1,有符号数的话就是负数；如果是无符号数,则都解释为正数。另外，unsigned若省略后一个关键字，大多数编译器都会认为是unsigned int。</p>
+<pre><code>char c = 0xc9;
+printf(&quot;A:c = %2x\n&quot;,(unsigned char)c);
+printf(&quot;B:c = %2x\n&quot;,c &amp; 0xff);
+printf(&quot;C:c = %2x\n&quot;,c);
+
+输出如下：
+
+A:c = c9
+B:c = c9
+C:c = ffffffc9
+</code></pre><p>　首先我们必须知道，printf()函数的%x(X)输出的是Int型别的16进制格式。所以char型别的c变量会被转换成Int型别。</p>
+<p>　其次，我们的知道计算机是用补码表示数据的</p>
+<ul>
+<li><p>情况C:</p>
+<p>  　　　c的补码：11001001（0xc9）。</p>
+<p>  　　　c的反码：11001000（0xc9）。</p>
+<p>  　　　c的原码：10110111（0xc9）。　</p>
+<p>  　　　因为char型别是带符号的，所以最高位的1这里视为负号。</p>
+<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
+<p>  　　　Int_c的原码：10000000 00000000 00000000 00110111（把c原码的最高位1  提到最高位。其余高位补0）。</p>
+<p>  　　　Int_c的反码：11111111 11111111 11111111 11001000</p>
+<p>  　　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
+<p>  　　　所以打印出来看似诡异的值其实是合情合理的。如何避免？看AB情况。</p>
+</li>
+</ul>
+<ul>
+<li><p>情况B:</p>
+<p>  　　我们在情况C的基础上将c与0xff做&amp;操作。</p>
+<p>  　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
+<p>  　　　　　　　　 &amp;</p>
+<p>  　　　　　　　　 00000000 00000000 00000000 11111111</p>
+<p>  　　最终结果为： 00000000 00000000 00000000 11001001(0xc9)。</p>
+</li>
+</ul>
+<ul>
+<li><p>情况A:</p>
+<p>  　　　c的补码：11001001（0xc9）。</p>
+<p>  　　　c的反码：11001001（0xc9）。</p>
+<p>  　　　c的原码：11001001（0xc9）。　</p>
+<p>  　　　这里强制转换c为unsigned char型别。因此最高位的1不是正负号</p>
+<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
+<p>  　　　Int_c的原码：00000000 00000000 00000000 11001001（把c原码的最高位1  提到最高位。其余高位补0）。</p>
+<p>  　　　Int_c的反码：00000000 00000000 00000000 11001001</p>
+<p>  　　　Int_c的补码：00000000 00000000 00000000 11001001(0xc9)。</p>
+<p>  以32位机为例，int 分为无符号 unsigned 和有符号 signed 两种类型，默认为signed。二者的区别就是无符号类型能保存2倍于有符号类型的数据。32位下，signed int 的表示范围为：-2147483648 ~ 2147483647 (最高位做符号位)。unsigned int 的表示范围为：0 ~ 4294967295 （不保留符号位）。我们都知道，两个不同的数据类型在进行混合使用时，会自动进行类型转换。其转换原则就是：向着精度更高、长度更长的方向转换。也就是我们平常见到的 char 转为 int ，int 转为 long，float 转为 double  . etc.</p>
+</li>
+</ul>
+<p>相关资料:</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">C语言打印16进制出现0xffffff现象的问题剖析</a></p>
+</blockquote>
+<blockquote>
+<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">unsigned关键字，你真的懂了吗</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjt2pb6yt000qtovc0vaxjmka" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-网络/OSI七层模型" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/06/13/网络/OSI七层模型/" class="article-date">
@@ -165,7 +263,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjserkv99000m50vc92joj6c4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjt2pb6yb000etovce92x7yiw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -321,7 +419,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjserkv94000j50vcir6t4j93" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjt2pb6x10002tovcgbcirmzs" class="article-share-link">Share</a>
       
       
     </footer>
@@ -337,10 +435,6 @@ Content-Length: 122
   <time datetime="2018-05-28T17:04:43.000Z" itemprop="datePublished">2018-05-29</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/笔记/">笔记</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -708,7 +802,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjserkvb9001e50vcio6xienv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjt2pb70y001itovcd64x3cm6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -733,7 +827,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -748,7 +842,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -759,6 +853,10 @@ a + 1 = 0x804a018
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
+          </li>
         
           <li>
             <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
@@ -774,10 +872,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/other/指针数组和数组指针/">指针数组和数组指针</a>
           </li>
         
       </ul>
