@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="CuijianSa.github.io">
 <meta property="og:description" content="爬坑笔记本文对日常工作及学习中遇到的问题做个记录  2018/5/18 1:01:33   编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折 undefined reference vtable for VideoDeviceclass VideoDevice: public QObject {     Q_OBJECT">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-10T09:13:55.615Z">
+<meta property="og:updated_time" content="2019-03-19T17:31:38.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="爬坑笔记">
 <meta name="twitter:description" content="爬坑笔记本文对日常工作及学习中遇到的问题做个记录  2018/5/18 1:01:33   编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折 undefined reference vtable for VideoDeviceclass VideoDevice: public QObject {     Q_OBJECT">
@@ -74,6 +74,10 @@
   <time datetime="2018-05-28T17:04:43.000Z" itemprop="datePublished">2018-05-29</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/other/">other</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -437,11 +441,54 @@ a + 1 = 0x804a018
  5     char *p = get_msg_id();
  6     printf(&quot;%p&quot;,p);
  7 }
-</code></pre>
+</code></pre><h1 id="关于CGO-musllibc问题"><a href="#关于CGO-musllibc问题" class="headerlink" title="关于CGO+musllibc问题"></a>关于CGO+musllibc问题</h1><ul>
+<li>golang github issue:<a href="https://github.com/golang/go/issues/28909" target="_blank" rel="noopener">https://github.com/golang/go/issues/28909</a></li>
+</ul>
+<p>首先简单说明下uclibc、eglibc、glibc及musl-libc区别</p>
+<ol>
+<li><p>Glibc glibc = GNU C Library 是GNU项（GNU Project）目，所实现的 C语言标准库（C standard library）。 目前，常见的桌面和服务器中的GNU/Linux类的系统中，都是用的这套C语言标准库。 其实现了常见的C库的函数，支持很多种系统平台，功能很全，但是也相对比较臃肿和庞大。</p>
+</li>
+<li><p>uClibc 一个小型的C语言标准库，主要用于嵌入式。 其最开始设计用于uClinux（注：uClinux不支持MMU），因此比较适用于微处理器中。 对应的，此处的u意思是μ，Micro，微小的意思。 uClibc的特点：</p>
+<ul>
+<li>uClibc比glibc要小很多。</li>
+<li>uClibc是独立的，为了应用于嵌入式系统中，完全重新实现出来的。和glibc在源码结构和二进制上，都不兼容。</li>
+</ul>
+</li>
+<li><p>EGLIBC EGLIBC = Embedded GLIBC EGLIBC是，（后来）glibc的原创作组织FSF所（新）推出的，glibc的一种变体，目的在于将glibc用于嵌入式系统。 EGLIBC的目标是： </p>
+<ul>
+<li>保持源码和二进制级别的兼容于Glibc 源代码架构和ABI层面兼容 如果真正实现了这个目标，那意味着，你之前用glibc编译的程序，可以直接用eglibc替换，而不需要重新编译。 这样就可以复用之前的很多的程序了。 </li>
+<li>降低(内存)资源占用/消耗</li>
+<li>使更多的模块为可配置的（以实现按需裁剪不需要的模块）</li>
+<li><p>提高对于交叉编译(cross-compilation)和交叉测试(cross-testing)的支持 Eglibc的最主要特点就是可配置，这样对于嵌入式系统中，你所不需要的模块，比如NIS，locale等，就可以裁剪掉，不把其编译到库中，使得降低生成的库的大小了</p>
+<p>更多特点，可以去看：Eglibc的特点 【glibc, uClibc, Elibc的渊源/历史/区别/联系】 </p>
+<ol>
+<li>写程序，需要用到很多c语言的库函数。所有的库函数加起来，就是对应的C语言（标准）函数库。 </li>
+<li>目前在普通GNU/Linux系统中所用的C语言标准库，叫做glibc。其功能很全，函数很多，但是代码太多，编译出来的函数库的大小也很大，即资源占用也很多。</li>
+<li>而嵌入式系统中，也需要C语言写代码实现特定功能，也需要用到C语言函数库，但是由于嵌入式系统中，一般资源比较有限，所以不适合直接使用（太占用资源的）gLibc。 4. 所以有人就又（没有参考glibc，而是从头开始，）重新实现了一个用于嵌入式系统中的，代码量不是很大的，资源占用相对较少的，C语言函数库，叫做uClibc。并且，uClibc不支持MMU（内存管理单元）。 </li>
+<li>而后来，glibc的开发者，又推出个Embedded glibc，简称eglibc，其主要目的也是将glibc用于嵌入式领域。 相应最大的改动就在于，把更多的库函数，改为可配置的，这样，如果你的嵌入式系统中不需要某些函数，就可以裁剪掉，不把该函数编译到你的eglibc库中，使得最终生成的eglibc库的大小变小，最终符合你的嵌入式系统的要求（不能超过一定的大小），这样，就实现了，把glibc引用于嵌入式系统中的目的了。 </li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>可以简单的理解为： glibc，uClibc，eglibc都是C语言函数库：
+ 1. uClibc是嵌入式系统中用的，glibc是桌面系统用的 
+ 2. eglibc也是嵌入式系统中用的，是glibc的嵌入式版本，和glibc在源码和二进制上兼容。
+</code></pre><ol start="4">
+<li>Musl-libc C语言标准库Musl-libc项目发布了1.0版。Musl是一个轻量级的C标准库，设计作为GNU C library (glibc)、 uClibc或Android Bionic的替代用于嵌入式操作系统和移动设备。它遵循POSIX 2008规格和 C99 标准，采用MIT许可证授权，使用Musl的Linux发行版和项目包括sabotage，bootstrap-linux，LightCube OS等等。</li>
+</ol>
+<p>golang + C混编时， cgo依赖于底层c库。cgo在muslibc支持程序不是很好<br>muslibc初始化时为将环境变量写入init_array造成cgo获取argv为空</p>
+<p>解决方法:</p>
+<p>使用patchelf 工具修改已编译运行程序的依赖库位置和指定库链接器</p>
+<ul>
+<li>patchelf –set-rpath</li>
+<li>patchelf –set-interpreter</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjt2pb70y001itovcd64x3cm6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjtg22uhq001h24vca1ahjt4o" class="article-share-link">Share</a>
       
       
     </footer>
@@ -473,7 +520,7 @@ a + 1 = 0x804a018
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
     </div>
   </div>
 
@@ -501,6 +548,10 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/03/20/编译框架/cmake/">cmake</a>
+          </li>
+        
+          <li>
             <a href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
           </li>
         
@@ -514,10 +565,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
           </li>
         
       </ul>
