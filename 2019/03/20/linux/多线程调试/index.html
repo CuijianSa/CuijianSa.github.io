@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>多线程调试 | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="常用命令 gdb attach $PID:attach 进程 info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID  12345678    Id   Target Id         Frame * 1    Thread 0x7f8ef79ec740 (LWP 3994) &amp;quot;thread_demo&amp;quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多线程调试">
+<meta property="og:url" content="http://yoursite.com/2019/03/20/linux/多线程调试/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="常用命令 gdb attach $PID:attach 进程 info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID  12345678    Id   Target Id         Frame * 1    Thread 0x7f8ef79ec740 (LWP 3994) &amp;quot;thread_demo&amp;quot;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-03-20T15:59:19.609Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多线程调试">
+<meta name="twitter:description" content="常用命令 gdb attach $PID:attach 进程 info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID  12345678    Id   Target Id         Frame * 1    Thread 0x7f8ef79ec740 (LWP 3994) &amp;quot;thread_demo&amp;quot;">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux/多线程调试" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/20/linux/多线程调试/" class="article-date">
+  <time datetime="2019-03-20T15:31:09.000Z" itemprop="datePublished">2019-03-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      多线程调试
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ol>
+<li>gdb attach $PID:attach 进程</li>
+<li>info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    Id   Target Id         Frame </span><br><span class="line">* 1    Thread 0x7f8ef79ec740 (LWP 3994) &quot;thread_demo&quot; 0x00007f8ef75d1d2d in __GI___pthread_timedjoin_ex (threadid=140251998291712, thread_return=0x0, </span><br><span class="line">    abstime=0x0, block=&lt;optimized out&gt;) at pthread_join_common.c:89</span><br><span class="line">  2    Thread 0x7f8ef6898700 (LWP 3995) &quot;thread_demo&quot; 0x00007f8ef6f339d0 in __GI___nanosleep (requested_time=requested_time@entry=0x7f8ef6897ea0, </span><br><span class="line">    remaining=remaining@entry=0x7f8ef6897ea0)</span><br><span class="line">    at ../sysdeps/unix/sysv/linux/nanosleep.c:28</span><br><span class="line">  3    Thread 0x7f8ef6097700 (LWP 3996) &quot;thread_demo&quot; 0x00007f8ef6f339d0 in __GI___nanosleep (requested_time=requested_time@entry=0x7f8ef6096ea0, </span><br><span class="line">    remaining=remaining@entry=0x7f8ef6096ea0)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>thread ID:切换当前调试的线程为指定ID的线程</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Switching to thread 1 (Thread 0x7f8ef79ec740 (LWP 3994))]</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>打印堆栈信息: thread apply all bt</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">hread 11 (Thread 0x7f8ef208f700 (LWP 4004)):</span><br><span class="line">#0  0x00007f8ef6f339d0 in __GI___nanosleep (</span><br><span class="line">    requested_time=requested_time@entry=0x7f8ef208eea0, </span><br><span class="line">    remaining=remaining@entry=0x7f8ef208eea0)</span><br><span class="line">    at ../sysdeps/unix/sysv/linux/nanosleep.c:28</span><br><span class="line">#1  0x00007f8ef6f338aa in __sleep (seconds=0) at ../sysdeps/posix/sleep.c:55</span><br><span class="line">#2  0x00005580971cdaa2 in thread_route (arg=0x0) at thread_demo.cpp:10</span><br><span class="line">#3  0x00007f8ef75d06db in start_thread (arg=0x7f8ef208f700)</span><br><span class="line">    at pthread_create.c:463</span><br><span class="line">#4  0x00007f8ef6f7088f in clone ()</span><br><span class="line">    at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95</span><br><span class="line"></span><br><span class="line">Thread 10 (Thread 0x7f8ef2890700 (LWP 4003)):</span><br><span class="line">#0  0x00007f8ef6f339d0 in __GI___nanosleep (</span><br><span class="line">    requested_time=requested_time@entry=0x7f8ef288fea0, </span><br><span class="line">    remaining=remaining@entry=0x7f8ef288fea0)</span><br><span class="line">    at ../sysdeps/unix/sysv/linux/nanosleep.c:28</span><br><span class="line">#1  0x00007f8ef6f338aa in __sleep (seconds=0) at ../sysdeps/posix/sleep.c:55</span><br><span class="line">#2  0x00005580971cdaa2 in thread_route (arg=0x0) at thread_demo.cpp:10</span><br><span class="line">#3  0x00007f8ef75d06db in start_thread (arg=0x7f8ef2890700)</span><br><span class="line">    at pthread_create.c:463</span><br><span class="line">#4  0x00007f8ef6f7088f in clone ()</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Thread apply ID1 ID2:让一个或者多个线程执行command命令</li>
+<li>Set scheduler-locking off|on|step<ul>
+<li>设置locking scheduler模式<ul>
+<li>ON：只有当前线程运行</li>
+<li>Off：所有线程都会运行</li>
+<li>Step：当执行step操作时只有当前线程会运行，执行continue所有线程都会运行<ol start="7">
+<li>ps aux | grep thread_demo:查看当前运行的经常</li>
+<li>ps -aL | grep thread_demo:查看当前运行的轻量级进程</li>
+<li>pstree -p 主线程ID:查看线程关系</li>
+<li>查看线程栈结构: ps stack 线程ID</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void *thread_route(void *arg)</span><br><span class="line">&#123;</span><br><span class="line">    sleep(random());</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int i;</span><br><span class="line">    pthread_t threadID[10];</span><br><span class="line">    cout&lt;&lt;&quot;pthread runing&quot;&lt;&lt;endl;</span><br><span class="line">    for(i = 0; i &lt; sizeof(threadID) / sizeof(threadID[0]); i++) &#123;</span><br><span class="line">        pthread_create(&amp;threadID[i], NULL, thread_route, NULL);</span><br><span class="line">    &#125;   </span><br><span class="line">    for(i = 0; i &lt; sizeof(threadID) / sizeof(threadID[0]); i++) &#123;</span><br><span class="line"></span><br><span class="line">        pthread_join(threadID[i], NULL);</span><br><span class="line">    &#125;   </span><br><span class="line">    cout&lt;&lt;&quot;pthread end&quot;&lt;&lt;endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjthdwpjg0002ugvcbjpbwkmi" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/20/编译框架/cmake/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">cmake</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/20/linux/多线程调试/">多线程调试</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/20/编译框架/cmake/">cmake</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

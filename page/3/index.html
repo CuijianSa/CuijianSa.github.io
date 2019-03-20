@@ -66,6 +66,72 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/RTMP/RTMP" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/13/流媒体/RTMP/RTMP/" class="article-date">
+  <time datetime="2018-10-13T07:22:36.000Z" itemprop="datePublished">2018-10-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/13/流媒体/RTMP/RTMP/">RTMP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>从腾讯云中看到一篇对RTMP介绍比较好的文章<br>转自<a href="https://cloud.tencent.com/developer/article/1004970" target="_blank" rel="noopener">视频协议学习：推流拉流都擅长的 RTMP</a></p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>RTMP(Real Time Message Protocol)是进行实时通信协议的网络，用于Flash/AIR平台及支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信</p>
+<p>RTMP有多个变种</p>
+<ol>
+<li>RTMP工作在TCP之上，默认使用端口1935；</li>
+<li>RTMPE在RTMP的基础上增加了加密功能；</li>
+<li>RTMPT封装在HTTP请求之上，可穿透防火墙；</li>
+<li>RTMPS类似RTMPT，增加了TLS/SSL的安全功能；</li>
+<li>RTMFP使用UDP进行传输的RTMP</li>
+</ol>
+<p><strong>rtmp协议中基本的数据单元称为消息（Message）。当rtmp协议在互联网中传输数据的时候，消息会被拆分成更小的单元，称为消息块（Chunk）。Rtmp的交互过程可以理解成独有的握手过程、控制命令传输、音视频数据传输</strong></p>
+<h1 id="握手过程"><a href="#握手过程" class="headerlink" title="握手过程"></a>握手过程</h1><p>RTMP 握手由三个固定长度的块组成，而不是像其他协议一样的带有报头的可变长度的块。客户端 (发起连接请求的终端) 和服务器端各自发送相同的三块。便于演示，当发送自客户端时这些块被指定为 C0、C1 和 C2；当发送自服务器端时这些块分别被指定为 S0、S1 和 S2。以下是握手过程中传递的包格式介绍：</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png" alt=""></p>
+<p>RTMP握手以客户端发送 C0 和 C1 块开始，客户端必须接收到 S1 才能发送 C2，客户端必须接收到 S2 才能发送任何其他数据，服务器端必须接收到 C0 才能发送 S0 和 S1，也可以等待接收到 C1 再发送 S0 和 S1，服务器端必须接收到 C1 才能发送 S2，服务器端必须接收到 C2 才能发送任何其他数据。以下为RTMP的握手过程图介绍：</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshank_process.png" alt=""></p>
+<p>规范要求RTMP需要一个一个的发送握手包，但是实际上客户端发送C0+C1，服务端发送S0+S1+S2，再客户端在发送C2结束握手。</p>
+<h1 id="数据包格式"><a href="#数据包格式" class="headerlink" title="数据包格式"></a>数据包格式</h1><p>RTMP基础数据单位是消息，当RTMP协议在交互过程中，消息会被拆分成更小的单元，称为消息块（Chunk）。</p>
+<p><img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_chunk.png" alt=""></p>
+<h2 id="消息格式"><a href="#消息格式" class="headerlink" title="消息格式"></a>消息格式</h2><p>消息头包含以下信息</p>
+<ul>
+<li>MessageType: 消息类型,1Byte</li>
+<li>Length:有效负载字节数,3Byte大端</li>
+<li>Timestamp:时间戳，4Byte大端</li>
+<li>MessageStreamID：消息流ID</li>
+</ul>
+<p><a href="https://blog.csdn.net/defonds/article/details/17534903" target="_blank" rel="noopener">Adobe 官方公布的 RTMP 规范</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjthdwpma001ougvcpc2tl8tk" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-架构/thinking-in-uml" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/07/31/架构/thinking-in-uml/" class="article-date">
@@ -233,7 +299,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjtg22ug1000924vccyo36dj6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjthdwpkc000iugvcrdhqoku7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -331,7 +397,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjtg22uft000524vc8vo7tgjn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjthdwpjs0006ugvccxtlf82u" class="article-share-link">Share</a>
       
       
     </footer>
@@ -440,7 +506,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjtg22ugx001024vc4sdhde5f" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjthdwplb0012ugvcfm5932lk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -596,7 +662,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjtg22ug6000g24vc745w0hli" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjthdwpl6000zugvciix0l7uj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1026,7 +1092,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjtg22uhq001h24vca1ahjt4o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjthdwpm1001jugvckie442y1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1079,6 +1145,10 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/03/20/linux/多线程调试/">多线程调试</a>
+          </li>
+        
+          <li>
             <a href="/2019/03/20/编译框架/cmake/">cmake</a>
           </li>
         
@@ -1092,10 +1162,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
           </li>
         
       </ul>
