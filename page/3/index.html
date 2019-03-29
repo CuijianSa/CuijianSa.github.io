@@ -66,6 +66,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-other/数组地址操作" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/14/other/数组地址操作/" class="article-date">
+  <time datetime="2018-11-14T15:28:10.000Z" itemprop="datePublished">2018-11-14</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/14/other/数组地址操作/">数组地址操作</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对指针取址和对数组取地址含义是不同的</p>
+<p>arr和&amp;arr结果都是数组的首地址，但是他们类型不相同</p>
+<p>arr表示&amp;arr[0],即数组首元素取址</p>
+<p>arr+1=首地址+sizeof(char)</p>
+<p>&amp;arr虽值为数组首元素地址，但类型为:类型(*)[数组个数],所以&amp;arr+1=首地址+sizeof(arr)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">char arr[] = &quot;123455678&quot;;</span><br><span class="line"></span><br><span class="line">printf(&quot;arr:%p\n&quot;,arr);</span><br><span class="line">printf(&quot;&amp;arr[0]:%p\n&quot;,&amp;arr[0]);</span><br><span class="line">printf(&quot;arr+1:%p\n&quot;,arr+1);</span><br><span class="line"></span><br><span class="line">char *p = arr;</span><br><span class="line">printf(&quot;p:%p\n&quot;, p); </span><br><span class="line">printf(&quot;&amp;p:%p\n&quot;,&amp;p);</span><br><span class="line">printf(&quot;p+1:%p\n&quot;,p+1);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">arr:0x7ffec43c2e80</span><br><span class="line">&amp;arr[0]:0x7ffec43c2e80</span><br><span class="line">arr+1:0x7ffec43c2e81</span><br><span class="line">p:0x7ffec43c2e80</span><br><span class="line">&amp;p:0x7ffec43c2e78</span><br><span class="line">p+1:0x7ffec43c2e81</span><br></pre></td></tr></table></figure>
+<p>对数组名取地址曾经踩过大坑，如下</p>
+<p>dbus_message_append_args中参数要求传入间接指针，<br>错误用法，对&amp;arr其实类型为char(*)[]，而非char**,导致访问非法内存crash<br>const char arr[] = “Hello World”;<br>dbus_message_append_args (message,<br>                          DBUS_TYPE_INT32, &amp;v_INT32,<br>                          DBUS_TYPE_STRING, &amp;arr,<br>                          DBUS_TYPE_INVALID)</p>
+<p>正确用法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dbus_int32_t v_INT32 = 42;</span><br><span class="line">const char *v_STRING = &quot;Hello World&quot;;</span><br><span class="line">dbus_message_append_args (message,</span><br><span class="line">                          DBUS_TYPE_INT32, &amp;v_INT32,</span><br><span class="line">                          DBUS_TYPE_STRING, &amp;v_STRING,</span><br><span class="line">                          DBUS_TYPE_INVALID);</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjtu7kaic000nqcvcji0sje8d" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/RTMP/RTMP" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/10/13/流媒体/RTMP/RTMP/" class="article-date">
@@ -122,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjthdwpma001ougvcpc2tl8tk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjtu7kajt001oqcvcm3t2tt2z" class="article-share-link">Share</a>
       
       
     </footer>
@@ -299,7 +348,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjthdwpkc000iugvcrdhqoku7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjtu7kai4000gqcvcscdxl0ul" class="article-share-link">Share</a>
       
       
     </footer>
@@ -397,7 +446,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjthdwpjs0006ugvccxtlf82u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjtu7kahw0009qcvcuti8d9c9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -506,7 +555,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjthdwplb0012ugvcfm5932lk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjtu7kail000xqcvc87ec8oj2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -662,7 +711,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjthdwpl6000zugvciix0l7uj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cjtu7kaii000sqcvc2ehupi42" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1092,7 +1141,7 @@ a + 1 = 0x804a018
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjthdwpm1001jugvckie442y1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cjtu7kajs001nqcvcyfbdeafc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1145,6 +1194,10 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
+          </li>
+        
+          <li>
             <a href="/2019/03/20/linux/多线程调试/">多线程调试</a>
           </li>
         
@@ -1158,10 +1211,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/27/流媒体/rtmp-specification-1-0/">rtmp_specification_1.0</a>
           </li>
         
       </ul>
