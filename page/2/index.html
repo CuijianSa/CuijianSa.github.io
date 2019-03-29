@@ -66,6 +66,62 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-other/函数指针和指针函数" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/other/函数指针和指针函数/" class="article-date">
+  <time datetime="2019-01-07T14:11:46.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/07/other/函数指针和指针函数/">函数指针和指针函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="指针函数"><a href="#指针函数" class="headerlink" title="指针函数"></a>指针函数</h1><p>返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 </p>
+<p>声明格式为：类型标识符 *函数名(参数表)</p>
+<p>例如:<br>int *fun(int x,int y);</p>
+<h1 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h1><p>其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。</p>
+<p>声明格式：类型说明符 (*函数名) (参数) </p>
+<p>int (*fun)(int x,int y);</p>
+<p>函数指针是需要把一个函数的地址赋值给它，有两种写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fun = &amp;Function；</span><br><span class="line">fun = Function;</span><br></pre></td></tr></table></figure></p>
+<p>调用函数指针的方式也有两种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = (*fun)();</span><br><span class="line">x = fun();</span><br></pre></td></tr></table></figure></p>
+<h1 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h1><h2 id="定义不同"><a href="#定义不同" class="headerlink" title="定义不同"></a>定义不同</h2><ul>
+<li>指针函数本质是一个函数，其返回值为指针。 </li>
+<li>函数指针本质是一个指针，其指向一个函数。</li>
+</ul>
+<h2 id="写法"><a href="#写法" class="headerlink" title="写法"></a>写法</h2><ul>
+<li>指针函数：int* fun(int x,int y); </li>
+<li>函数指针：int (*fun)(int x,int y); </li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cjtu8agax000j0svcqdjgzwvm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/live555分析-startStream" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/05/流媒体/live555分析-startStream/" class="article-date">
@@ -96,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjtu7kaik000uqcvcwh7y465c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cjtu8agb6000s0svc0zmeq8qt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -160,7 +216,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjtu7kahy000bqcvcipvr95jm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cjtu8agap00090svc9w0bl7bi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -459,7 +515,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjtu7kaka001rqcvcb6nxkahr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cjtu8agdd001v0svcm7mw1dey" class="article-share-link">Share</a>
       
       
     </footer>
@@ -739,7 +795,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjtu7kaje001bqcvcixi5nvdu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjtu8agbt001i0svc0r7thy51" class="article-share-link">Share</a>
       
       
     </footer>
@@ -783,7 +839,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjtu7kajh001eqcvcxy69wflx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjtu8agbu001j0svc62tw4elj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -847,7 +903,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjtu7kajg001dqcvcwwc4bemd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjtu8agbr001h0svc9natxa7j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -916,7 +972,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjtu7kajj001fqcvcq8qb9w5w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjtu8agc3001k0svct2le10ic" class="article-share-link">Share</a>
       
       
     </footer>
@@ -966,7 +1022,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjtu7kajd001aqcvcdv3wzhw2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjtu8agac00010svckvtm1qgr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1011,56 +1067,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjtu7kag60000qcvcmztr4rfb" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-other/github访问提速" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/01/other/github访问提速/" class="article-date">
-  <time datetime="2018-12-01T13:34:05.000Z" itemprop="datePublished">2018-12-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/other/">other</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/01/other/github访问提速/">github访问提速</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>github的CDN被屏蔽，由于网络代理商的原因，所以访问下载很慢。Ping github.com 时，速度只有300多ms。</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>绕过dns解析，在本地直接绑定host，该方法也可加速其他因为CDN被屏蔽导致访问慢的网站</p>
-<ul>
-<li>访问ipaddress网站<a href="https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具" target="_blank" rel="noopener">https://www.ipaddress.com/，查看网站对应的IP地址，输入网址则可查阅到对应的IP地址，这是一个查询域名映射关系的工具</a></li>
-<li>查询 github.global.ssl.fastly.net 和 github.com 两个地址</li>
-<li>将ip和domain name加到/etc/hosts中</li>
-<li>重启网络 /etc/init.d/networking restart</li>
-<li>Done</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjtu7kai6000iqcvcqevxcrrs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjtu8ag7x00000svc2sh6xhnh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1113,6 +1120,10 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/03/29/C++/指针详解/">指针详解</a>
+          </li>
+        
+          <li>
             <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
           </li>
         
@@ -1126,10 +1137,6 @@ CSeq: 6
         
           <li>
             <a href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
-          </li>
-        
-          <li>
-            <a href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
           </li>
         
       </ul>
