@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>cmake | CuijianSa.github.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https://blog.csdn.net/haluoluo211/article/details/80559341 find_packagecmake find_package基本原理find_package()首先在模块路径中寻找Find.cmake, 一次为${CMAKE_MODULE_PATH}中所有目录 以bzip为例 1234567891011121314151617181920212">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmake">
+<meta property="og:url" content="http://yoursite.com/2019/04/01/编译框架/cmake/index.html">
+<meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="https://blog.csdn.net/haluoluo211/article/details/80559341 find_packagecmake find_package基本原理find_package()首先在模块路径中寻找Find.cmake, 一次为${CMAKE_MODULE_PATH}中所有目录 以bzip为例 1234567891011121314151617181920212">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-02T16:41:23.403Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cmake">
+<meta name="twitter:description" content="https://blog.csdn.net/haluoluo211/article/details/80559341 find_packagecmake find_package基本原理find_package()首先在模块路径中寻找Find.cmake, 一次为${CMAKE_MODULE_PATH}中所有目录 以bzip为例 1234567891011121314151617181920212">
+  
+    <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CuijianSa.github.io</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Olin&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-编译框架/cmake" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/01/编译框架/cmake/" class="article-date">
+  <time datetime="2019-04-01T15:15:04.000Z" itemprop="datePublished">2019-04-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编译框架/">编译框架</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cmake
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://blog.csdn.net/haluoluo211/article/details/80559341" target="_blank" rel="noopener">https://blog.csdn.net/haluoluo211/article/details/80559341</a></p>
+<h1 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h1><h2 id="cmake-find-package基本原理"><a href="#cmake-find-package基本原理" class="headerlink" title="cmake find_package基本原理"></a>cmake find_package基本原理</h2><p>find_package()首先在模块路径中寻找Find.cmake, 一次为${CMAKE_MODULE_PATH}中所有目录</p>
+<p>以bzip为例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">#   BZIP2_FOUND - system has BZip2</span><br><span class="line">#   BZIP2_INCLUDE_DIR - the BZip2 include directory</span><br><span class="line">#   BZIP2_LIBRARIES - Link these to use BZip2</span><br><span class="line">#   BZIP2_NEED_PREFIX - this is set if the functions are prefixed with BZ2_</span><br><span class="line">#   BZIP2_VERSION_STRING - the version of BZip2 found (since CMake 2.8.8)</span><br><span class="line"></span><br><span class="line">set(_BZIP2_PATHS PATHS</span><br><span class="line">  &quot;[HKEY_LOCAL_MACHINE\\SOFTWARE\\GnuWin32\\Bzip2;InstallPath]&quot;</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">find_path(BZIP2_INCLUDE_DIR bzlib.h $&#123;_BZIP2_PATHS&#125; PATH_SUFFIXES include)</span><br><span class="line"></span><br><span class="line">if (NOT BZIP2_LIBRARIES)</span><br><span class="line">    find_library(BZIP2_LIBRARY_RELEASE NAMES bz2 bzip2 $&#123;_BZIP2_PATHS&#125; PATH_SUFFIXES lib)</span><br><span class="line">    find_library(BZIP2_LIBRARY_DEBUG NAMES bz2d bzip2d $&#123;_BZIP2_PATHS&#125; PATH_SUFFIXES lib)</span><br><span class="line"></span><br><span class="line">    include($&#123;CMAKE_CURRENT_LIST_DIR&#125;/SelectLibraryConfigurations.cmake)</span><br><span class="line">    SELECT_LIBRARY_CONFIGURATIONS(BZIP2)</span><br><span class="line">endif ()</span><br><span class="line"></span><br><span class="line">if (BZIP2_INCLUDE_DIR AND EXISTS &quot;$&#123;BZIP2_INCLUDE_DIR&#125;/bzlib.h&quot;)</span><br><span class="line">    file(STRINGS &quot;$&#123;BZIP2_INCLUDE_DIR&#125;/bzlib.h&quot; BZLIB_H REGEX &quot;bzip2/libbzip2 version [0-9]+\\.[^ ]+ of [0-9]+ &quot;)</span><br><span class="line">    string(REGEX REPLACE &quot;.* bzip2/libbzip2 version ([0-9]+\\.[^ ]+) of [0-9]+ .*&quot; &quot;\\1&quot; BZIP2_VERSION_STRING &quot;$&#123;BZLIB_H&#125;&quot;)</span><br><span class="line">endif ()</span><br><span class="line"></span><br><span class="line">include($&#123;CMAKE_CURRENT_LIST_DIR&#125;/FindPackageHandleStandardArgs.cmake)</span><br><span class="line">FIND_PACKAGE_HANDLE_STANDARD_ARGS(BZip2</span><br><span class="line">                                  REQUIRED_VARS BZIP2_LIBRARIES BZIP2_INCLUDE_DIR</span><br><span class="line">                                  VERSION_VAR BZIP2_VERSION_STRING)</span><br><span class="line"></span><br><span class="line">if (BZIP2_FOUND)</span><br><span class="line">   include($&#123;CMAKE_CURRENT_LIST_DIR&#125;/CheckSymbolExists.cmake)</span><br><span class="line">   include($&#123;CMAKE_CURRENT_LIST_DIR&#125;/CMakePushCheckState.cmake)</span><br><span class="line">   cmake_push_check_state()</span><br><span class="line">   set(CMAKE_REQUIRED_QUIET $&#123;BZip2_FIND_QUIETLY&#125;)</span><br><span class="line">   set(CMAKE_REQUIRED_INCLUDES $&#123;BZIP2_INCLUDE_DIR&#125;)</span><br><span class="line">   set(CMAKE_REQUIRED_LIBRARIES $&#123;BZIP2_LIBRARIES&#125;)</span><br><span class="line">   CHECK_SYMBOL_EXISTS(BZ2_bzCompressInit &quot;bzlib.h&quot; BZIP2_NEED_PREFIX)</span><br><span class="line">   cmake_pop_check_state()</span><br><span class="line"></span><br><span class="line">    if(NOT TARGET BZip2::BZip2)</span><br><span class="line">      add_library(BZip2::BZip2 UNKNOWN IMPORTED)</span><br><span class="line">      set_target_properties(BZip2::BZip2 PROPERTIES</span><br><span class="line">        INTERFACE_INCLUDE_DIRECTORIES &quot;$&#123;BZIP2_INCLUDE_DIRS&#125;&quot;)</span><br><span class="line"></span><br><span class="line">      if(BZIP2_LIBRARY_RELEASE)</span><br><span class="line">        set_property(TARGET BZip2::BZip2 APPEND PROPERTY</span><br><span class="line">          IMPORTED_CONFIGURATIONS RELEASE)</span><br><span class="line">        set_target_properties(BZip2::BZip2 PROPERTIES</span><br><span class="line">          IMPORTED_LOCATION_RELEASE &quot;$&#123;BZIP2_LIBRARY_RELEASE&#125;&quot;)</span><br><span class="line">      endif()</span><br><span class="line"></span><br><span class="line">      if(BZIP2_LIBRARY_DEBUG)</span><br><span class="line">        set_property(TARGET BZip2::BZip2 APPEND PROPERTY</span><br><span class="line">          IMPORTED_CONFIGURATIONS DEBUG)</span><br><span class="line">        set_target_properties(BZip2::BZip2 PROPERTIES</span><br><span class="line">          IMPORTED_LOCATION_DEBUG &quot;$&#123;BZIP2_LIBRARY_DEBUG&#125;&quot;)</span><br><span class="line">      endif()</span><br><span class="line"></span><br><span class="line">      if(NOT BZIP2_LIBRARY_RELEASE AND NOT BZIP2_LIBRARY_DEBUG)</span><br><span class="line">        set_property(TARGET BZip2::BZip2 APPEND PROPERTY</span><br><span class="line">          IMPORTED_LOCATION &quot;$&#123;BZIP2_LIBRARY&#125;&quot;)</span><br><span class="line">      endif()</span><br><span class="line">    endif()</span><br><span class="line">endif ()</span><br><span class="line"></span><br><span class="line">mark_as_advanced(BZIP2_INCLUDE_DIR)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装相应的lib,<code>sudo apt-get install libbz2-dev</code></li>
+<li>查看CMake模块<code>cmake --help-module FindBZip2</code></li>
+<li><p>例子</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required (VERSION 2.8)</span><br><span class="line"></span><br><span class="line">message($&#123;CMAKE_SOURCE_DIR&#125;)</span><br><span class="line"></span><br><span class="line">set(CMAKE_MODULE_PATH /usr/share/cmake-3.10/Modules)</span><br><span class="line">message($&#123;CMAKE_MODULE_PATH&#125;)</span><br><span class="line"></span><br><span class="line">find_package(BZip2)</span><br><span class="line"></span><br><span class="line">if (BZIP2_FOUND)</span><br><span class="line">message($&#123;BZIP2_INCLUDE_DIR&#125;)</span><br><span class="line">message($&#123;BZIP2_LIBRARIES&#125;)</span><br><span class="line">message($&#123;BZIP2_NEED_PREFIX&#125;)</span><br><span class="line">message($&#123;BZIP2_VERSION_STRING&#125;)</span><br><span class="line">endif(BZIP2_FOUND)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>输出</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/home/cuijian/do/git/utils/test/cmake_find_package</span><br><span class="line">/usr/share/cmake-3.10/Modules</span><br><span class="line">/usr/include</span><br><span class="line">/usr/lib/x86_64-linux-gnu/libbz2.so</span><br><span class="line">1</span><br><span class="line">1.0.6</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>cmake 会将路径赋予相应的变量</p>
+<h2 id="编写cmake-module"><a href="#编写cmake-module" class="headerlink" title="编写cmake module"></a>编写cmake module</h2><h2 id="cmkae-find-package使用不同版本lib"><a href="#cmkae-find-package使用不同版本lib" class="headerlink" title="cmkae find_package使用不同版本lib"></a>cmkae find_package使用不同版本lib</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cju00dsl3000sn8vc6kdkmnax" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/30/C++/类型转换/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">类型转换</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/01/编译框架/cmake/">cmake</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/30/C++/类型转换/">类型转换</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/29/C++/指针详解/">指针详解</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/20/linux/多线程调试/">多线程调试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Jian.Cui<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
