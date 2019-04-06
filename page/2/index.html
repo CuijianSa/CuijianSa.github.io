@@ -66,6 +66,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux/用户态和内核态" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/linux/用户态和内核态/" class="article-date">
+  <time datetime="2019-01-07T14:48:08.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/07/linux/用户态和内核态/">用户态和内核态</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="用户态及内核态介绍"><a href="#用户态及内核态介绍" class="headerlink" title="用户态及内核态介绍"></a>用户态及内核态介绍</h1><p><img src="/2019/01/07/linux/用户态和内核态/Unix_Linux的体系架构.png" alt=""></p>
+<p>从宏观上来看，Linux操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。<em>内核从本质上看是一种软件——控制计算机的硬件资源，并提供上层应用程序运行的环境</em>。用户态即上层应用程序的活动空间，应用程序的执行必须依托于内核提供的资源，包括CPU资源、存储资源、I/O资源等。为了使上层应用能够访问到这些资源，内核必须为上层应用提供访问的接口：即系统调用。</p>
+<p>系统调用是操作系统的最小功能单位，这些系统调用根据不同的应用场景可以进行扩展和裁剪，现在各种版本的Unix实现都提供了不同数量的系统调用，如Linux的不同版本提供了240-260个系统调用，FreeBSD大约提供了320个（reference：UNIX环境高级编程）。我们可以把系统调用看成是一种不能再化简的操作（类似于原子操作，但是不同概念），有人把它比作一个汉字的一个“笔画”，而一个“汉字”就代表一个上层应用，我觉得这个比喻非常贴切。因此，有时候如果要实现一个完整的汉字（给某个变量分配内存空间），就必须调用很多的系统调用。如果从实现者（程序员）的角度来看，这势必会加重程序员的负担，良好的程序设计方法是：重视上层的业务逻辑操作，而尽可能避免底层复杂的实现细节。库函数正是为了将程序员从复杂的细节中解脱出来而提出的一种有效方法。它实现对系统调用的封装，将简单的业务逻辑接口呈现给用户，方便用户调用，从这个角度上看，库函数就像是组成汉字的“偏旁”。这样的一种组成方式极大增强了程序设计的灵活性，对于简单的操作，我们可以直接调用系统调用来访问资源，如“人”，对于复杂操作，我们借助于库函数来实现，如“仁”。显然，这样的库函数依据不同的标准也可以有不同的实现版本，如ISO C 标准库，POSIX标准库等。</p>
+<p>　　Shell是一个特殊的应用程序，俗称命令行，本质上是一个命令解释器，它下通系统调用，上通各种应用，通常充当着一种“胶水”的角色，来连接各个小功能程序，让不同程序能够以一个清晰的接口协同工作，从而增强各个程序的功能。同时，Shell是可编程的，它可以执行符合Shell语法的文本，这样的文本称为Shell脚本，通常短短的几行Shell脚本就可以实现一个非常大的功能，原因就是这些Shell语句通常都对系统调用做了一层封装。为了方便用户和系统交互，一般，一个Shell对应一个终端，终端是一个硬件设备，呈现给用户的是一个图形化窗口。我们可以通过这个窗口输入或者输出文本。这个文本直接传递给shell进行分析解释，然后执行。</p>
+<p>总结一下，用户态的应用程序可以通过三种方式来访问内核态的资源：<br>1) 系统调用<br>2) 库函数<br>3) Shell脚本</p>
+<ul>
+<li>向下控制硬件资源</li>
+<li>向内管理操作系统资源<ul>
+<li>进程的调度和管理</li>
+<li>内存的管理</li>
+<li>文件系统的管理</li>
+<li>设备驱动</li>
+<li>网络资源的管理</li>
+</ul>
+</li>
+<li>向上则向应用程序提供系统调用的接口</li>
+</ul>
+<p>整个操作系统分为两层：用户态和内核态，这种分层的架构极大地提高了资源管理的可扩展性和灵活性，而且方便用户对资源的调用和集中式的管理，带来一定的安全性</p>
+<p><img src="/2019/01/07/linux/用户态和内核态/kernal_framework.jpg" alt=""></p>
+<h1 id="用户态及内核态的切换"><a href="#用户态及内核态的切换" class="headerlink" title="用户态及内核态的切换"></a>用户态及内核态的切换</h1><p>因为操作系统的资源是有限的，如果访问资源的操作过多，必然会消耗过多的资源，而且如果不对这些操作加以区分，很可能造成资源访问的冲突。所以，为了减少有限资源的访问和使用冲突，Unix/Linux的设计哲学之一就是：对不同的操作赋予不同的执行等级，就是所谓特权的概念。简单说就是有多大能力做多大的事，与系统相关的一些特别关键的操作必须由最高特权的程序来完成。Intel的X86架构的CPU提供了0到3四个特权级，数字越小，特权越高，Linux操作系统中主要采用了0和3两个特权级，分别对应的就是内核态和用户态。运行于用户态的进程可以执行的操作和访问的资源都会受到极大的限制，而运行在内核态的进程则可以执行任何操作并且在资源的使用上没有限制。很多程序开始时运行于用户态，但在执行的过程中，一些操作需要在内核权限下才能执行，这就涉及到一个从用户态切换到内核态的过程。比如C函数库中的内存分配函数malloc()，它具体是使用sbrk()系统调用来分配内存，当malloc调用sbrk()的时候就涉及一次从用户态到内核态的切换，类似的函数还有printf()，调用的是wirte()系统调用来输出字符串，等等。</p>
+<p><img src="/2019/01/07/linux/用户态和内核态/mode_change.gif" alt=""></p>
+<p>从用户态到内核态的切换:</p>
+<ol>
+<li>系统调用</li>
+<li>异常事件： 当CPU正在执行运行在用户态的程序时，突然发生某些预先不可知的异常事件，这个时候就会触发从当前用户态执行的进程转向内核态执行相关的异常事件，典型的如缺页异常。</li>
+<li>外围设备的中断：当外围设备完成用户的请求操作后，会像CPU发出中断信号，此时，CPU就会暂停执行下一条即将要执行的指令，转而去执行中断信号对应的处理程序，如果先前执行的指令是在用户态下，则自然就发生从用户态到内核态的转换。</li>
+</ol>
+<p>系统调用的本质其实也是中断，相对于外围设备的硬中断，这种中断称为软中断，这是操作系统为用户特别开放的一种中断，如Linux int 80h中断。所以，从触发方式和效果上来看，这三种切换方式是完全一样的，都相当于是执行了一个中断响应的过程。但是从触发的对象来看，系统调用是进程主动请求切换的，而异常和硬中断则是被动的。</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.cnblogs.com/bakari/p/5520860.html" target="_blank" rel="noopener">Linux探秘之用户态与内核态</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cju558nkc00153cvcjvcvnicr" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-other/指针数组和数组指针" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/07/other/指针数组和数组指针/" class="article-date">
@@ -108,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cju1ebxv7000lwcvcv0zl9rtl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cju558nk4000p3cvccvs024ep" class="article-share-link">Share</a>
       
       
     </footer>
@@ -164,7 +233,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cju1ebxvd000rwcvchxdn9gei" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cju558nk0000i3cvcooio6rlu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -204,7 +273,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cju1ebxve000uwcvc90wlwjlw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cju558nk6000t3cvc948lgkyq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -268,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cju1ebxv6000iwcvc455kynmd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cju558nkg001a3cvc9rdj4ve0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -567,7 +636,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cju1ebxwh0021wcvcfhxmcw84" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cju558nmf001y3cvca4optbwa" class="article-share-link">Share</a>
       
       
     </footer>
@@ -847,7 +916,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cju1ebxvr001kwcvc8syje1qf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cju558nkp001l3cvcwaex20ah" class="article-share-link">Share</a>
       
       
     </footer>
@@ -891,7 +960,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cju1ebxvv001pwcvc7z7qwn94" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cju558nkx001p3cvc95km9e3k" class="article-share-link">Share</a>
       
       
     </footer>
@@ -955,7 +1024,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cju1ebxvt001mwcvcjqhwdezg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cju558nkq001m3cvctpj75d3s" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1024,57 +1093,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cju1ebxvu001nwcvczwarc3cx" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-C++/C-回调函数的实现" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/19/C++/C-回调函数的实现/" class="article-date">
-  <time datetime="2018-12-19T15:05:28.000Z" itemprop="datePublished">2018-12-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/C/">C++</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/19/C++/C-回调函数的实现/">C++回调函数的实现</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在c++中，回调函数是一个非常常用的一种解耦技巧， 实际上通过函数指针作为参数传递给另一个函数，当这个指针被用来调用其指向的函数，回调函数通常在特定的事件或者条件发生时由另外一方调用， 用于对该事件或者条件进行响应</p>
-<h1 id="C-成员函数作为回调函数"><a href="#C-成员函数作为回调函数" class="headerlink" title="C++成员函数作为回调函数"></a>C++成员函数作为回调函数</h1><p>对于非静态成员来说， 默认情况下参数列表都包含this指针，such as ‘void Method:fun(<em>**, Method</em> this)’,C++通过传递一个指向自身的指针给其成员函数从而实现成员函数可以访问C++的数据成员， 由于this指针的作用，使得一个CALLBACK型的成员函数作为回调函数安装就会因为隐含的this指针使得函数参数个数不匹配</p>
-<p>解决方法:</p>
-<ul>
-<li><p>回调函数为普通函数， 在函数体内执行成员函数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class MyClass  </span><br><span class="line">&#123;  </span><br><span class="line">    pthread_t TID;  </span><br><span class="line">public:  </span><br><span class="line">    void func()  </span><br><span class="line">    &#123;  </span><br><span class="line">        //子线程执行代码  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    bool startThread()  </span><br><span class="line">    &#123;//启动子线程  </span><br><span class="line">        int ret = pthread_create( &amp;TID , NULL , callback , this );  </span><br><span class="line">        if( ret != 0 )  </span><br><span class="line">            return false;  </span><br><span class="line">        else  </span><br><span class="line">            return true;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line"></span><br><span class="line">static void* callback( void* arg )  </span><br><span class="line">&#123;//回调函数  </span><br><span class="line">    ((MyClass*)arg)-&gt;func();调用成员函数  </span><br><span class="line">    return NULL;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    MyClass a;  </span><br><span class="line">    a.startThread();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>回调函数为类静态函数， 在内部调用其成员函数</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class MyClass  </span><br><span class="line">&#123;  </span><br><span class="line">    static MyClass* CurMy;//存储回调函数调用的对象  </span><br><span class="line">    static void* callback(void*);//回调函数  </span><br><span class="line">    pthread_t TID;  </span><br><span class="line">    void func()  </span><br><span class="line">    &#123;  </span><br><span class="line">        //子线程执行代码  </span><br><span class="line">    &#125;  </span><br><span class="line"></span><br><span class="line">    void setCurMy()  </span><br><span class="line">    &#123;//设置当前对象为回调函数调用的对象  </span><br><span class="line">        CurMy = this;  </span><br><span class="line">    &#125;  </span><br><span class="line">public:  </span><br><span class="line">    bool startThread()  </span><br><span class="line">    &#123;//启动子线程  </span><br><span class="line">        setCurMy();  </span><br><span class="line">        int ret = pthread_create( &amp;TID , NULL , MyClass::callback , NULL );  </span><br><span class="line">        if( ret != 0 )  </span><br><span class="line">            return false;  </span><br><span class="line">        else  </span><br><span class="line">            return true;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line">MyClass* MyClass::CurMy = NULL;  </span><br><span class="line">void* MyClass::callback(void*)  </span><br><span class="line">&#123;  </span><br><span class="line">    CurMy-&gt;func();  </span><br><span class="line">    return NULL;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">int main()  </span><br><span class="line">&#123;  </span><br><span class="line">    MyClass a;  </span><br><span class="line">    a.startThread();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cju1ebxtb0001wcvck284iez5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cju558nko001k3cvcz761nnuh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1127,6 +1146,10 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/01/编译框架/cmake/">cmake-find_package</a>
           </li>
         
@@ -1140,10 +1163,6 @@ CSeq: 6
         
           <li>
             <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/20/linux/多线程调试/">多线程调试</a>
           </li>
         
       </ul>
