@@ -66,6 +66,56 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/nginx-rtmp" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/23/流媒体/nginx-rtmp/" class="article-date">
+  <time datetime="2019-01-23T13:41:30.000Z" itemprop="datePublished">2019-01-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>git clone <a href="https://github.com/arut/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module.git</a> </li>
+<li>wget <a href="http://nginx.org/download/nginx-1.15.8.tar.gz" target="_blank" rel="noopener">http://nginx.org/download/nginx-1.15.8.tar.gz</a></li>
+<li>./configure –prefix=/usr/local/nginx  –add-module=../nginx-rtmp-module  –with-http_ssl_module    </li>
+<li>nginx.conf <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    location /stat &#123;</span><br><span class="line">            rtmp_stat all;</span><br><span class="line">            rtmp_stat_stylesheet stat.xsl;</span><br><span class="line">    &#125;</span><br><span class="line">    location /stat.xsl &#123;</span><br><span class="line">        root /home/cuijian/do/package/nginx-rtmp-module;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rtmp &#123;                #RTMP服务</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;  #//服务端口</span><br><span class="line">        chunk_size 4096;   #//数据传输块的大小</span><br><span class="line"></span><br><span class="line">        application live &#123;</span><br><span class="line">            live on;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>ffmpeg -threads 2 -re -fflags +genpts -stream_loop -1 -i test.264   -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/test264</p>
+<p>RTMP推流数据包</p>
+<p><img src="/2019/01/23/流媒体/nginx-rtmp/rtmp_publish.jpg" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/23/流媒体/nginx-rtmp/" data-id="cju8k6dqj001894vcz6410mm8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-linux/用户态和内核态" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/07/linux/用户态和内核态/" class="article-date">
@@ -125,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cju558nkc00153cvcjvcvnicr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/linux/用户态和内核态/" data-id="cju8k6doh000694vcg17dj6ef" class="article-share-link">Share</a>
       
       
     </footer>
@@ -177,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cju558nk4000p3cvccvs024ep" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cju8k6dqc001094vc5d0qj99q" class="article-share-link">Share</a>
       
       
     </footer>
@@ -233,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cju558nk0000i3cvcooio6rlu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/07/other/函数指针和指针函数/" data-id="cju8k6dqb000y94vcru9jqyon" class="article-share-link">Share</a>
       
       
     </footer>
@@ -273,7 +323,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cju558nk6000t3cvc948lgkyq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/05/流媒体/live555分析-startStream/" data-id="cju8k6dqi001794vcioxkfun5" class="article-share-link">Share</a>
       
       
     </footer>
@@ -337,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cju558nkg001a3cvc9rdj4ve0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/04/linux/mount/" data-id="cju8k6do9000294vct6bsod6s" class="article-share-link">Share</a>
       
       
     </footer>
@@ -636,7 +686,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cju558nmf001y3cvca4optbwa" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/27/流媒体/H264/h264分析/" data-id="cju8k6dss002494vcf1zd1l0b" class="article-share-link">Share</a>
       
       
     </footer>
@@ -916,7 +966,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cju558nkp001l3cvcwaex20ah" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cju8k6dr0001r94vcis04oedc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -960,7 +1010,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cju558nkx001p3cvc95km9e3k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cju8k6drn001t94vcys03x0i8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1024,76 +1074,7 @@ CSeq: 6
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cju558nkq001m3cvctpj75d3s" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/live555分析" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/20/流媒体/live555分析/" class="article-date">
-  <time datetime="2018-12-19T16:14:10.000Z" itemprop="datePublished">2018-12-20</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/流媒体/live555分析/">live555分析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输协议如RTP/RTCP、RTSP、SIP等的支持。Live555实现了对多种音视频编码格式的音视频数据的流化、接收和处理等支持，包括MPEG、H.263+、DV、JPEG视频和多种音频编码。同时由于良好的设计，Live555非常容易扩展对其他格式的支持。</p>
-<p><a href="http://www.live555.com/" target="_blank" rel="noopener">live555官网</a></p>
-<p>live555被设计为单线程，不知为何没有设计为多线程模式。<br>其事件调度比较巧妙， 使用事件性驱动框架设计架构。底层select或epool实现</p>
-<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><ul>
-<li>UsageEnvironment</li>
-</ul>
-<p>UsageEnvironment和TaskScheduler类用于事件条用， 异步读取事件分配处理程序及输出error、warning消息。此外HashTable类定义了哈希表，这些都是基类必须被子类实现</p>
-<ul>
-<li>groupsock</li>
-</ul>
-<p>此库中的类封装了网络接口和套接字。 特别是，“Groupsock”类封装了一个用于发送（和/或接收）多播数据报的套接字。</p>
-<ul>
-<li>liveMedia</li>
-</ul>
-<p>该库定义了一个类层次结构 - 以“Medium”类为基类，适用于各种流媒体类型和编解码器。</p>
-<ul>
-<li>BasicUsageEnvironment</li>
-</ul>
-<p>该库定义了“UsageEnvironment”类的一个具体实现（即子类），用于简单的控制台应用程序。 使用select（）循环处理读取事件和延迟操作。</p>
-<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="/2018/12/20/流媒体/live555分析/live555_class.jpg" alt=""></p>
-<h1 id="RTSP流程分析"><a href="#RTSP流程分析" class="headerlink" title="RTSP流程分析"></a>RTSP流程分析</h1><p>从RTSPServer::RTSPClientConnection::handleRequestBytes函数分析， 当socket接收到bytes,由handleRequestBytes进行拆包处理,一般的交互流程如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. C-&gt;S: OPTION request 询问S提供的方法</span><br><span class="line">1. S-&gt;C: OPTION response S回应提供的所有可用方法</span><br><span class="line"></span><br><span class="line">2. C-&gt;S: DESCRIBE request 要求得到S提供的媒体初始化描述信息</span><br><span class="line">2. S-&gt;C: DESCRIBE response S回应媒体初始化描述信息， 主要是SDP</span><br><span class="line"></span><br><span class="line">3. C-&gt;S: SETUP request 设置会话的属性，以及传输模式，并提醒S建立会话</span><br><span class="line">3. S-&gt;C: SETUP response S建立会话，返回会话标识符及会话相关信息</span><br><span class="line"></span><br><span class="line">4. C-&gt;S: PLAY request C请求播放</span><br><span class="line">4. S-&gt;C: PLAY response S回应请求信息</span><br><span class="line"></span><br><span class="line">5. S-&gt;C: 发送流媒体数据</span><br><span class="line"></span><br><span class="line">6. C-&gt;S: TEARDOWN request C请求关闭会话</span><br><span class="line">6. S-&gt;C: TEARDOWN response S回应请求</span><br></pre></td></tr></table></figure>
-<h2 id="OPTION"><a href="#OPTION" class="headerlink" title="OPTION"></a>OPTION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">char const* RTSPServer::allowedCommandNames() &#123;</span><br><span class="line">  return &quot;OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientConnection::handleCmd_OPTIONS() &#123;</span><br><span class="line">  snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">       &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n&quot;,</span><br><span class="line">       fCurrentCSeq, dateHeader(), fOurRTSPServer.allowedCommandNames());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="DESCRIBE"><a href="#DESCRIBE" class="headerlink" title="DESCRIBE"></a>DESCRIBE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientConnection</span><br><span class="line">::handleCmd_DESCRIBE(char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">  do &#123;</span><br><span class="line">    if (!authenticationOK(&quot;DESCRIBE&quot;, urlTotalSuffix, fullRequestStr)) break; //验证username passwd</span><br><span class="line">    session = fOurServer.lookupServerMediaSession(urlTotalSuffix);//根据suffix查找session</span><br><span class="line">    if (session == NULL) &#123;</span><br><span class="line">      handleCmd_notFound();</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sdpDescription = session-&gt;generateSDPDescription();</span><br><span class="line"></span><br><span class="line">    rtspURL = fOurRTSPServer.rtspURL(session, fClientInputSocket);</span><br><span class="line">    </span><br><span class="line">    snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">         &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n&quot;</span><br><span class="line">         &quot;%s&quot;</span><br><span class="line">         &quot;Content-Base: %s/\r\n&quot;</span><br><span class="line">         &quot;Content-Type: application/sdp\r\n&quot;</span><br><span class="line">         &quot;Content-Length: %d\r\n\r\n&quot;</span><br><span class="line">         &quot;%s&quot;,</span><br><span class="line">         fCurrentCSeq,</span><br><span class="line">         dateHeader(),</span><br><span class="line">         rtspURL,</span><br><span class="line">         sdpDescriptionSize,</span><br><span class="line">         sdpDescription);</span><br><span class="line">  &#125; while (0);</span><br><span class="line">  </span><br><span class="line">  if (session != NULL) &#123;</span><br><span class="line">    // Decrement its reference count, now that we&apos;re done using it:</span><br><span class="line">    session-&gt;decrementReferenceCount();</span><br><span class="line">    if (session-&gt;referenceCount() == 0 &amp;&amp; session-&gt;deleteWhenUnreferenced()) &#123;</span><br><span class="line">      fOurServer.removeServerMediaSession(session);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  delete[] sdpDescription;</span><br><span class="line">  delete[] rtspURL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="SETUP"><a href="#SETUP" class="headerlink" title="SETUP"></a>SETUP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">void OnDemandServerMediaSubsession</span><br><span class="line">::getStreamParameters(unsigned clientSessionId,</span><br><span class="line">              netAddressBits clientAddress,</span><br><span class="line">              Port const&amp; clientRTPPort,</span><br><span class="line">              Port const&amp; clientRTCPPort,</span><br><span class="line">              int tcpSocketNum,</span><br><span class="line">              unsigned char rtpChannelId,</span><br><span class="line">              unsigned char rtcpChannelId,</span><br><span class="line">              netAddressBits&amp; destinationAddress,</span><br><span class="line">              u_int8_t&amp; /*destinationTTL*/,</span><br><span class="line">              Boolean&amp; isMulticast,</span><br><span class="line">              Port&amp; serverRTPPort,</span><br><span class="line">              Port&amp; serverRTCPPort,</span><br><span class="line">              void*&amp; streamToken) &#123;</span><br><span class="line">    if (fLastStreamToken != NULL &amp;&amp; fReuseFirstSource) &#123;</span><br><span class="line">        // Special case: Rather than creating a new &apos;StreamState&apos;,</span><br><span class="line">        // we reuse the one that we&apos;ve already created:</span><br><span class="line">        serverRTPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTPPort();</span><br><span class="line">        serverRTCPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTCPPort();</span><br><span class="line">        ++((StreamState*)fLastStreamToken)-&gt;referenceCount();</span><br><span class="line">        streamToken = fLastStreamToken;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        //创建流媒体源</span><br><span class="line">        FramedSource* mediaSource = createNewStreamSource(clientSessionId, streamBitrate);</span><br><span class="line">        if (clientRTPPort.num() != 0 || tcpSocketNum &gt;= 0) &#123;</span><br><span class="line">            //创建server RTP port,从fInitialPortNum开始+1尝试创建port</span><br><span class="line">            rtpGroupsock = createGroupsock(dummyAddr, serverRTPPort);</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">        rtpSink = createNewRTPSink(rtpGroupsock, rtpPayloadType, mediaSource);</span><br><span class="line">        //并记录stream的状态</span><br><span class="line">        streamToken = fLastStreamToken</span><br><span class="line">          = new StreamState(*this, serverRTPPort, serverRTCPPort, rtpSink, udpSink,</span><br><span class="line">                streamBitrate, mediaSource,</span><br><span class="line">                rtpGroupsock, rtcpGroupsock);</span><br><span class="line">        //并将clientSessionId及destinations保存到hash表中</span><br><span class="line">        fDestinationsHashTable-&gt;Add((char const*)clientSessionId, destinations);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_SETUP(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">        do &#123;</span><br><span class="line">          ServerMediaSession* sms</span><br><span class="line">      = fOurServer.lookupServerMediaSession(streamName, fOurServerMediaSession == NULL);//查找session</span><br><span class="line">            if(sms) &#123;</span><br><span class="line">              //返回失败</span><br><span class="line">            &#125;</span><br><span class="line">            if(fStreamStates == NULL) &#123;</span><br><span class="line">              //第一次设置SETUP</span><br><span class="line">              //初始化环境</span><br><span class="line">              fNumStreamStates = fOurServerMediaSession-&gt;numSubsessions();</span><br><span class="line">              fStreamStates = new struct streamState[fNumStreamStates];</span><br><span class="line">              </span><br><span class="line">              ServerMediaSubsessionIterator iter(*fOurServerMediaSession);</span><br><span class="line">              ServerMediaSubsession* subsession;</span><br><span class="line">              for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">                  subsession = iter.next();</span><br><span class="line">                  fStreamStates[i].subsession = subsession;</span><br><span class="line">                  fStreamStates[i].tcpSocketNum = -1; // for now; may get set for RTP-over-TCP streaming</span><br><span class="line">                  fStreamStates[i].streamToken = NULL; // for now; it may be changed by the &quot;getStreamParameters()&quot; call that comes later</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //根据url的后缀，一般用来确定媒体类型，例如mp4、h264...</span><br><span class="line">            if (trackId != NULL &amp;&amp; trackId[0] != &apos;\0&apos;) &#123; // normal case</span><br><span class="line">              for (trackNum = 0; trackNum &lt; fNumStreamStates; ++trackNum) &#123;</span><br><span class="line">            subsession = fStreamStates[trackNum].subsession;</span><br><span class="line">            if (subsession != NULL &amp;&amp; strcmp(trackId, subsession-&gt;trackId()) == 0) break;</span><br><span class="line">              &#125;</span><br><span class="line">              if (trackNum &gt;= fNumStreamStates) &#123;</span><br><span class="line">            // The specified track id doesn&apos;t exist, so this request fails:</span><br><span class="line">            ourClientConnection-&gt;handleCmd_notFound();</span><br><span class="line">            break;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //解析客户端SETUP消息， Transport类型， client-port</span><br><span class="line">            parseTransportHeader(fullRequestStr, streamingMode, streamingModeString,</span><br><span class="line">             clientsDestinationAddressStr, clientsDestinationTTL,</span><br><span class="line">             clientRTPPortNum, clientRTCPPortNum,</span><br><span class="line">             rtpChannelId, rtcpChannelId);</span><br><span class="line"></span><br><span class="line">             subsession-&gt;getStreamParameters(fOurSessionId, ourClientConnection-&gt;fClientAddr.sin_addr.s_addr,</span><br><span class="line">                    clientRTPPort, clientRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].tcpSocketNum, rtpChannelId, rtcpChannelId,</span><br><span class="line">                    destinationAddress, destinationTTL, fIsMulticast,</span><br><span class="line">                    serverRTPPort, serverRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].streamToken);</span><br><span class="line"></span><br><span class="line">            //拼接RESPONSE包</span><br><span class="line"></span><br><span class="line">          &#125;while(0)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="PLAY"><a href="#PLAY" class="headerlink" title="PLAY"></a>PLAY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PLAY(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession, char const* fullRequestStr) &#123;</span><br><span class="line">            //解析scale、range</span><br><span class="line">            //根据scale、range设置session   setStreamScale、seekStream or nullSeekStream</span><br><span class="line"></span><br><span class="line">        for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">            fStreamStates[i].subsession-&gt;startStream(...)</span><br><span class="line">        &#125;</span><br><span class="line">        //拼接PLAY RESPONSE</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void OnDemandServerMediaSubsession::startStream()</span><br><span class="line">&#123;</span><br><span class="line">  StreamState* streamState = (StreamState*)streamToken;</span><br><span class="line">  Destinations* destinations</span><br><span class="line">    = (Destinations*)(fDestinationsHashTable-&gt;Lookup((char const*)clientSessionId));</span><br><span class="line">  if (streamState != NULL) &#123;</span><br><span class="line">    streamState-&gt;startPlaying(destinations, clientSessionId,</span><br><span class="line">                  rtcpRRHandler, rtcpRRHandlerClientData,</span><br><span class="line">                  serverRequestAlternativeByteHandler, serverRequestAlternativeByteHandlerClientData);</span><br><span class="line">    RTPSink* rtpSink = streamState-&gt;rtpSink(); // alias</span><br><span class="line">    if (rtpSink != NULL) &#123;</span><br><span class="line">      //返回rtp seqNum及timestamp</span><br><span class="line">      rtpSeqNum = rtpSink-&gt;currentSeqNo();</span><br><span class="line">      rtpTimestamp = rtpSink-&gt;presetNextTimestamp();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体的startPlaying流程单独开一篇处理</p>
-<h2 id="PAUSE"><a href="#PAUSE" class="headerlink" title="PAUSE"></a>PAUSE</h2><p>调用session-&gt;pauseStream(), 并发送RESPONSE</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PAUSE(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fStreamStates[i].subsession-&gt;pauseStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;, fOurSessionId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="TEARDOWN"><a href="#TEARDOWN" class="headerlink" title="TEARDOWN"></a>TEARDOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_TEARDOWN(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  unsigned i;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fOurRTSPServer.unnoteTCPStreamingOnSocket(fStreamStates[i].tcpSocketNum, this, i);</span><br><span class="line">  fStreamStates[i].subsession-&gt;deleteStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">  fStreamStates[i].subsession = NULL;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;);</span><br><span class="line">  </span><br><span class="line">  // Optimization: If all subsessions have now been torn down, then we know that we can reclaim our object now.</span><br><span class="line">  // (Without this optimization, however, this object would still get reclaimed later, as a result of a &apos;liveness&apos; timeout.)</span><br><span class="line">  Boolean noSubsessionsRemain = True;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">      noSubsessionsRemain = False;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (noSubsessionsRemain) delete this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cju558nko001k3cvcz761nnuh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cju8k6dqz001q94vcf6atcq93" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1107,7 +1088,7 @@ CSeq: 6
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1146,6 +1127,10 @@ CSeq: 6
       <ul>
         
           <li>
+            <a href="/2019/04/08/网络/epoll框架/">epoll框架</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
           </li>
         
@@ -1159,10 +1144,6 @@ CSeq: 6
         
           <li>
             <a href="/2019/03/29/C++/指针详解/">指针详解</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
           </li>
         
       </ul>

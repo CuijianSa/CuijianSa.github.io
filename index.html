@@ -66,6 +66,84 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-网络/epoll框架" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/08/网络/epoll框架/" class="article-date">
+  <time datetime="2019-04-08T14:25:18.000Z" itemprop="datePublished">2019-04-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/网络/epoll框架/">epoll框架</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">SYNOPSIS</span><br><span class="line">       #include &lt;sys/epoll.h&gt;</span><br><span class="line"></span><br><span class="line">DESCRIPTION</span><br><span class="line">       The  epoll  API performs a similar task to poll(2): monitoring multiple</span><br><span class="line">       file descriptors to see if I/O is possible on any of them.   The  epoll</span><br><span class="line">       API can be used either as an edge-triggered or a level-triggered inter‐</span><br><span class="line">       face and scales well to large numbers of watched file descriptors.  The</span><br><span class="line">       following  system  calls  are  provided  to  create and manage an epoll</span><br><span class="line">       instance:</span><br><span class="line"></span><br><span class="line">       *  epoll_create(2) creates a new epoll  instance  and  returns  a  file</span><br><span class="line">          descriptor  referring to that instance.  (The more recent epoll_cre‐</span><br><span class="line">          ate1(2) extends the functionality of epoll_create(2).)</span><br><span class="line"></span><br><span class="line">       *  Interest in particular  file  descriptors  is  then  registered  via</span><br><span class="line">          epoll_ctl(2).   The  set of file descriptors currently registered on</span><br><span class="line">          an epoll instance is sometimes called an epoll set.</span><br><span class="line"></span><br><span class="line">       *  epoll_wait(2) waits for I/O events, blocking the calling  thread  if</span><br><span class="line">          no events are currently available.</span><br></pre></td></tr></table></figure>
+<h1 id="epoll-API"><a href="#epoll-API" class="headerlink" title="epoll API"></a>epoll API</h1><ul>
+<li>int epoll_create(int size)<ul>
+<li>描述: 创建一个epoll实例，为new epoll实例返回一个文件描述符， 可用close(2)关闭文件描述符</li>
+</ul>
+</li>
+<li><p>int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef union epoll_data &#123;</span><br><span class="line">       void        *ptr;</span><br><span class="line">       int          fd;</span><br><span class="line">       uint32_t     u32;</span><br><span class="line">       uint64_t     u64;</span><br><span class="line">   &#125; epoll_data_t;</span><br><span class="line"></span><br><span class="line">   struct epoll_event &#123;</span><br><span class="line">       uint32_t     events;      /* Epoll events */</span><br><span class="line">       epoll_data_t data;        /* User data variable */</span><br><span class="line">   &#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>op:<ul>
+<li>EPOLL_CTL_ADD: Register  the  target  file  descriptor fd on the epoll instance referred to by the file descriptor epfd and associate the  event event with the internal file linked to fd.</li>
+<li>EPOLL_CTL_MOD: Change  the event event associated with the target file descriptor fd.</li>
+<li>EPOLL_CTL_DEL: Remove (deregister) the target file descriptor fd from the epoll instance  referred  to by epfd.  The event is ignored and can be NULL (but see BUGS below).</li>
+</ul>
+</li>
+<li>event<ul>
+<li>EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</li>
+<li>EPOLLOUT：表示对应的文件描述符可以写；</li>
+<li>EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</li>
+<li>EPOLLERR：表示对应的文件描述符发生错误；</li>
+<li>EPOLLHUP：表示对应的文件描述符被挂断；</li>
+<li>EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</li>
+<li>EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout):等待事件的产生，类似于select()调用。参数events用来从内核得到事件的集合，maxevents告之内核这个events有多大，这个 maxevents的值不能大于创建epoll_create()时的size，参数timeout是超时时间（毫秒，0会立即返回，-1将不确定，也有说法说是永久阻塞）。该函数返回需要处理的事件数目，如返回0表示已超时。</p>
+</li>
+</ul>
+<h1 id="ET、LT工作模式"><a href="#ET、LT工作模式" class="headerlink" title="ET、LT工作模式"></a>ET、LT工作模式</h1><ul>
+<li>LT（水平触发）模式下，只要这个文件描述符还有数据可读，每次 epoll_wait都会返回它的事件，提醒用户程序去操作；</li>
+<li>ET（边缘触发）模式下，在它检测到有 I/O 事件时，通过 epoll_wait 调用会得到有事件通知的文件描述符，对于每一个被通知的文件描述符，如可读，则必须将该文件描述符一直读到空，让 errno 返回 EAGAIN 为止，否则下次的 epoll_wait 不会返回余下的数据，会丢掉事件。如果ET模式不是非阻塞的，那这个一直读或一直写势必会在最后一次阻塞。</li>
+</ul>
+<p>epoll使用“事件”的就绪通知方式，通过epoll_ctl注册fd，一旦该fd就绪，内核就会采用类似callback的回调机制来激活该fd，epoll_wait便可以收到通知</p>
+<h1 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;sys/epoll.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">#define MAXLEN 1024</span><br><span class="line">#define MAX_OPEN_FD 1024</span><br><span class="line">#define SERV_PORT 8000</span><br><span class="line"></span><br><span class="line">void setnonblocking(int sock)</span><br><span class="line">&#123;</span><br><span class="line">    int opts;</span><br><span class="line">    opts = fcntl(sock, F_GETFL);</span><br><span class="line">    if (opts &lt; 0)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(&quot;fcntl(sock,GETFL)&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">    opts = opts | O_NONBLOCK;</span><br><span class="line">    if (fcntl(sock, F_SETFL, opts) &lt; 0)</span><br><span class="line">    &#123;</span><br><span class="line">        perror(&quot;fcntl(sock,SETFL,opts)&quot;);</span><br><span class="line">        exit(1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int listenfd, connfd, efd;</span><br><span class="line">    char buf[MAXLEN];</span><br><span class="line">    struct sockaddr_in cliaddr, servaddr;</span><br><span class="line">    socklen_t clilen = sizeof(cliaddr);</span><br><span class="line">    struct epoll_event ep[MAX_OPEN_FD], tep;</span><br><span class="line"></span><br><span class="line">    if (-1 == (listenfd = socket(AF_INET, SOCK_STREAM, 0)))</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; __LINE__ &lt;&lt; strerror(errno) &lt;&lt; endl;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    servaddr.sin_family = AF_INET;</span><br><span class="line">    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line">    servaddr.sin_port = htons(SERV_PORT);</span><br><span class="line"></span><br><span class="line">    if (-1 == (bind(listenfd, (struct sockaddr *)&amp;servaddr, sizeof(servaddr))))</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; __LINE__ &lt;&lt; strerror(errno) &lt;&lt; endl;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    listen(listenfd,20);</span><br><span class="line"></span><br><span class="line">    efd = epoll_create(MAX_OPEN_FD);</span><br><span class="line">    tep.events = EPOLLIN;</span><br><span class="line">    tep.data.fd = listenfd;</span><br><span class="line"></span><br><span class="line">    if (-1 == epoll_ctl(efd, EPOLL_CTL_ADD, listenfd, &amp;tep))</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; __LINE__ &lt;&lt; strerror(errno) &lt;&lt; endl;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    for (;;)</span><br><span class="line">    &#123;</span><br><span class="line">        size_t nready = epoll_wait(efd, ep, MAX_OPEN_FD - 1, -1);</span><br><span class="line">        for (unsigned int i = 0; i &lt; nready; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            //new client connect</span><br><span class="line">            if (ep[i].data.fd == listenfd)</span><br><span class="line">            &#123;</span><br><span class="line">                connfd = accept(listenfd, (struct sockaddr *)&amp;cliaddr, &amp;clilen);</span><br><span class="line">                tep.events = EPOLLIN;</span><br><span class="line">                tep.data.fd = connfd;</span><br><span class="line">                if (-1 == epoll_ctl(efd, EPOLL_CTL_ADD, connfd, &amp;tep))</span><br><span class="line">                &#123;</span><br><span class="line">                    cout &lt;&lt; __LINE__ &lt;&lt; strerror(errno) &lt;&lt; endl;</span><br><span class="line">                    return -1;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123; //read client dataa</span><br><span class="line">                connfd = ep[i].data.fd;</span><br><span class="line">                int bytes = read(connfd, buf, MAXLEN);</span><br><span class="line">                //peer socket is close</span><br><span class="line">                if (bytes == 0)</span><br><span class="line">                &#123;</span><br><span class="line">                    epoll_ctl(efd, EPOLL_CTL_DEL, connfd, NULL);</span><br><span class="line">                    close(connfd);</span><br><span class="line">                    cout &lt;&lt; &quot;client[&quot; &lt;&lt; i &lt;&lt; &quot;] is close&quot; &lt;&lt; endl;</span><br><span class="line">                &#125;</span><br><span class="line">                else</span><br><span class="line">                &#123;</span><br><span class="line">                    for (int j = 0; j &lt; bytes; ++j)</span><br><span class="line">                    &#123;</span><br><span class="line">                        buf[j] = toupper(buf[j]);</span><br><span class="line">                    &#125;</span><br><span class="line">                    // write to client</span><br><span class="line">                    write(connfd, buf, bytes);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/83862311" target="_blank" rel="noopener">epoll原理详解及epoll反应堆模型</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cju8k6dpr000j94vc9a7aacxz" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-编译框架/cmake-基本命令" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/04/编译框架/cmake-基本命令/" class="article-date">
@@ -365,7 +443,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cju558nkb00133cvcbvnz1qlr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cju8k6dqk001b94vc31774aij" class="article-share-link">Share</a>
       
       
     </footer>
@@ -430,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cju558njc00043cvcafyjg45q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cju8k6dok000894vcekxgvxkt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -471,7 +549,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cju558nk5000q3cvc83p5ftey" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cju8k6dps000l94vcnko0smzw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -529,7 +607,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cju558nk2000m3cvclen7ljmr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cju8k6dpy000p94vcbi7xevlj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -666,7 +744,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cju558nk900103cvcfpolmb8i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cju8k6doe000494vc91cnccy8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -737,7 +815,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cju558nk9000y3cvcttibnui7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cju8k6do0000194vcdnarj90k" class="article-share-link">Share</a>
       
       
     </footer>
@@ -848,7 +926,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cju558nj800023cvc3juac0yq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cju8k6dqh001494vcu467tr4l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -910,7 +988,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/21/other/getaddrinfo爬坑/" data-id="cju558njz000h3cvcdienyhtg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/21/other/getaddrinfo爬坑/" data-id="cju8k6dq1000r94vcak6cn55i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1062,57 +1140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/27/流媒体/rtmp-specification-1-0/" data-id="cju558nkv001n3cvcvwt096qh" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-流媒体/nginx-rtmp" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/01/23/流媒体/nginx-rtmp/" class="article-date">
-  <time datetime="2019-01-23T13:41:30.000Z" itemprop="datePublished">2019-01-23</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/23/流媒体/nginx-rtmp/">nginx_rtmp</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>git clone <a href="https://github.com/arut/nginx-rtmp-module.git" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module.git</a> </li>
-<li>wget <a href="http://nginx.org/download/nginx-1.15.8.tar.gz" target="_blank" rel="noopener">http://nginx.org/download/nginx-1.15.8.tar.gz</a></li>
-<li>./configure –prefix=/usr/local/nginx  –add-module=../nginx-rtmp-module  –with-http_ssl_module    </li>
-<li>nginx.conf <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    location /stat &#123;</span><br><span class="line">            rtmp_stat all;</span><br><span class="line">            rtmp_stat_stylesheet stat.xsl;</span><br><span class="line">    &#125;</span><br><span class="line">    location /stat.xsl &#123;</span><br><span class="line">        root /home/cuijian/do/package/nginx-rtmp-module;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rtmp &#123;                #RTMP服务</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;  #//服务端口</span><br><span class="line">        chunk_size 4096;   #//数据传输块的大小</span><br><span class="line"></span><br><span class="line">        application live &#123;</span><br><span class="line">            live on;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>ffmpeg -threads 2 -re -fflags +genpts -stream_loop -1 -i test.264   -c:v copy -c:a aac -f flv rtmp://127.0.0.1:1935/live/test264</p>
-<p>RTMP推流数据包</p>
-<p><img src="/2019/01/23/流媒体/nginx-rtmp/rtmp_publish.jpg" alt=""></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/23/流媒体/nginx-rtmp/" data-id="cju558nke00183cvca3lebxcb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/01/27/流媒体/rtmp-specification-1-0/" data-id="cju8k6drx001v94vcqin24mwh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1126,7 +1154,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1165,6 +1193,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/08/网络/epoll框架/">epoll框架</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
           </li>
         
@@ -1178,10 +1210,6 @@
         
           <li>
             <a href="/2019/03/29/C++/指针详解/">指针详解</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
           </li>
         
       </ul>

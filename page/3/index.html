@@ -66,6 +66,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/live555分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/20/流媒体/live555分析/" class="article-date">
+  <time datetime="2018-12-19T16:14:10.000Z" itemprop="datePublished">2018-12-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/20/流媒体/live555分析/">live555分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输是一个为流媒体提供解决方案的跨平台的C++开源项目，它实现了对标准流媒体传输协议如RTP/RTCP、RTSP、SIP等的支持。Live555实现了对多种音视频编码格式的音视频数据的流化、接收和处理等支持，包括MPEG、H.263+、DV、JPEG视频和多种音频编码。同时由于良好的设计，Live555非常容易扩展对其他格式的支持。</p>
+<p><a href="http://www.live555.com/" target="_blank" rel="noopener">live555官网</a></p>
+<p>live555被设计为单线程，不知为何没有设计为多线程模式。<br>其事件调度比较巧妙， 使用事件性驱动框架设计架构。底层select或epool实现</p>
+<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><ul>
+<li>UsageEnvironment</li>
+</ul>
+<p>UsageEnvironment和TaskScheduler类用于事件条用， 异步读取事件分配处理程序及输出error、warning消息。此外HashTable类定义了哈希表，这些都是基类必须被子类实现</p>
+<ul>
+<li>groupsock</li>
+</ul>
+<p>此库中的类封装了网络接口和套接字。 特别是，“Groupsock”类封装了一个用于发送（和/或接收）多播数据报的套接字。</p>
+<ul>
+<li>liveMedia</li>
+</ul>
+<p>该库定义了一个类层次结构 - 以“Medium”类为基类，适用于各种流媒体类型和编解码器。</p>
+<ul>
+<li>BasicUsageEnvironment</li>
+</ul>
+<p>该库定义了“UsageEnvironment”类的一个具体实现（即子类），用于简单的控制台应用程序。 使用select（）循环处理读取事件和延迟操作。</p>
+<h1 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h1><p><img src="/2018/12/20/流媒体/live555分析/live555_class.jpg" alt=""></p>
+<h1 id="RTSP流程分析"><a href="#RTSP流程分析" class="headerlink" title="RTSP流程分析"></a>RTSP流程分析</h1><p>从RTSPServer::RTSPClientConnection::handleRequestBytes函数分析， 当socket接收到bytes,由handleRequestBytes进行拆包处理,一般的交互流程如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">1. C-&gt;S: OPTION request 询问S提供的方法</span><br><span class="line">1. S-&gt;C: OPTION response S回应提供的所有可用方法</span><br><span class="line"></span><br><span class="line">2. C-&gt;S: DESCRIBE request 要求得到S提供的媒体初始化描述信息</span><br><span class="line">2. S-&gt;C: DESCRIBE response S回应媒体初始化描述信息， 主要是SDP</span><br><span class="line"></span><br><span class="line">3. C-&gt;S: SETUP request 设置会话的属性，以及传输模式，并提醒S建立会话</span><br><span class="line">3. S-&gt;C: SETUP response S建立会话，返回会话标识符及会话相关信息</span><br><span class="line"></span><br><span class="line">4. C-&gt;S: PLAY request C请求播放</span><br><span class="line">4. S-&gt;C: PLAY response S回应请求信息</span><br><span class="line"></span><br><span class="line">5. S-&gt;C: 发送流媒体数据</span><br><span class="line"></span><br><span class="line">6. C-&gt;S: TEARDOWN request C请求关闭会话</span><br><span class="line">6. S-&gt;C: TEARDOWN response S回应请求</span><br></pre></td></tr></table></figure>
+<h2 id="OPTION"><a href="#OPTION" class="headerlink" title="OPTION"></a>OPTION</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">char const* RTSPServer::allowedCommandNames() &#123;</span><br><span class="line">  return &quot;OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientConnection::handleCmd_OPTIONS() &#123;</span><br><span class="line">  snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">       &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n%sPublic: %s\r\n\r\n&quot;,</span><br><span class="line">       fCurrentCSeq, dateHeader(), fOurRTSPServer.allowedCommandNames());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="DESCRIBE"><a href="#DESCRIBE" class="headerlink" title="DESCRIBE"></a>DESCRIBE</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientConnection</span><br><span class="line">::handleCmd_DESCRIBE(char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">  do &#123;</span><br><span class="line">    if (!authenticationOK(&quot;DESCRIBE&quot;, urlTotalSuffix, fullRequestStr)) break; //验证username passwd</span><br><span class="line">    session = fOurServer.lookupServerMediaSession(urlTotalSuffix);//根据suffix查找session</span><br><span class="line">    if (session == NULL) &#123;</span><br><span class="line">      handleCmd_notFound();</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    sdpDescription = session-&gt;generateSDPDescription();</span><br><span class="line"></span><br><span class="line">    rtspURL = fOurRTSPServer.rtspURL(session, fClientInputSocket);</span><br><span class="line">    </span><br><span class="line">    snprintf((char*)fResponseBuffer, sizeof fResponseBuffer,</span><br><span class="line">         &quot;RTSP/1.0 200 OK\r\nCSeq: %s\r\n&quot;</span><br><span class="line">         &quot;%s&quot;</span><br><span class="line">         &quot;Content-Base: %s/\r\n&quot;</span><br><span class="line">         &quot;Content-Type: application/sdp\r\n&quot;</span><br><span class="line">         &quot;Content-Length: %d\r\n\r\n&quot;</span><br><span class="line">         &quot;%s&quot;,</span><br><span class="line">         fCurrentCSeq,</span><br><span class="line">         dateHeader(),</span><br><span class="line">         rtspURL,</span><br><span class="line">         sdpDescriptionSize,</span><br><span class="line">         sdpDescription);</span><br><span class="line">  &#125; while (0);</span><br><span class="line">  </span><br><span class="line">  if (session != NULL) &#123;</span><br><span class="line">    // Decrement its reference count, now that we&apos;re done using it:</span><br><span class="line">    session-&gt;decrementReferenceCount();</span><br><span class="line">    if (session-&gt;referenceCount() == 0 &amp;&amp; session-&gt;deleteWhenUnreferenced()) &#123;</span><br><span class="line">      fOurServer.removeServerMediaSession(session);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  delete[] sdpDescription;</span><br><span class="line">  delete[] rtspURL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="SETUP"><a href="#SETUP" class="headerlink" title="SETUP"></a>SETUP</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">void OnDemandServerMediaSubsession</span><br><span class="line">::getStreamParameters(unsigned clientSessionId,</span><br><span class="line">              netAddressBits clientAddress,</span><br><span class="line">              Port const&amp; clientRTPPort,</span><br><span class="line">              Port const&amp; clientRTCPPort,</span><br><span class="line">              int tcpSocketNum,</span><br><span class="line">              unsigned char rtpChannelId,</span><br><span class="line">              unsigned char rtcpChannelId,</span><br><span class="line">              netAddressBits&amp; destinationAddress,</span><br><span class="line">              u_int8_t&amp; /*destinationTTL*/,</span><br><span class="line">              Boolean&amp; isMulticast,</span><br><span class="line">              Port&amp; serverRTPPort,</span><br><span class="line">              Port&amp; serverRTCPPort,</span><br><span class="line">              void*&amp; streamToken) &#123;</span><br><span class="line">    if (fLastStreamToken != NULL &amp;&amp; fReuseFirstSource) &#123;</span><br><span class="line">        // Special case: Rather than creating a new &apos;StreamState&apos;,</span><br><span class="line">        // we reuse the one that we&apos;ve already created:</span><br><span class="line">        serverRTPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTPPort();</span><br><span class="line">        serverRTCPPort = ((StreamState*)fLastStreamToken)-&gt;serverRTCPPort();</span><br><span class="line">        ++((StreamState*)fLastStreamToken)-&gt;referenceCount();</span><br><span class="line">        streamToken = fLastStreamToken;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        //创建流媒体源</span><br><span class="line">        FramedSource* mediaSource = createNewStreamSource(clientSessionId, streamBitrate);</span><br><span class="line">        if (clientRTPPort.num() != 0 || tcpSocketNum &gt;= 0) &#123;</span><br><span class="line">            //创建server RTP port,从fInitialPortNum开始+1尝试创建port</span><br><span class="line">            rtpGroupsock = createGroupsock(dummyAddr, serverRTPPort);</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">        rtpSink = createNewRTPSink(rtpGroupsock, rtpPayloadType, mediaSource);</span><br><span class="line">        //并记录stream的状态</span><br><span class="line">        streamToken = fLastStreamToken</span><br><span class="line">          = new StreamState(*this, serverRTPPort, serverRTCPPort, rtpSink, udpSink,</span><br><span class="line">                streamBitrate, mediaSource,</span><br><span class="line">                rtpGroupsock, rtcpGroupsock);</span><br><span class="line">        //并将clientSessionId及destinations保存到hash表中</span><br><span class="line">        fDestinationsHashTable-&gt;Add((char const*)clientSessionId, destinations);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_SETUP(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      char const* urlPreSuffix, char const* urlSuffix, char const* fullRequestStr) &#123;</span><br><span class="line">        do &#123;</span><br><span class="line">          ServerMediaSession* sms</span><br><span class="line">      = fOurServer.lookupServerMediaSession(streamName, fOurServerMediaSession == NULL);//查找session</span><br><span class="line">            if(sms) &#123;</span><br><span class="line">              //返回失败</span><br><span class="line">            &#125;</span><br><span class="line">            if(fStreamStates == NULL) &#123;</span><br><span class="line">              //第一次设置SETUP</span><br><span class="line">              //初始化环境</span><br><span class="line">              fNumStreamStates = fOurServerMediaSession-&gt;numSubsessions();</span><br><span class="line">              fStreamStates = new struct streamState[fNumStreamStates];</span><br><span class="line">              </span><br><span class="line">              ServerMediaSubsessionIterator iter(*fOurServerMediaSession);</span><br><span class="line">              ServerMediaSubsession* subsession;</span><br><span class="line">              for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">                  subsession = iter.next();</span><br><span class="line">                  fStreamStates[i].subsession = subsession;</span><br><span class="line">                  fStreamStates[i].tcpSocketNum = -1; // for now; may get set for RTP-over-TCP streaming</span><br><span class="line">                  fStreamStates[i].streamToken = NULL; // for now; it may be changed by the &quot;getStreamParameters()&quot; call that comes later</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //根据url的后缀，一般用来确定媒体类型，例如mp4、h264...</span><br><span class="line">            if (trackId != NULL &amp;&amp; trackId[0] != &apos;\0&apos;) &#123; // normal case</span><br><span class="line">              for (trackNum = 0; trackNum &lt; fNumStreamStates; ++trackNum) &#123;</span><br><span class="line">            subsession = fStreamStates[trackNum].subsession;</span><br><span class="line">            if (subsession != NULL &amp;&amp; strcmp(trackId, subsession-&gt;trackId()) == 0) break;</span><br><span class="line">              &#125;</span><br><span class="line">              if (trackNum &gt;= fNumStreamStates) &#123;</span><br><span class="line">            // The specified track id doesn&apos;t exist, so this request fails:</span><br><span class="line">            ourClientConnection-&gt;handleCmd_notFound();</span><br><span class="line">            break;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            //解析客户端SETUP消息， Transport类型， client-port</span><br><span class="line">            parseTransportHeader(fullRequestStr, streamingMode, streamingModeString,</span><br><span class="line">             clientsDestinationAddressStr, clientsDestinationTTL,</span><br><span class="line">             clientRTPPortNum, clientRTCPPortNum,</span><br><span class="line">             rtpChannelId, rtcpChannelId);</span><br><span class="line"></span><br><span class="line">             subsession-&gt;getStreamParameters(fOurSessionId, ourClientConnection-&gt;fClientAddr.sin_addr.s_addr,</span><br><span class="line">                    clientRTPPort, clientRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].tcpSocketNum, rtpChannelId, rtcpChannelId,</span><br><span class="line">                    destinationAddress, destinationTTL, fIsMulticast,</span><br><span class="line">                    serverRTPPort, serverRTCPPort,</span><br><span class="line">                    fStreamStates[trackNum].streamToken);</span><br><span class="line"></span><br><span class="line">            //拼接RESPONSE包</span><br><span class="line"></span><br><span class="line">          &#125;while(0)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="PLAY"><a href="#PLAY" class="headerlink" title="PLAY"></a>PLAY</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PLAY(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession, char const* fullRequestStr) &#123;</span><br><span class="line">            //解析scale、range</span><br><span class="line">            //根据scale、range设置session   setStreamScale、seekStream or nullSeekStream</span><br><span class="line"></span><br><span class="line">        for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">            fStreamStates[i].subsession-&gt;startStream(...)</span><br><span class="line">        &#125;</span><br><span class="line">        //拼接PLAY RESPONSE</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void OnDemandServerMediaSubsession::startStream()</span><br><span class="line">&#123;</span><br><span class="line">  StreamState* streamState = (StreamState*)streamToken;</span><br><span class="line">  Destinations* destinations</span><br><span class="line">    = (Destinations*)(fDestinationsHashTable-&gt;Lookup((char const*)clientSessionId));</span><br><span class="line">  if (streamState != NULL) &#123;</span><br><span class="line">    streamState-&gt;startPlaying(destinations, clientSessionId,</span><br><span class="line">                  rtcpRRHandler, rtcpRRHandlerClientData,</span><br><span class="line">                  serverRequestAlternativeByteHandler, serverRequestAlternativeByteHandlerClientData);</span><br><span class="line">    RTPSink* rtpSink = streamState-&gt;rtpSink(); // alias</span><br><span class="line">    if (rtpSink != NULL) &#123;</span><br><span class="line">      //返回rtp seqNum及timestamp</span><br><span class="line">      rtpSeqNum = rtpSink-&gt;currentSeqNo();</span><br><span class="line">      rtpTimestamp = rtpSink-&gt;presetNextTimestamp();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的startPlaying流程单独开一篇处理</p>
+<h2 id="PAUSE"><a href="#PAUSE" class="headerlink" title="PAUSE"></a>PAUSE</h2><p>调用session-&gt;pauseStream(), 并发送RESPONSE</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_PAUSE(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">      ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  for (unsigned i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fStreamStates[i].subsession-&gt;pauseStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;, fOurSessionId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="TEARDOWN"><a href="#TEARDOWN" class="headerlink" title="TEARDOWN"></a>TEARDOWN</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void RTSPServer::RTSPClientSession</span><br><span class="line">::handleCmd_TEARDOWN(RTSPServer::RTSPClientConnection* ourClientConnection,</span><br><span class="line">         ServerMediaSubsession* subsession) &#123;</span><br><span class="line">  unsigned i;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (subsession == NULL /* means: aggregated operation */</span><br><span class="line">  || subsession == fStreamStates[i].subsession) &#123;</span><br><span class="line">      if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">  fOurRTSPServer.unnoteTCPStreamingOnSocket(fStreamStates[i].tcpSocketNum, this, i);</span><br><span class="line">  fStreamStates[i].subsession-&gt;deleteStream(fOurSessionId, fStreamStates[i].streamToken);</span><br><span class="line">  fStreamStates[i].subsession = NULL;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  setRTSPResponse(ourClientConnection, &quot;200 OK&quot;);</span><br><span class="line">  </span><br><span class="line">  // Optimization: If all subsessions have now been torn down, then we know that we can reclaim our object now.</span><br><span class="line">  // (Without this optimization, however, this object would still get reclaimed later, as a result of a &apos;liveness&apos; timeout.)</span><br><span class="line">  Boolean noSubsessionsRemain = True;</span><br><span class="line">  for (i = 0; i &lt; fNumStreamStates; ++i) &#123;</span><br><span class="line">    if (fStreamStates[i].subsession != NULL) &#123;</span><br><span class="line">      noSubsessionsRemain = False;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (noSubsessionsRemain) delete this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cju8k6dr1001s94vc6whapdry" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-C++/C-回调函数的实现" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/19/C++/C-回调函数的实现/" class="article-date">
@@ -106,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cju558nj300013cvcbnc5o46b" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cju8k6dog000594vcazfk35us" class="article-share-link">Share</a>
       
       
     </footer>
@@ -151,7 +220,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cju558neo00003cvc0tt3b3on" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cju8k6dl5000094vcf38ikdlz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -200,7 +269,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cju558nk1000l3cvc1h573uzr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cju8k6dq9000v94vcyfk3bemz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -249,7 +318,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cju558nk7000v3cvcpt3j8z2s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cju8k6dqf001394vcmnojz54n" class="article-share-link">Share</a>
       
       
     </footer>
@@ -315,7 +384,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cju558nlg001v3cvcrv7w61b4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cju8k6dsc002194vchl7nalws" class="article-share-link">Share</a>
       
       
     </footer>
@@ -492,7 +561,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cju558nju000d3cvc22waoykn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cju8k6dpp000i94vcop9bvofd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -590,7 +659,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cju558njw000g3cvcy6pq8ttm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cju8k6dq5000u94vcp74p7u9p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -699,7 +768,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cju558njd00053cvc2nvr3lj5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cju8k6dpw000n94vcqnmlwvmf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -855,437 +924,7 @@ Content-Length: 122
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cju558njv000e3cvcoxl1uqh7" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-other/爬坑笔记" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/29/other/爬坑笔记/" class="article-date">
-  <time datetime="2018-05-28T17:04:43.000Z" itemprop="datePublished">2018-05-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/other/">other</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/29/other/爬坑笔记/">爬坑笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="爬坑笔记"><a href="#爬坑笔记" class="headerlink" title="爬坑笔记"></a>爬坑笔记</h1><p>本文对日常工作及学习中遇到的问题做个记录</p>
-<blockquote>
-<p>2018/5/18 1:01:33 </p>
-</blockquote>
-<p>编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折</p>
-<h2 id="undefined-reference-vtable-for-VideoDevice"><a href="#undefined-reference-vtable-for-VideoDevice" class="headerlink" title="undefined reference vtable for VideoDevice"></a>undefined reference vtable for VideoDevice</h2><pre><code>class VideoDevice: public QObject
-{
-    Q_OBJECT
-public:
-    explicit VideoDevice(QObject *parent = nullptr);
-       VideoDevice(QString dev_name);
-    int open_device();
-    int close_device();
-.....
-</code></pre><p>定义一个类VideoDevice继承于QObject，编译出现cmake error: undefined reference to <code>vtable for VideoDevice&#39;错误， 一般这是虚函数没有提供实现造成的，不过</code>VideoDevice`并不是一个虚函数，所以和这个没有关系，很有可能是Q_OBJECT这个宏造成的，查阅资料说明Q_OBJECT 元对象一般是由moc XXX.cpp生成moc文件实现的，在CMakeList指定了VideoDevice.h 的moc文件， error fix.</p>
-<p><strong>QT5_WRAP_CPP(video_device_moc include/videodevice.h)</strong></p>
-<p>发现的确生成了一个moc文件，此cpp对videodevice.h生成了一些元对象，和信号和槽相关</p>
-<pre><code>QT_BEGIN_MOC_NAMESPACE
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_VideoDevice_t {
-    QByteArrayData data[4];
-    char stringdata0[39];
-};
-#define QT_MOC_LITERAL(idx, ofs, len) \
-    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_VideoDevice_t, stringdata0) + ofs \
-        - idx * sizeof(QByteArrayData)) \
-    )
-static const qt_meta_stringdata_VideoDevice_t qt_meta_stringdata_VideoDevice = {
-    {
-QT_MOC_LITERAL(0, 0, 11), // &quot;VideoDevice&quot;
-QT_MOC_LITERAL(1, 12, 13), // &quot;display_error&quot;
-QT_MOC_LITERAL(2, 26, 0), // &quot;&quot;
-QT_MOC_LITERAL(3, 27, 11) // &quot;std::string&quot;
-
-    },
-    &quot;VideoDevice\0display_error\0\0std::string&quot;
-};
-#undef QT_MOC_LITERAL
-
-static const uint qt_meta_data_VideoDevice[] = {
-
- // content:
-       7,       // revision
-       0,       // classname
-       0,    0, // classinfo
-       1,   14, // methods
-       0,    0, // properties
-       0,    0, // enums/sets
-       0,    0, // constructors
-       0,       // flags
-       1,       // signalCount
-
- // signals: name, argc, parameters, tag, flags
-       1,    1,   19,    2, 0x06 /* Public */,
-
- // signals: parameters
-    QMetaType::Void, 0x80000000 | 3,    2,
-
-       0        // eod
-};
-
-void VideoDevice::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
-{
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        VideoDevice *_t = static_cast&lt;VideoDevice *&gt;(_o);
-        Q_UNUSED(_t)
-        switch (_id) {
-        case 0: _t-&gt;display_error((*reinterpret_cast&lt; std::string(*)&gt;(_a[1]))); break;
-        default: ;
-        }
-    } else if (_c == QMetaObject::IndexOfMethod) {
-        int *result = reinterpret_cast&lt;int *&gt;(_a[0]);
-        void **func = reinterpret_cast&lt;void **&gt;(_a[1]);
-        {
-            typedef void (VideoDevice::*_t)(std::string );
-            if (*reinterpret_cast&lt;_t *&gt;(func) == static_cast&lt;_t&gt;(&amp;VideoDevice::display_error)) {
-                *result = 0;
-                return;
-            }
-        }
-    }
-}
-
-const QMetaObject VideoDevice::staticMetaObject = {
-    { &amp;QObject::staticMetaObject, qt_meta_stringdata_VideoDevice.data,
-      qt_meta_data_VideoDevice,  qt_static_metacall, nullptr, nullptr}
-};
-
-
-const QMetaObject *VideoDevice::metaObject() const
-{
-    return QObject::d_ptr-&gt;metaObject ? QObject::d_ptr-&gt;dynamicMetaObject() : &amp;staticMetaObject;
-}
-
-void *VideoDevice::qt_metacast(const char *_clname)
-{
-    if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_VideoDevice.stringdata0))
-        return static_cast&lt;void*&gt;(this);
-    return QObject::qt_metacast(_clname);
-}
-
-int VideoDevice::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
-{
-    _id = QObject::qt_metacall(_c, _id, _a);
-    if (_id &lt; 0)
-        return _id;
-    if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id &lt; 1)
-            qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
-    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id &lt; 1)
-            *reinterpret_cast&lt;int*&gt;(_a[0]) = -1;
-        _id -= 1;
-    }
-    return _id;
-}
-
-// SIGNAL 0
-void VideoDevice::display_error(std::string _t1)
-{
-    void *_a[] = { nullptr, const_cast&lt;void*&gt;(reinterpret_cast&lt;const void*&gt;(&amp;_t1)) };
-    QMetaObject::activate(this, &amp;staticMetaObject, 0, _a);
-}
-QT_WARNING_POP
-QT_END_MOC_NAMESPACE
-</code></pre><h2 id="lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol"><a href="#lib-x86-64-linux-gnu-libpthread-so-0-1-error-error-adding-symbol" class="headerlink" title="/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol"></a>/lib/x86_64-linux-gnu/libpthread.so.0:-1: error: error adding symbol</h2><p>使用cmake 编译ffmpeg发现 …reference to symbol ‘pthread_create@@GLIBC_2.2.5, 发现是依赖于pthread<br>在连接库中加上-lpthread即可</p>
-<p>fmmpeg库之间有依赖关系，需要按顺序加载lib, make加载顺序为从右向左，故左边的库依赖于右边</p>
-<p>-lavcodec -lavdevice -lavfilter -lavformat -lavutil -lpostproc -lswresample -lswscale -lx264 -lpthread</p>
-<h2 id="关于stm32-freertos异常死机问题"><a href="#关于stm32-freertos异常死机问题" class="headerlink" title="关于stm32 freertos异常死机问题"></a>关于stm32 freertos异常死机问题</h2><blockquote>
-<p>2018/5/22 22:05:01 </p>
-</blockquote>
-<ul>
-<li>MCU: stm32</li>
-<li>OS: FreeRTOS</li>
-<li>问题描述: 最近项目任务，需要利用CMSIS接口对FreeRTOS做了一层封装，以实现多平台抽象，改造运行时很快挂死了。使用JLINK时DEBUG,发现运行时常常在某些函数时挂死，但不常是同一函数，发现通常是在函数退出时挂掉，初步怀疑是栈太小被破坏了，导致函数返回跑偏，栈大小改大同样。继续跟踪发现虽然挂的地点不同，但都进入了同一个函数，DEFAULTXXX, 发现此函数位于启动函数中，如果未设置中断函数，发生中断会自动进入DEFAULTXXX, 可能是我链接时未将中断处理函数链接上，将中断实现函数链接FIX (0.0 醉了，  十足小白)</li>
-</ul>
-<h2 id="FreeRTOS-线程函数问题"><a href="#FreeRTOS-线程函数问题" class="headerlink" title="FreeRTOS 线程函数问题"></a>FreeRTOS 线程函数问题</h2><p>一直在linux环境下工作，对STM32 OVER RTOS不是很熟悉， 利用CMSIS OS over FreeRTOS封装Thread;编写测试用例时发现线程函数直接退出会进入FreeRTOS内部一个函数，Tips要求线程函数一直loop或者退出时调用vTaskDelete（NULL）删除自己。</p>
-<p>查看了一些资料，发现FreeRTOS不能类似于linux线程直接退出处于僵死状态，需要线程内部调用vTaskDelete（NULL）删除自己或者别的线程调用vTaskDelete（thread_id）。 猜测FreeRTOSCreate时是将任务加入到task list,每隔一段时间调用一次，调用vTaskDelete则将任务从task list中移除；  如果函数直接退出但task list还在task list中， 时间片到达时运行task， 函数已经退出可能导致task不知如何运行，被集中运行到了DEFAULT THREAD FUNCTION中了.</p>
-<h2 id="utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题"><a href="#utils-qt-ffmpeg-rtsp-src-mainwindow-ui’-is-not-valid问题" class="headerlink" title="utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题"></a>utils/qt/ffmpeg_rtsp/src/mainwindow.ui’ is not valid问题</h2><blockquote>
-<p>2018/5/23 23:00:41 </p>
-</blockquote>
-<ul>
-<li><p>背景: 最近在<a href="https://github.com/CuijianSa/utils" target="_blank" rel="noopener">utils</a>项目中使用ffmpeg+QT+cmake 播放h264视频流, 编译UI时报错</p>
-<pre><code>Generating ui_mainwindow.h
-File &apos;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.ui&apos; is not valid
-qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/build.make:57: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc&apos; failed
-CMakeFiles/Makefile2:615: recipe for target &apos;qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp_automoc.dir/all&apos; failed
-AUTOUIC: error: process for ui_mainwindow.h needed by
- &quot;/home/cuijian/share/git/utils/qt/ffmpeg_rtsp/src/mainwindow.cpp&quot;
-failed:
-</code></pre></li>
-<li>思路: 在CMakeLists中已经指定了QT5_WRAP_UI指定了UI文件,QT5_WRAP_UI(ui_mainwindow mainwindow.ui)，编译log却在下级src查询*ui.h文件，和预期不符。然后查询Makefile查看的UI路径，发现路径正常<pre><code>`./qt/ffmpeg_rtsp/CMakeFiles/ffmpeg_rtsp.dir/build.make:    cd /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp &amp;&amp; /home/cuijian/Qt5.9.2/5.9.2/gcc_64/bin/uic -o /home/cuijian/share/git/build-utils-Desktop_Qt_5_9_2_GCC_64bit-Debug/qt/ffmpeg_rtsp/ui_mainwindow.h /home/cuijian/share/git/utils/qt/ffmpeg_rtsp/mainwindow.ui`
-</code></pre></li>
-</ul>
-<p>THANK Gooole，遍历了几篇文章找到蛛丝马迹， 因为我mainwindow.cpp是位于src目录下，而编译器也在src下搜寻ui_mainwindow.h，和设置的UI路径不符（实际上ui_mainwindow.h位于CMakeLists同级目录），应该和自动配置有关，查看了CMAKE_UIC命令，尝试把CMAKE_AUTOUIC关闭按照cmake设定的UI编译解决。  阻塞了两晚… </p>
-<h2 id="程序随机挂死问题，DEBUG无异常"><a href="#程序随机挂死问题，DEBUG无异常" class="headerlink" title="程序随机挂死问题，DEBUG无异常"></a>程序随机挂死问题，DEBUG无异常</h2><blockquote>
-<p>2018/5/24 22:34:34 </p>
-</blockquote>
-<p>很简单的一个问题。<br>主要是同事开启了Watchdog, merge代码未喂狗。导致挂死，debug看不出异常… </p>
-<h2 id="吐槽一下ARM-CMSIS—OS接口"><a href="#吐槽一下ARM-CMSIS—OS接口" class="headerlink" title="吐槽一下ARM CMSIS—OS接口"></a>吐槽一下ARM CMSIS—OS接口</h2><blockquote>
-<p>2018/5/29 1:27:39 </p>
-</blockquote>
-<p>最近做使用CMSIS over freertos封装实现项目HAL, 发现不合理的地方</p>
-<ol>
-<li><p>osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t count)   </p>
-<p> count为semaphore可用资源量， 跟踪代码发现在freertos stm32中其内部实现为count同时被设为最大资源量和初始值。 ===&gt; 无法将初始值设为0(因为count也指定了最大资源)</p>
-</li>
-<li><p>CMSIS_5-develop包中提供了Template， 使用C++对CMSIS_OS进行了一次封装， 不过发现Mutex.cpp没有调用osMutexDelete释放互斥量,会引起资源泄露的问题,其sample如下:</p>
-<pre><code>#include &quot;Mutex.h&quot;
-
-#include &lt;string.h&gt;
-//#include &quot;error.h&quot;
-
-namespace rtos {
-
-Mutex::Mutex() {
-#ifdef CMSIS_OS_RTX
-    memset(_mutex_data, 0, sizeof(_mutex_data));
-    _osMutexDef.mutex = _mutex_data;
-#endif
-    _osMutexId = osMutexCreate(&amp;_osMutexDef);
-    if (_osMutexId == NULL) {
-//        error(&quot;Error initializing the mutex object\n&quot;);
-    }
-}
-
-osStatus Mutex::lock(uint32_t millisec) {
-    return osMutexWait(_osMutexId, millisec);
-}
-
-bool Mutex::trylock() {
-    return (osMutexWait(_osMutexId, 0) == osOK);
-}
-
-osStatus Mutex::unlock() {
-    return osMutexRelease(_osMutexId);
-}
-
-}
-</code></pre></li>
-</ol>
-<h2 id="undefined-reference-vtable-for"><a href="#undefined-reference-vtable-for" class="headerlink" title="undefined reference vtable for"></a>undefined reference vtable for</h2><blockquote>
-<p>2018/5/30 0:08:23 </p>
-</blockquote>
-<p>C++ 继承基类编译出现undefined reference vtable for XXX,这是由于编译器在子类未发现纯虚函数在子类的实现，虚拟函数table。 在子类实现虚函数即可</p>
-<h1 id="FFmpeg-RTSP-缩放花屏"><a href="#FFmpeg-RTSP-缩放花屏" class="headerlink" title="FFmpeg RTSP 缩放花屏"></a>FFmpeg RTSP 缩放花屏</h1><p>使用开源库ffmpeg播放RTSP(H264=&gt;RGB24), 使用sws_getContext()出现花屏。原因在与缩放后width没有16字节对齐</p>
-<ol>
-<li>将缩放后的宽度16字节对齐</li>
-<li><p>sws_scale时picture.linesize分别设置RGB字节数（缩放后宽度所占BYTE，</p>
-<pre><code>scaleWidth = CELING_2_POWER(width / scale, 16);
-scaleHeight = CELING_2_POWER(height / scale, 16);
-
-pSwsCtx = sws_getContext(width, height, pCodecCtx-&gt;pix_fmt, scaleWidth, scaleHeight, AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
-
-pixbyte = scaleWidth * 3;
-picture.linesize[0] = picture.linesize[1] = picture.linesize[2] = pixbyte;
-
-sws_scale(pSwsCtx, pFrame-&gt;data, pFrame-&gt;linesize, 0, height, picture.data, picture.linesize)
-</code></pre></li>
-</ol>
-<h1 id="类互相引用导致一方类定义不可达"><a href="#类互相引用导致一方类定义不可达" class="headerlink" title="类互相引用导致一方类定义不可达"></a>类互相引用导致一方类定义不可达</h1><blockquote>
-<p>2018/6/21 23:40:39 </p>
-</blockquote>
-<ol>
-<li>class A 成员函数形参为class B*，这种情景很常见(在另一个类中修改本类的成员变量，或者保存本类的对象指针)，比如观察者模式及状态模式。</li>
-<li>class A及class B都包含宏用于防重复包含，而在类中直接include 对方头文件必会导致有一方类实现不可达</li>
-</ol>
-<p><strong>解决方法:</strong><br>.h中使用class 对方类声明，在.cpp包含对方头文件。.cpp不存在重复包含的问题。程序会在符号表中查找该函数的实现。</p>
-<h1 id="C-构造函数调用虚函数问题"><a href="#C-构造函数调用虚函数问题" class="headerlink" title="C++构造函数调用虚函数问题"></a>C++构造函数调用虚函数问题</h1><blockquote>
-<p>2018/7/4 23:35:59 </p>
-</blockquote>
-<ul>
-<li>问题描述</li>
-</ul>
-<p>class A 继承于class Base,基类和子类构造都调用虚函数Function,实例化class A的对象时，子类和基类的Function都会被调用一遍</p>
-<p>原因:</p>
-<ul>
-<li>在基类子对象构造期间，编译器直接调用基类版本的虚函数。在子类对象构造期间，编译器直接调用基类虚函数的版本。并没有走虚机制。虽然在基类子对象的构造期间，虚表指针指向的是基类的Virtual Table，在进入子类对象构造后，虚表指针指向的是子类对象的Virtual Table</li>
-</ul>
-<p>故以下输出为:</p>
-<p>Base::Fuction<br>A::Fuction </p>
-<pre><code>class Base  
-{  
-public:  
-    Base()  
-    {  
-        Fuction();  
-    }  
-
-    virtual void Fuction()  
-    {  
-        cout &lt;&lt; &quot;Base::Fuction&quot; &lt;&lt; endl;  
-    }  
-};  
-
-class A : public Base  
-{  
-public:  
-    A()  
-    {  
-        Fuction();  
-    }  
-
-    virtual void Fuction()  
-    {  
-        cout &lt;&lt; &quot;A::Fuction&quot; &lt;&lt; endl;  
-    }  
-};  
-
-A a;  
-</code></pre><p>==&gt;使用多态时， 注意勿在构造函数中调用虚函数， 否则会造成无法执行到子类虚函数，引起异常也不好排查</p>
-<h1 id="ubuntu输入密码后无法进入系统"><a href="#ubuntu输入密码后无法进入系统" class="headerlink" title="ubuntu输入密码后无法进入系统"></a>ubuntu输入密码后无法进入系统</h1><blockquote>
-<p>2018/7/17 0:32:26 </p>
-</blockquote>
-<p>查看~/.xsession-errors，发现dbus未起来导致dbus-deamon异常，unity一个服务termintor.</p>
-<p>最近工作上需要用到dbus, 所以在本机编译dbus源码，并make install安装到系统中,可能破坏掉了原先ubuntu内部的dbus配置。</p>
-<p>手动删除安装的dbus配置， 重启解决。</p>
-<p>教训:以后专门建立一个package防止源码，编译程序时指定package路径，尽量与系统隔离。</p>
-<h1 id="函数返回的string生命周期问题"><a href="#函数返回的string生命周期问题" class="headerlink" title="函数返回的string生命周期问题"></a>函数返回的string生命周期问题</h1><blockquote>
-<p>2018/8/2 23:41:17 </p>
-</blockquote>
-<pre><code>std::string toString(){
-    return std::string(data);
-}
-
-int iterCalback() 
-{
-    char *argv[2];
-    if(cb) {
-        argv[0] = key.toString().c_str();
-        argv[1] = value.toString().c_str();
-
-        cb(argc, argv);
-    }
-}
-</code></pre><p>示例如上， 获取key及value的字符串常量传递给callback,发现argv[0]及argv[1]同一个地址且指向同一字符串</p>
-<p>原因： 理解错函数返回string生命周期的问题， string_key通过函数返回，toString()执行完毕后，临时变量string其生命周期已经结束， 栈空间将会被收回。执行下一函数获取string_value,将会key复用的占用的空间(不一定同一栈地址)</p>
-<p>note:函数返回的临时变量在函数调用结束时即被销毁。</p>
-<h1 id="对数组名取址"><a href="#对数组名取址" class="headerlink" title="对数组名取址"></a>对数组名取址</h1><blockquote>
-<p>2018/8/13 22:37:29 </p>
-</blockquote>
-<p>数组名的值是个常量，是数组第一个元素的地址，它的数据类型取决于数组的类型。以下为例</p>
-<pre><code>int a[2] = {1,2}
-
-printf(&quot;a = %p\n&quot;, a); // I
-printf(&quot;&amp;a = %p\n&quot;, &amp;a); // II
-printf(&quot;a + 1 = %p\n&quot;, a + 1);// III
-printf(&quot;&amp;a + 1 = %p\n&quot;, &amp;a + 1);// IV
-
-a = 0x804a014
-&amp;a = 0x804a014
-a + 1 = 0x804a018
-&amp;a + 1 = 0x804a01c
-</code></pre><p>对数组名取址=数组第一个元素的地址.<br>今天趟坑，dbus需要传入一个二级指针，自己傻乎乎的直接对数组取值传入，实际上还是首元素的地址。dbus函数内部认为其为二级指针，使用一个变量指向其指向的值， 并将其当做字符串的地址。实际上是把数组的数据当做字符串的地址。导致非法访问core dump</p>
-<h1 id="对隐形调用函数大坑说明"><a href="#对隐形调用函数大坑说明" class="headerlink" title="对隐形调用函数大坑说明"></a>对隐形调用函数大坑说明</h1><blockquote>
-<p>2018/8/17 0:23:04</p>
-</blockquote>
-<p>背景:x86 linux 64位系统<br>proxy接收到message-proxy消息， 进行解析打包传出后总是挂掉。<br>原以为是函数内部拼接字符串错误， 使用log后发现出入参都很正常， 原以为是函数栈被踩导致函数调用结束后跑偏导致core dump, 后来使用log发现程序是可以调用函数返回的， 对返回值打印其地址时发现地址只有4个字节， 而返回值却有8个字节， 其前4个字节时相同的， 也就是表示丢了高4个字节。查看编译Log时发现调用func时将char <em>转为integet.在64位系统中char</em>就是8byte, 而int 为4byte；这段日志提示了我编译器进行了隐藏转换， 后来发现调用库文件没有显式包含函数声明导致编辑器自动默认声明。导致char* =&gt; int， 而对截断后的地址进行访问造成非法访问内存空间crash</p>
-<p>教训:<br>不要放过任何一个warning,为了减少大坑，还是将所有的warning解决</p>
-<p>示例如下:调用函数未现实声明被调用的函数，造成编译器自动声明函数， 其返回值为int,这也是warning说明int数据传给了char*,所以point被截断了<br><code>warning: initialization makes pointer from integer without a cast [-Wint-conversion]</code></p>
-<pre><code> 1 #include &lt;stdio.h&gt;
- 2 #include &lt;stdlib.h&gt;
- 3 #include &lt;string.h&gt;
- 4 
- 5 
- 6 char *get_msg_id()
- 7 {
- 8     char *p = malloc(32);
- 9     if(p) {
-10         strcpy(p, &quot;msg_id:32&quot;);
-11     }
-12     printf(&quot;%p\n&quot;, p);
-13     return p;
-14 }
-
-
- 1 #include &lt;stdio.h&gt;
- 2 
- 3 int main()
- 4 {
- 5     char *p = get_msg_id();
- 6     printf(&quot;%p&quot;,p);
- 7 }
-</code></pre><h1 id="关于CGO-musllibc问题"><a href="#关于CGO-musllibc问题" class="headerlink" title="关于CGO+musllibc问题"></a>关于CGO+musllibc问题</h1><ul>
-<li>golang github issue:<a href="https://github.com/golang/go/issues/28909" target="_blank" rel="noopener">https://github.com/golang/go/issues/28909</a></li>
-</ul>
-<p>首先简单说明下uclibc、eglibc、glibc及musl-libc区别</p>
-<ol>
-<li><p>Glibc glibc = GNU C Library 是GNU项（GNU Project）目，所实现的 C语言标准库（C standard library）。 目前，常见的桌面和服务器中的GNU/Linux类的系统中，都是用的这套C语言标准库。 其实现了常见的C库的函数，支持很多种系统平台，功能很全，但是也相对比较臃肿和庞大。</p>
-</li>
-<li><p>uClibc 一个小型的C语言标准库，主要用于嵌入式。 其最开始设计用于uClinux（注：uClinux不支持MMU），因此比较适用于微处理器中。 对应的，此处的u意思是μ，Micro，微小的意思。 uClibc的特点：</p>
-<ul>
-<li>uClibc比glibc要小很多。</li>
-<li>uClibc是独立的，为了应用于嵌入式系统中，完全重新实现出来的。和glibc在源码结构和二进制上，都不兼容。</li>
-</ul>
-</li>
-<li><p>EGLIBC EGLIBC = Embedded GLIBC EGLIBC是，（后来）glibc的原创作组织FSF所（新）推出的，glibc的一种变体，目的在于将glibc用于嵌入式系统。 EGLIBC的目标是： </p>
-<ul>
-<li>保持源码和二进制级别的兼容于Glibc 源代码架构和ABI层面兼容 如果真正实现了这个目标，那意味着，你之前用glibc编译的程序，可以直接用eglibc替换，而不需要重新编译。 这样就可以复用之前的很多的程序了。 </li>
-<li>降低(内存)资源占用/消耗</li>
-<li>使更多的模块为可配置的（以实现按需裁剪不需要的模块）</li>
-<li><p>提高对于交叉编译(cross-compilation)和交叉测试(cross-testing)的支持 Eglibc的最主要特点就是可配置，这样对于嵌入式系统中，你所不需要的模块，比如NIS，locale等，就可以裁剪掉，不把其编译到库中，使得降低生成的库的大小了</p>
-<p>更多特点，可以去看：Eglibc的特点 【glibc, uClibc, Elibc的渊源/历史/区别/联系】 </p>
-<ol>
-<li>写程序，需要用到很多c语言的库函数。所有的库函数加起来，就是对应的C语言（标准）函数库。 </li>
-<li>目前在普通GNU/Linux系统中所用的C语言标准库，叫做glibc。其功能很全，函数很多，但是代码太多，编译出来的函数库的大小也很大，即资源占用也很多。</li>
-<li>而嵌入式系统中，也需要C语言写代码实现特定功能，也需要用到C语言函数库，但是由于嵌入式系统中，一般资源比较有限，所以不适合直接使用（太占用资源的）gLibc。 4. 所以有人就又（没有参考glibc，而是从头开始，）重新实现了一个用于嵌入式系统中的，代码量不是很大的，资源占用相对较少的，C语言函数库，叫做uClibc。并且，uClibc不支持MMU（内存管理单元）。 </li>
-<li>而后来，glibc的开发者，又推出个Embedded glibc，简称eglibc，其主要目的也是将glibc用于嵌入式领域。 相应最大的改动就在于，把更多的库函数，改为可配置的，这样，如果你的嵌入式系统中不需要某些函数，就可以裁剪掉，不把该函数编译到你的eglibc库中，使得最终生成的eglibc库的大小变小，最终符合你的嵌入式系统的要求（不能超过一定的大小），这样，就实现了，把glibc引用于嵌入式系统中的目的了。 </li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<pre><code>可以简单的理解为： glibc，uClibc，eglibc都是C语言函数库：
- 1. uClibc是嵌入式系统中用的，glibc是桌面系统用的 
- 2. eglibc也是嵌入式系统中用的，是glibc的嵌入式版本，和glibc在源码和二进制上兼容。
-</code></pre><ol start="4">
-<li>Musl-libc C语言标准库Musl-libc项目发布了1.0版。Musl是一个轻量级的C标准库，设计作为GNU C library (glibc)、 uClibc或Android Bionic的替代用于嵌入式操作系统和移动设备。它遵循POSIX 2008规格和 C99 标准，采用MIT许可证授权，使用Musl的Linux发行版和项目包括sabotage，bootstrap-linux，LightCube OS等等。</li>
-</ol>
-<p>golang + C混编时， cgo依赖于底层c库。cgo在muslibc支持程序不是很好<br>muslibc初始化时为将环境变量写入init_array造成cgo获取argv为空</p>
-<p>解决方法:</p>
-<p>使用patchelf 工具修改已编译运行程序的依赖库位置和指定库链接器</p>
-<ul>
-<li>patchelf –set-rpath</li>
-<li>patchelf –set-interpreter</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/other/爬坑笔记/" data-id="cju558nlf001u3cvc9e429qy3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cju8k6dpv000m94vc40upya8l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1299,7 +938,7 @@ a + 1 = 0x804a018
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1338,6 +977,10 @@ a + 1 = 0x804a018
       <ul>
         
           <li>
+            <a href="/2019/04/08/网络/epoll框架/">epoll框架</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
           </li>
         
@@ -1351,10 +994,6 @@ a + 1 = 0x804a018
         
           <li>
             <a href="/2019/03/29/C++/指针详解/">指针详解</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/linux/多进程线程通信同步总结/">多进程线程通信同步总结</a>
           </li>
         
       </ul>
