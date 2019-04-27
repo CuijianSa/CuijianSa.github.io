@@ -66,6 +66,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/live555分析-TaskScheduler分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/" class="article-date">
+  <time datetime="2018-12-21T15:57:21.000Z" itemprop="datePublished">2018-12-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/21/流媒体/live555分析-TaskScheduler分析/">live555分析-TaskScheduler分析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="TaskScheduler类"><a href="#TaskScheduler类" class="headerlink" title="TaskScheduler类"></a>TaskScheduler类</h1><p>TaskScheduler是任务调度的基类， 其类关系如图所示</p>
+<p><img src="/2018/12/21/流媒体/live555分析-TaskScheduler分析/TaskScheduler.PNG" alt=""></p>
+<p>首先可从代码调用关系开始着手分析</p>
+<p>BasicTaskScheduler0主要初始化一些参数，包括socket、 event handle</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BasicTaskScheduler0::BasicTaskScheduler0()</span><br><span class="line">  : fLastHandledSocketNum(-1), fTriggersAwaitingHandling(0), fLastUsedTriggerMask(1), fLastUsedTriggerNum(MAX_NUM_EVENT_TRIGGERS-1) &#123;</span><br><span class="line">  fHandlers = new HandlerSet;</span><br><span class="line">  for (unsigned i = 0; i &lt; MAX_NUM_EVENT_TRIGGERS; ++i) &#123;</span><br><span class="line">    fTriggeredEventHandlers[i] = NULL;</span><br><span class="line">    fTriggeredEventClientDatas[i] = NULL;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TaskScheduler* scheduler = BasicTaskScheduler::createNew();</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">BasicTaskScheduler::BasicTaskScheduler(unsigned maxSchedulerGranularity)</span><br><span class="line">  : fMaxSchedulerGranularity(maxSchedulerGranularity), fMaxNumSockets(0)</span><br><span class="line">#if defined(__WIN32__) || defined(_WIN32)</span><br><span class="line">  , fDummySocketNum(-1)</span><br><span class="line">#endif</span><br><span class="line">&#123;</span><br><span class="line">  FD_ZERO(&amp;fReadSet);</span><br><span class="line">  FD_ZERO(&amp;fWriteSet);</span><br><span class="line">  FD_ZERO(&amp;fExceptionSet);</span><br><span class="line"></span><br><span class="line">  if (maxSchedulerGranularity &gt; 0) schedulerTickTask(); // ensures that we handle events frequently</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UsageEnvironment<em> env = BasicUsageEnvironment::createNew(</em>scheduler);</p>
+<p>scheduler作为一个参数作为UsageEnvironment的构造参数， 实际上UsageEnvironment是将其作为一个成员变量进行保存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UsageEnvironment::UsageEnvironment(TaskScheduler&amp; scheduler)</span><br><span class="line">  : liveMediaPriv(NULL), groupsockPriv(NULL), fScheduler(scheduler) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在开始分析live555 server创建过程可以看出,使用引用的taskScheduler将readhandle注册到taskscheduler,当read event触发时，taskscheduer进入注册的event进行处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">rtspServer = RTSPServer::createNew(*env, rtspServerPortNum, authDB);</span><br><span class="line"></span><br><span class="line">GenericMediaServer</span><br><span class="line">::GenericMediaServer(UsageEnvironment&amp; env, int ourSocket, Port ourPort,</span><br><span class="line">             unsigned reclamationSeconds)</span><br><span class="line">  : Medium(env),</span><br><span class="line">    fServerSocket(ourSocket), fServerPort(ourPort), fReclamationSeconds(reclamationSeconds),</span><br><span class="line">    fServerMediaSessions(HashTable::create(STRING_HASH_KEYS)),</span><br><span class="line">    fClientConnections(HashTable::create(ONE_WORD_HASH_KEYS)),</span><br><span class="line">    fClientSessions(HashTable::create(STRING_HASH_KEYS)) &#123;</span><br><span class="line">  ignoreSigPipeOnSocket(fServerSocket); // so that clients on the same host that are killed don&apos;t also kill us</span><br><span class="line">  </span><br><span class="line">  // Arrange to handle connections from others:</span><br><span class="line">  env.taskScheduler().turnOnBackgroundReadHandling(fServerSocket, incomingConnectionHandler, this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="setBackgroundHandling分析"><a href="#setBackgroundHandling分析" class="headerlink" title="setBackgroundHandling分析"></a>setBackgroundHandling分析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">void BasicTaskScheduler</span><br><span class="line">  ::setBackgroundHandling(int socketNum, int conditionSet, BackgroundHandlerProc* handlerProc, void* clientData) &#123;</span><br><span class="line">  if (socketNum &lt; 0) return;</span><br><span class="line">#if !defined(__WIN32__) &amp;&amp; !defined(_WIN32) &amp;&amp; defined(FD_SETSIZE)</span><br><span class="line">  if (socketNum &gt;= (int)(FD_SETSIZE)) return;</span><br><span class="line">#endif</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fReadSet);</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fWriteSet);</span><br><span class="line">  FD_CLR((unsigned)socketNum, &amp;fExceptionSet);</span><br><span class="line">  if (conditionSet == 0) &#123;</span><br><span class="line">    fHandlers-&gt;clearHandler(socketNum);</span><br><span class="line">    if (socketNum+1 == fMaxNumSockets) &#123;</span><br><span class="line">      --fMaxNumSockets;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    fHandlers-&gt;assignHandler(socketNum, conditionSet, handlerProc, clientData);</span><br><span class="line">    if (socketNum+1 &gt; fMaxNumSockets) &#123;</span><br><span class="line">      fMaxNumSockets = socketNum+1;</span><br><span class="line">    &#125;</span><br><span class="line">    if (conditionSet&amp;SOCKET_READABLE) FD_SET((unsigned)socketNum, &amp;fReadSet);</span><br><span class="line">    if (conditionSet&amp;SOCKET_WRITABLE) FD_SET((unsigned)socketNum, &amp;fWriteSet);</span><br><span class="line">    if (conditionSet&amp;SOCKET_EXCEPTION) FD_SET((unsigned)socketNum, &amp;fExceptionSet);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用hash进行sockerNum &lt;====&gt; handlerProc,client映射；具体可见HandlerSet<br>::assignHandler</p>
+<p>至此rtspservice初始化已经完成，下面介绍client connect处理<br>GenericMediaServer::incomingConnectionHandlerOnSocket</p>
+<ul>
+<li>监听connect消息，accept serverSocket</li>
+<li>ignoreSigPipeOnSocket,send已经的关闭的套接字时,收到SIGPIPE信号,系统对该信号的默认处理方式是程序直接退出</li>
+<li>makeSocketNonBlocking,设置socket no block</li>
+<li>设置client send buffer,默认50K</li>
+<li>创建client connection</li>
+</ul>
+<p>client connection处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RTSPServer::RTSPClientConnection</span><br><span class="line">::RTSPClientConnection(RTSPServer&amp; ourServer, int clientSocket, struct sockaddr_in clientAddr)</span><br><span class="line">  : GenericMediaServer::ClientConnection(ourServer, clientSocket, clientAddr),</span><br><span class="line">    fOurRTSPServer(ourServer), fClientInputSocket(fOurSocket), fClientOutputSocket(fOurSocket),</span><br><span class="line">    fIsActive(True), fRecursionCount(0), fOurSessionCookie(NULL) &#123;</span><br><span class="line">  resetRequestBuffer();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>clientConnection保存RTSPServer、clientSocket、clientAddr</p>
+<p>接下来进入TaskScheduler的doEventLoop函数,taskscheduler yield函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) &#123;</span><br><span class="line">  fd_set readSet = fReadSet; // make a copy for this select() call</span><br><span class="line">  fd_set writeSet = fWriteSet; // ditto</span><br><span class="line">  fd_set exceptionSet = fExceptionSet; // ditto</span><br><span class="line"></span><br><span class="line">  DelayInterval const&amp; timeToDelay = fDelayQueue.timeToNextAlarm();</span><br><span class="line">  struct timeval tv_timeToDelay;</span><br><span class="line">  tv_timeToDelay.tv_sec = timeToDelay.seconds();</span><br><span class="line">  tv_timeToDelay.tv_usec = timeToDelay.useconds();</span><br><span class="line">  // Very large &quot;tv_sec&quot; values cause select() to fail.</span><br><span class="line">  // Don&apos;t make it any larger than 1 million seconds (11.5 days)</span><br><span class="line">  const long MAX_TV_SEC = MILLION;</span><br><span class="line">  if (tv_timeToDelay.tv_sec &gt; MAX_TV_SEC) &#123;</span><br><span class="line">    tv_timeToDelay.tv_sec = MAX_TV_SEC;</span><br><span class="line">  &#125;</span><br><span class="line">  // Also check our &quot;maxDelayTime&quot; parameter (if it&apos;s &gt; 0):</span><br><span class="line">  if (maxDelayTime &gt; 0 &amp;&amp;</span><br><span class="line">      (tv_timeToDelay.tv_sec &gt; (long)maxDelayTime/MILLION ||</span><br><span class="line">       (tv_timeToDelay.tv_sec == (long)maxDelayTime/MILLION &amp;&amp;</span><br><span class="line">    tv_timeToDelay.tv_usec &gt; (long)maxDelayTime%MILLION))) &#123;</span><br><span class="line">    tv_timeToDelay.tv_sec = maxDelayTime/MILLION;</span><br><span class="line">    tv_timeToDelay.tv_usec = maxDelayTime%MILLION;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  int selectResult = select(fMaxNumSockets, &amp;readSet, &amp;writeSet,  &amp;exceptionSet, &amp;tv_timeToDelay);  //监听事件</span><br><span class="line">  if (selectResult &lt; 0) &#123;</span><br><span class="line">#if defined(__WIN32__) || defined(_WIN32)</span><br><span class="line">    int err = WSAGetLastError();</span><br><span class="line">    // For some unknown reason, select() in Windoze sometimes fails with WSAEINVAL if</span><br><span class="line">    // it was called with no entries set in &quot;readSet&quot;.  If this happens, ignore it:</span><br><span class="line">    if (err == WSAEINVAL &amp;&amp; readSet.fd_count == 0) &#123;</span><br><span class="line">      err = EINTR;</span><br><span class="line">      // To stop this from happening again, create a dummy socket:</span><br><span class="line">      if (fDummySocketNum &gt;= 0) closeSocket(fDummySocketNum);</span><br><span class="line">      fDummySocketNum = socket(AF_INET, SOCK_DGRAM, 0);</span><br><span class="line">      FD_SET((unsigned)fDummySocketNum, &amp;fReadSet);</span><br><span class="line">    &#125;</span><br><span class="line">    if (err != EINTR) &#123;</span><br><span class="line">#else</span><br><span class="line">    if (errno != EINTR &amp;&amp; errno != EAGAIN) &#123;</span><br><span class="line">#endif</span><br><span class="line">    // Unexpected error - treat this as fatal:</span><br><span class="line">#if !defined(_WIN32_WCE)</span><br><span class="line">    perror(&quot;BasicTaskScheduler::SingleStep(): select() fails&quot;);</span><br><span class="line">    // Because this failure is often &quot;Bad file descriptor&quot; - which is caused by an invalid socket number (i.e., a socket number</span><br><span class="line">    // that had already been closed) being used in &quot;select()&quot; - we print out the sockets that were being used in &quot;select()&quot;,</span><br><span class="line">    // to assist in debugging:</span><br><span class="line">    fprintf(stderr, &quot;socket numbers used in the select() call:&quot;);</span><br><span class="line">    for (int i = 0; i &lt; 10000; ++i) &#123;</span><br><span class="line">      if (FD_ISSET(i, &amp;fReadSet) || FD_ISSET(i, &amp;fWriteSet) || FD_ISSET(i, &amp;fExceptionSet)) &#123;</span><br><span class="line">        fprintf(stderr, &quot; %d(&quot;, i);</span><br><span class="line">        if (FD_ISSET(i, &amp;fReadSet)) fprintf(stderr, &quot;r&quot;);</span><br><span class="line">        if (FD_ISSET(i, &amp;fWriteSet)) fprintf(stderr, &quot;w&quot;);</span><br><span class="line">        if (FD_ISSET(i, &amp;fExceptionSet)) fprintf(stderr, &quot;e&quot;);</span><br><span class="line">        fprintf(stderr, &quot;)&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fprintf(stderr, &quot;\n&quot;);</span><br><span class="line">#endif</span><br><span class="line">    internalError();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  //调用注册的event handle</span><br><span class="line">  // Call the handler function for one readable socket:</span><br><span class="line">  HandlerIterator iter(*fHandlers);</span><br><span class="line">  HandlerDescriptor* handler;</span><br><span class="line">  // To ensure forward progress through the handlers, begin past the last</span><br><span class="line">  // socket number that we handled:</span><br><span class="line">  if (fLastHandledSocketNum &gt;= 0) &#123;</span><br><span class="line">    while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">      if (handler-&gt;socketNum == fLastHandledSocketNum) break;</span><br><span class="line">    &#125;</span><br><span class="line">    if (handler == NULL) &#123;</span><br><span class="line">      fLastHandledSocketNum = -1;</span><br><span class="line">      iter.reset(); // start from the beginning instead</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">    int sock = handler-&gt;socketNum; // alias</span><br><span class="line">    int resultConditionSet = 0;</span><br><span class="line">    if (FD_ISSET(sock, &amp;readSet) &amp;&amp; FD_ISSET(sock, &amp;fReadSet)/*sanity check*/) resultConditionSet |= SOCKET_READABLE;</span><br><span class="line">    if (FD_ISSET(sock, &amp;writeSet) &amp;&amp; FD_ISSET(sock, &amp;fWriteSet)/*sanity check*/) resultConditionSet |= SOCKET_WRITABLE;</span><br><span class="line">    if (FD_ISSET(sock, &amp;exceptionSet) &amp;&amp; FD_ISSET(sock, &amp;fExceptionSet)/*sanity check*/) resultConditionSet |= SOCKET_EXCEPTION;</span><br><span class="line">    if ((resultConditionSet&amp;handler-&gt;conditionSet) != 0 &amp;&amp; handler-&gt;handlerProc != NULL) &#123;</span><br><span class="line">      fLastHandledSocketNum = sock;</span><br><span class="line">          // Note: we set &quot;fLastHandledSocketNum&quot; before calling the handler,</span><br><span class="line">          // in case the handler calls &quot;doEventLoop()&quot; reentrantly.</span><br><span class="line">      (*handler-&gt;handlerProc)(handler-&gt;clientData, resultConditionSet);</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  if (handler == NULL &amp;&amp; fLastHandledSocketNum &gt;= 0) &#123;</span><br><span class="line">    // We didn&apos;t call a handler, but we didn&apos;t get to check all of them,</span><br><span class="line">    // so try again from the beginning:</span><br><span class="line">    iter.reset();</span><br><span class="line">    while ((handler = iter.next()) != NULL) &#123;</span><br><span class="line">      int sock = handler-&gt;socketNum; // alias</span><br><span class="line">      int resultConditionSet = 0;</span><br><span class="line">      if (FD_ISSET(sock, &amp;readSet) &amp;&amp; FD_ISSET(sock, &amp;fReadSet)/*sanity check*/) resultConditionSet |= SOCKET_READABLE;</span><br><span class="line">      if (FD_ISSET(sock, &amp;writeSet) &amp;&amp; FD_ISSET(sock, &amp;fWriteSet)/*sanity check*/) resultConditionSet |= SOCKET_WRITABLE;</span><br><span class="line">      if (FD_ISSET(sock, &amp;exceptionSet) &amp;&amp; FD_ISSET(sock, &amp;fExceptionSet)/*sanity check*/) resultConditionSet |= SOCKET_EXCEPTION;</span><br><span class="line">      if ((resultConditionSet&amp;handler-&gt;conditionSet) != 0 &amp;&amp; handler-&gt;handlerProc != NULL) &#123;</span><br><span class="line">    fLastHandledSocketNum = sock;</span><br><span class="line">        // Note: we set &quot;fLastHandledSocketNum&quot; before calling the handler,</span><br><span class="line">            // in case the handler calls &quot;doEventLoop()&quot; reentrantly.</span><br><span class="line">    (*handler-&gt;handlerProc)(handler-&gt;clientData, resultConditionSet);</span><br><span class="line">    break;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (handler == NULL) fLastHandledSocketNum = -1;//because we didn&apos;t call a handler</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Also handle any newly-triggered event (Note that we do this *after* calling a socket handler,</span><br><span class="line">  // in case the triggered event handler modifies The set of readable sockets.)</span><br><span class="line">  if (fTriggersAwaitingHandling != 0) &#123;</span><br><span class="line">    if (fTriggersAwaitingHandling == fLastUsedTriggerMask) &#123;</span><br><span class="line">      // Common-case optimization for a single event trigger:</span><br><span class="line">      fTriggersAwaitingHandling &amp;=~ fLastUsedTriggerMask;</span><br><span class="line">      if (fTriggeredEventHandlers[fLastUsedTriggerNum] != NULL) &#123;</span><br><span class="line">    (*fTriggeredEventHandlers[fLastUsedTriggerNum])(fTriggeredEventClientDatas[fLastUsedTriggerNum]);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      // Look for an event trigger that needs handling (making sure that we make forward progress through all possible triggers):</span><br><span class="line">      unsigned i = fLastUsedTriggerNum;</span><br><span class="line">      EventTriggerId mask = fLastUsedTriggerMask;</span><br><span class="line"></span><br><span class="line">      do &#123;</span><br><span class="line">    i = (i+1)%MAX_NUM_EVENT_TRIGGERS;</span><br><span class="line">    mask &gt;&gt;= 1;</span><br><span class="line">    if (mask == 0) mask = 0x80000000;</span><br><span class="line"></span><br><span class="line">    if ((fTriggersAwaitingHandling&amp;mask) != 0) &#123;</span><br><span class="line">      fTriggersAwaitingHandling &amp;=~ mask;</span><br><span class="line">      if (fTriggeredEventHandlers[i] != NULL) &#123;</span><br><span class="line">        (*fTriggeredEventHandlers[i])(fTriggeredEventClientDatas[i]);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      fLastUsedTriggerMask = mask;</span><br><span class="line">      fLastUsedTriggerNum = i;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">      &#125; while (i != fLastUsedTriggerNum);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Also handle any delayed event that may have come due.</span><br><span class="line">  fDelayQueue.handleAlarm();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjuzodoto001r10vcmmvo32yg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/live555分析" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/20/流媒体/live555分析/" class="article-date">
@@ -125,7 +189,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cju8km6jx001vakvc98esxm70" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjuzodotr001u10vc2cc1woth" class="article-share-link">Share</a>
       
       
     </footer>
@@ -175,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cju8km6880004akvcy6m2pgtn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjuzodosf000110vccds4ollw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -220,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cju8km66f0000akvcsnjnbz1w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjuzodoqs000010vc62w7fxwb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -269,7 +333,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cju8km6iz000gakvcxdo61bhw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjuzodosw000i10vc8ihl2z0m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -318,7 +382,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cju8km6j6000oakvcei1pfnve" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjuzodot2000s10vc104kc8ys" class="article-share-link">Share</a>
       
       
     </footer>
@@ -384,7 +448,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cju8km6k60025akvcccrs5szv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjuzodotz002410vc2vgws186" class="article-share-link">Share</a>
       
       
     </footer>
@@ -561,7 +625,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cju8km6j8000pakvc1ml0t5gc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjuzodot3000v10vctqev5jn1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -659,7 +723,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cju8km6j1000hakvcbdca42d8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjuzodosy000l10vc0bu38aa9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -768,163 +832,7 @@ C:c = ffffffc9
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cju8km6ji0011akvcgh2er30h" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-网络/HTTP" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/29/网络/HTTP/" class="article-date">
-  <time datetime="2018-05-28T17:54:38.000Z" itemprop="datePublished">2018-05-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/网络/">网络</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/29/网络/HTTP/">HTTP</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定</p>
-<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><ul>
-<li><p>request line</p>
-<p>  由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1</p>
-<ul>
-<li><p>Get</p>
-<p>  常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回送给客户端。请求参数附加在URL后面，？代表URL的结束和请求参数的开始，长度受限制, 一般最多1024byte。/index.jsp?id=100&amp;op=bind</p>
-</li>
-<li><p>POST</p>
-<p>  POST会将请求参数封装到HTTP请求数据中，以名称/值得形式出现,可以传输大量的数据，传送的数据大小没有显示也不会显示在URL</p>
-<pre><code>POST /search HTTP/1.1
-Accept:image/git,image/x-xbitmap,image/jpeg,image/pjpeg
-Referer:&lt;a href=&quot;http://www.google.cn/&quot;&gt;http://www.google.cn&lt;/a&gt;
-Accept-Langel:zh-cn
-Accept-Encoding:gzip,deflate
-Host:&lt;a href=&quot;http://www.google.cn&quot;&gt;www.google.cn&lt;/a&gt;
-Connection:Keep-Alive
-Cookie: PREF=ID=80a06da87be9ae3c:U=f7167333e2c3b714:NW=1:TM=1261551909:LM=1261551917:S=ybYcq2wpfefs4V9g; 
-NID=31=ojj8d-IygaEtSxLgaJmqSjVhCspkviJrB6omjamNrSm8lZhKy_yMfO2M4QMRKcH1g0iQv9u-2hfBW7bUFwVh7pGaRUb0RnHcJU37y-
-FxlRugatx63JLv7CWMD6UB_O_r
-
-hl=zh-CN&amp;source=hp&amp;q=domety
-</code></pre><p>POST请求行中不包含数据字符串，数据保存在”请求内容部分”，各数据&amp;符号个靠,POST大多用于页面的表单中</p>
-</li>
-<li><p>HEAD</p>
-<p>   类似于GET，只不过服务端接受到HEAD请求后只返回响应头，而不会发送响应内容，当只需要查看页面状态时,使用HEAD非常高效，省去页面的内容</p>
-</li>
-<li>PUT</li>
-<li>DELETE</li>
-<li>OPTIONS</li>
-<li>TRACE</li>
-<li>CONNECT</li>
-</ul>
-</li>
-<li><p>header 由关键字/值对组成,每行一堆，”:”分隔</p>
-<ul>
-<li>User-Agent:产生请求的浏览器类型</li>
-<li>Accept:客户端可识别的内容类型列表</li>
-<li>Host:请求的主机名</li>
-</ul>
-</li>
-<li><p>blank line</p>
-<p>  每个请求头之间是一个空行，发送回车符和换行符，通知服务器以下不再有请求头。</p>
-</li>
-<li><p>request body</p>
-<p>  请求数据不再GET中使用，而是在POST方法中使用，适用于需要客户需要填写表单的场合。最常用的请求头是Content-Type和Content-Length。</p>
-</li>
-</ul>
-<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><pre><code>&lt;status-line&gt;
-&lt;headers&gt;
-&lt;blank link&gt;
-[&lt;response-body&gt;]
-</code></pre><ul>
-<li><p>状态行</p>
-<p>  格式如下<br>  HTTP-Version Staus-Code Reason-Phrase CRLF</p>
-<ul>
-<li>HTTP-Version表示HTTP协议版本</li>
-<li><p>Status-Code服务器返回的响应状态代码</p>
-<ul>
-<li>1xx:指示消息–表示请求已接收，继续处理</li>
-<li>2xx:成功– 表示请求一杯成功接收、理解、接收</li>
-<li>3xx:重定向–要完成请求必须进行更进一步的操作</li>
-<li>4xx:客户端错误–请求有语法或请求无法实现</li>
-<li>5xx:服务端错误–服务器未能实现合法的请求</li>
-</ul>
-</li>
-<li><p>Reason-Phrase状态代码的文本描述</p>
-<ul>
-<li>200 OK:客户端请求成功</li>
-<li>400 Bad Request:客户端请求有语法错误，不能被服务器所理解</li>
-<li>401 Unathorized:请求未经授权，必须和WWW-Authenticate报头域一起使用</li>
-<li>403 Forbidden:服务器接收到请求，但拒绝提供服务</li>
-<li>404 Not Found:请求资源不存在</li>
-<li>500 Internal Server Error:服务器发布不可预期的错误</li>
-<li>503 Server Unavailable:服务器当前不能处理客户端的请求，一段时间后可能恢复正常，</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>消息报头</p>
-</li>
-<li><p>响应正文</p>
-<pre><code>HTTP/1.1 200 OK
-Date: Sat, 31 Dec 2005 23:59:59 GMT
-Content-Type: text/html;charset=ISO-8859-1
-Content-Length: 122
-
-＜html＞
-＜head＞
-＜title＞Wrox Homepage＜/title＞
-＜/head＞
-＜body＞
-＜!-- body goes here --＞
-＜/body＞
-＜/html＞
-</code></pre></li>
-</ul>
-<p>GET及POST区别</p>
-<ul>
-<li><p>GET提交，请求的数据附加在URL之后，以？分割 URL和数据，多个参数&amp;连接，如果是英文字母/数字原样发送，空格转为+，中文或者其他字符使用BASE64加密,例%E4%BD%A0</p>
-</li>
-<li><p>POST提交,把提交的数据放于HTTP包包体中<request-body></request-body></p>
-</li>
-</ul>
-<p>传输数据的大小</p>
-<ul>
-<li><p>HTTP协议没有对传输的数据大小进行限制，HTTP规范也没对URL长度限制,实际开发过程中主要的限制有:</p>
-<ul>
-<li>GET:特定的浏览器及服务器对URL长度限制，例如IE(2K+35)字节。</li>
-<li>POST:由于不是通过URL传值，理论上数据不受限，但各个WEB服务器会规定对POST提交数据大小进行限制</li>
-</ul>
-</li>
-<li><p>安全性</p>
-<p>  POST的安全性要比GET的安全性高。注意：这里所说的安全性和上面GET提到的“安全”不是同个概念。上面“安全”的含义仅仅是不作数据修改，而这里安全的含义是真正的Security的含义，比如：通过GET提交数据，用户名和密码将明文出现在URL上，因为(1)登录页面有可能被浏览器缓存， (2)其他人查看浏览器的历史纪录，那么别人就可以拿到你的账号和密码了，</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/05/29/网络/HTTP/" data-id="cju8km6jf000xakvcds7gbvpr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/13/网络/OSI七层模型/" data-id="cjuzodot8001410vcxy6kx7jo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -977,6 +885,10 @@ Content-Length: 122
       <ul>
         
           <li>
+            <a href="/2019/04/27/linux/linux应用程序加载/">linux应用程序加载</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/08/网络/epoll框架/">epoll框架</a>
           </li>
         
@@ -990,10 +902,6 @@ Content-Length: 122
         
           <li>
             <a href="/2019/03/30/C++/类型转换/">类型转换</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/C++/指针详解/">指针详解</a>
           </li>
         
       </ul>

@@ -5,22 +5,19 @@
   
 
   
-  <title>指针数组和数组指针 | CuijianSa.github.io</title>
+  <title>linux应用程序加载 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="数组指针 int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。  12345如要将二维数组赋给一指针，应这样赋值：int a[3][4];int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。 p=a;        //将该二维数组的首地址赋给p，也就是a[">
+  <meta name="description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="指针数组和数组指针">
-<meta property="og:url" content="http://yoursite.com/2019/01/07/other/指针数组和数组指针/index.html">
+<meta property="og:title" content="linux应用程序加载">
+<meta property="og:url" content="http://yoursite.com/2019/04/27/linux/linux应用程序加载/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
-<meta property="og:description" content="数组指针 int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。  12345如要将二维数组赋给一指针，应这样赋值：int a[3][4];int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。 p=a;        //将该二维数组的首地址赋给p，也就是a[">
+<meta property="og:description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示2.jpg">
-<meta property="og:updated_time" content="2019-01-07T14:32:48.266Z">
+<meta property="og:updated_time" content="2019-04-27T15:16:50.566Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="指针数组和数组指针">
-<meta name="twitter:description" content="数组指针 int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。  12345如要将二维数组赋给一指针，应这样赋值：int a[3][4];int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。 p=a;        //将该二维数组的首地址赋给p，也就是a[">
-<meta name="twitter:image" content="http://yoursite.com/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg">
+<meta name="twitter:title" content="linux应用程序加载">
+<meta name="twitter:description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -71,14 +68,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-other/指针数组和数组指针" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-linux/linux应用程序加载" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/01/07/other/指针数组和数组指针/" class="article-date">
-  <time datetime="2019-01-07T14:17:19.000Z" itemprop="datePublished">2019-01-07</time>
+    <a href="/2019/04/27/linux/linux应用程序加载/" class="article-date">
+  <time datetime="2019-04-27T14:57:42.000Z" itemprop="datePublished">2019-04-27</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/笔记/">笔记</a>
+    <a class="article-category-link" href="/categories/linux/">linux</a>
   </div>
 
   </div>
@@ -89,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      指针数组和数组指针
+      linux应用程序加载
     </h1>
   
 
@@ -97,23 +94,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h1><ul>
-<li>int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。</li>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------</span><br><span class="line">|             APPLICATION                 |</span><br><span class="line">-------------------------------------------</span><br><span class="line"></span><br><span class="line">---------------------- --------------------         </span><br><span class="line">| libc.so ld-linux.so| | LD_LOADER|libso.z|</span><br><span class="line">---------------------- --------------------</span><br><span class="line"></span><br><span class="line">-------------------------------------------</span><br><span class="line">|            LINUX KERNEL                 |</span><br><span class="line">-------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>在同一个ARCH Machine, 一个完整的运行库都是可以运行的<br>ld-linux.so和libc.so强关联</p>
+<h1 id="静态库搜索路径"><a href="#静态库搜索路径" class="headerlink" title="静态库搜索路径"></a>静态库搜索路径</h1><ul>
+<li>gcc先从-L搜索</li>
+<li>再从LIBRARY_PATH路径搜索</li>
+<li>再从/usr /usr/lib /usr/local/lib. 这是由compile gcc编写在程序中</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如要将二维数组赋给一指针，应这样赋值：</span><br><span class="line">int a[3][4];</span><br><span class="line">int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。</span><br><span class="line"> p=a;        //将该二维数组的首地址赋给p，也就是a[0]或&amp;a[0][0]</span><br><span class="line"> p++;       //该语句执行过后，也就是p=p+1;p跨过行a[0][]指向了行a[1][]</span><br></pre></td></tr></table></figure>
-<h1 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h1><ul>
-<li>int <em>p[n];[]优先级高于</em>，故先于p组成数组， int*说明是整形指针数组它有n个指针类型的数组元素。这里执行p+1时，则p指向下一个数组元素</li>
+<h1 id="动态库搜索路径"><a href="#动态库搜索路径" class="headerlink" title="动态库搜索路径"></a>动态库搜索路径</h1><ul>
+<li>编译目标代码时指定的动态库搜索路径-L</li>
+<li>环境变量LD_LIBRARY_PATH指定的动态库搜索路径</li>
+<li>配置文件/etc/ld.so.conf中指定的动态库搜索路径</li>
+<li>默认的动态库搜索路径/lib /usr/lib/ /usr/local/lib</li>
 </ul>
-<h1 id="引申"><a href="#引申" class="headerlink" title="引申"></a>引申</h1><ul>
-<li>指针数组：首先它是一个数组，数组的元素都是指针，数组占多少个字节由数组本身的大小决定，每一个元素都是一个指针，在32 位系统下任何类型的指针永远是占4 个字节。它是“储存指针的数组”的简称。</li>
-<li>数组指针：首先它是一个指针，它指向一个数组。在32 位系统下任何类型的指针永远是占4 个字节，至于它指向的数组占多少字节，不知道，具体要看数组大小。它是“指向数组的指针”的简称。</li>
+<h1 id="静态链接-编译时"><a href="#静态链接-编译时" class="headerlink" title="静态链接(编译时)"></a>静态链接(编译时)</h1><p>链接器将函数的代码从其所在地（目标文件或静态链接库中）拷贝到最终的可执行程序中。这样该程序在被执行时这些代码将被装入到该进程的虚拟地址空间中。静态链接库实际上是一个目标文件的集合，其中的每个文件含有库中的一个或者一组相关函数的代码</p>
+<p>为创建可执行文件，链接器必须要完成的主要任务：</p>
+<ul>
+<li>符号解析：把目标文件中符号的定义和引用联系起来</li>
+<li>重定位：把符号定义和内存地址对应起来，然后修改所有对符号的引用</li>
 </ul>
-<p><img src="/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg" alt=""><br><img src="/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示2.jpg" alt=""></p>
+<h1 id="动态链接-加载、运行时"><a href="#动态链接-加载、运行时" class="headerlink" title="动态链接(加载、运行时)"></a>动态链接(加载、运行时)</h1><p>在此种方式下，函数的定义在动态链接库或共享对象的目标文件中。在编译的链接阶段，动态链接库只提供符号表和其他少量信息用于保证所有符号引用都有定义，保证编译顺利通过。动态链接器(ld-linux.so)链接程序在运行过程中根据记录的共享对象的符号定义来动态加载共享库，然后完成重定位。在此可执行文件被执行时，动态链接库的全部内容将被映射到运行时相应进程的虚地址空间。动态链接程序将根据可执行程序中记录的信息找到相应的函数代码</p>
+<h1 id="加载工程"><a href="#加载工程" class="headerlink" title="加载工程"></a>加载工程</h1><p>加载器首先创建如上图所示的内存映像，然后根据段头部表，把目标文件拷贝到内存的数据和代码段中。然后，加载器跳转到程序入口点（即符号_start 的地址），执行启动代码（startup code）</p>
+<ul>
+<li>AR ：创建静态库，插入、删除、列出和提取成员</li>
+<li>STRINGS ：列出目标文件中所有可以打印的字符串</li>
+<li>STRIP ：从目标文件中删除符号表信息</li>
+<li>NM ：列出目标文件符号表中定义的符号</li>
+<li>SIZE ：列出目标文件中节的名字和大小</li>
+<li>READELF ：显示一个目标文件的完整结构，包括ELF 头中编码的所有信息</li>
+<li>OBJDUMP ：显示目标文件的所有信息，最有用的功能是反汇编.text节中的二进制指令</li>
+<li>LDD ：列出可执行文件在运行时需要的共享库</li>
+<li>PATCHELF : ELF解析工具</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/01/07/other/指针数组和数组指针/" data-id="cjuzodot0000q10vcj0d7s2fn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjuzodosk000410vcaoyhq29y" class="article-share-link">Share</a>
       
       
     </footer>
@@ -122,19 +139,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/01/07/linux/用户态和内核态/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          用户态和内核态
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/01/07/other/函数指针和指针函数/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/04/08/网络/epoll框架/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">函数指针和指针函数</div>
+      <div class="article-nav-title">epoll框架</div>
     </a>
   
 </nav>
