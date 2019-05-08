@@ -66,6 +66,268 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-SQL/mongodb" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/07/SQL/mongodb/" class="article-date">
+  <time datetime="2019-05-07T15:34:44.000Z" itemprop="datePublished">2019-05-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/SQL/">SQL</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/07/SQL/mongodb/">mongodb</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="MongoDB基础概念"><a href="#MongoDB基础概念" class="headerlink" title="MongoDB基础概念"></a>MongoDB基础概念</h1><p>MongoDB是基于分布式文件存储的数据库，介于关系数据库和非关系数据库之间的产品</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点:"></a>优缺点:</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点:"></a>优点:</h3><ul>
+<li>可靠性(容错):分布式计算系统中的一个重要的优点是可靠性。一台服务器的系统崩溃并不影响到其余的服务器。</li>
+<li>可扩展性:在分布式计算系统可以根据需要增加更多的机器。</li>
+<li>资源共享</li>
+<li>灵活性:由于该系统是非常灵活的，它很容易安装，实施和调试新的服务。</li>
+<li>更快的速度:分布式计算系统可以有多台计算机的计算能力，使得它比其他系统有更快的处理速度。</li>
+<li>开放系统：由于它是开放的系统，本地或者远程都可以访问到该服务。</li>
+<li>更高的性能：相较于集中式计算机网络集群可以提供更高的性能（及更好的性价比）。</li>
+</ul>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ul>
+<li>故障排除:故障排除和诊断问题。</li>
+<li>软件:更少的软件支持是分布式计算系统的主要缺点。</li>
+<li>网络:网络基础设施的问题，包括：传输问题，高负载，信息丢失等。</li>
+<li>安全性:开放系统的特性让分布式计算系统存在着数据的安全性和共享的风险等问题。</li>
+</ul>
+<h2 id="RDBMS-vs-NoSQL"><a href="#RDBMS-vs-NoSQL" class="headerlink" title="RDBMS vs NoSQL"></a>RDBMS vs NoSQL</h2><p>RDBMS </p>
+<ul>
+<li>高度组织化结构化数据 </li>
+<li>结构化查询语言（SQL） (SQL) </li>
+<li>数据和关系都存储在单独的表中。 </li>
+<li>数据操纵语言，数据定义语言 </li>
+<li>严格的一致性</li>
+<li>基础事务</li>
+</ul>
+<p>NoSQL </p>
+<ul>
+<li>代表着不仅仅是SQL</li>
+<li>没有声明性查询语言</li>
+<li>没有预定义的模式<br>-键 - 值对存储，列存储，文档存储，图形数据库</li>
+<li>最终一致性，而非ACID属性</li>
+<li>非结构化和不可预知的数据</li>
+<li>CAP定理 </li>
+<li>高性能，高可用性和可伸缩性</li>
+</ul>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><ul>
+<li>下载： curl -O <a href="https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz" target="_blank" rel="noopener">https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz</a></li>
+<li>运行服务<code>mongod</code> </li>
+<li>后台管理shell <code>mongo</code></li>
+<li><code>&gt;show dbs</code>显示数据库列表</li>
+<li><code>&gt;db</code>显示当前苏韩剧库对象或集合</li>
+<li><code>&gt;use</code>连接指定的数据库</li>
+</ul>
+<p>特殊数据库</p>
+<ul>
+<li>admin:  从权限的角度来看，这是”root”数据库。要是将一个用户添加到这个数据库，这个用户自动继承所有数据库的权限。一些特定的服务器端命令也只能从这个数据库运行，比如列出所有的数据库或者关闭服务器</li>
+<li>local: 这个数据永远不会被复制，可以用来存储限于本地单台服务器的任意集合</li>
+<li>config: 当Mongo用于分片设置时，config数据库在内部使用，用于保存分片的相关信息。</li>
+</ul>
+<h2 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h2><p>数据库的信息都是存储在集合中，它们使用了系统的命名空间<code>dbname.system.*</code></p>
+<table>
+<thead>
+<tr>
+<th>集合命名空间</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dbname.system.namespaces</td>
+<td>列出所有名字空间</td>
+</tr>
+<tr>
+<td>dbname.system.indexes</td>
+<td>列出所有索引</td>
+</tr>
+<tr>
+<td>dbname.system.profile</td>
+<td>包含数据库概要(profile)信息</td>
+</tr>
+<tr>
+<td>dbname.system.users</td>
+<td>列出所有可访问数据库的用户</td>
+</tr>
+<tr>
+<td>dbname.local.sources</td>
+<td>包含复制对端（slave）的服务器信息和状态</td>
+</tr>
+</tbody>
+</table>
+<h2 id="RDBMS-VS-MongoDB-术语对比"><a href="#RDBMS-VS-MongoDB-术语对比" class="headerlink" title="RDBMS VS MongoDB 术语对比"></a>RDBMS VS MongoDB 术语对比</h2><table>
+<thead>
+<tr>
+<th>RDBMS</th>
+<th>MongoDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库</td>
+<td>数据库</td>
+</tr>
+<tr>
+<td>表格</td>
+<td>集合</td>
+</tr>
+<tr>
+<td>行</td>
+<td>文档</td>
+</tr>
+<tr>
+<td>列</td>
+<td>字段</td>
+</tr>
+<tr>
+<td>表联合</td>
+<td>嵌入文档</td>
+</tr>
+<tr>
+<td>主键</td>
+<td>主键 (MongoDB 提供了 key 为 _id )</td>
+</tr>
+<tr>
+<td>Mysqld/Oracle</td>
+<td>mongod</td>
+</tr>
+<tr>
+<td>mysql/sqlplus</td>
+<td>mongo</td>
+</tr>
+</tbody>
+</table>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>字符串。存储数据常用的数据类型。在 MongoDB 中，UTF-8 编码的字符串才是合法的</td>
+</tr>
+<tr>
+<td>Interger</td>
+<td>整型数值。用于存储数值。根据你所采用的服务器，可分为 32 位或 64 位</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>布尔值， 用于存储布尔值（真/假）</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>双精度浮点值。用于存储浮点值</td>
+</tr>
+<tr>
+<td>Min/Max keys</td>
+<td>将一个值与 BSON（二进制的 JSON）元素的最低值和最高值相对比</td>
+</tr>
+<tr>
+<td>Array</td>
+<td>用于将数组或列表或多个值存储为一个键</td>
+</tr>
+<tr>
+<td>Timestamp</td>
+<td>时间戳。记录文档修改或添加的具体时间</td>
+</tr>
+<tr>
+<td>Object</td>
+<td>用于内嵌文档</td>
+</tr>
+<tr>
+<td>Null</td>
+<td>用于创建空值</td>
+</tr>
+<tr>
+<td>Symbol</td>
+<td>符号。该数据类型基本上等同于字符串类型，但不同的是，它一般用于采用特殊符号类型的语言</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>日期时间。用 UNIX 时间格式来存储当前日期或时间。你可以指定自己的日期时间：创建 Date 对象，传入年月日信息</td>
+</tr>
+<tr>
+<td>Object ID</td>
+<td>对象 ID。用于创建文档的 ID</td>
+</tr>
+<tr>
+<td>Binary Data</td>
+<td>二进制数据。用于存储二进制数据。</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>代码类型。用于在文档中存储 JavaScript 代码</td>
+</tr>
+<tr>
+<td>Regular expression</td>
+<td>正则表达式类型。用于存储正则表达式</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>对象ID<ul>
+<li>ObjectId 类似唯一主键，可以很快的去生成和排序，包含 12 bytes，含义是：    <ul>
+<li>前 4 个字节表示创建 unix 时间戳,格林尼治时间 UTC 时间，比北京时间晚了 8 个小时</li>
+<li>接下来的 3 个字节是机器标识码</li>
+<li>紧接的两个字节由进程 id 组成 PID</li>
+<li>最后三个字节是随机数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>字符串<ul>
+<li>BSON 字符串都是 UTF-8 编码</li>
+</ul>
+</li>
+<li>时间戳<ul>
+<li>BSON 有一个特殊的时间戳类型用于 MongoDB 内部使用，与普通的 日期 类型不相关。 时间戳值是一个 64 位的值。其中：<ul>
+<li>前32位是一个 time_t 值（与Unix新纪元相差的秒数）</li>
+<li>后32位是在某秒中操作的一个递增的序数</li>
+</ul>
+</li>
+<li>在单个 mongod 实例中，时间戳值通常是唯一的</li>
+</ul>
+</li>
+<li>日期<ul>
+<li>当前距离 Unix新纪元（1970年1月1日）的毫秒数。日期类型是有符号的, 负数表示 1970 年之前的日期。</li>
+</ul>
+</li>
+</ul>
+<h1 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h1><p>UIR: <code>mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/07/SQL/mongodb/" data-id="cjvfbv78p0004e4vcnrpmnhv6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-linux/linux应用程序加载" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/04/27/linux/linux应用程序加载/" class="article-date">
@@ -128,7 +390,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjuzodosk000410vcaoyhq29y" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjvfbv78k0002e4vc336i6tox" class="article-share-link">Share</a>
       
       
     </footer>
@@ -206,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjuzodotm001p10vcj7vrzatg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjvfbv7bj001he4vcvzufircx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -515,7 +777,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjuzodott001y10vcoz39khic" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjvfbv7c10021e4vcjnr9dm0m" class="article-share-link">Share</a>
       
       
     </footer>
@@ -580,7 +842,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjuzodot7001210vckkoq9ny9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjvfbv7bk001je4vcgngcu3za" class="article-share-link">Share</a>
       
       
     </footer>
@@ -621,7 +883,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjuzodosl000510vcjjudarcz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjvfbv7a6000le4vczcfkl8ds" class="article-share-link">Share</a>
       
       
     </footer>
@@ -679,7 +941,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjuzodosh000210vcka3ejwri" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjvfbv7a3000je4vcrnl4yq3d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -816,7 +1078,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjuzodosu000e10vcnoacfiyq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjvfbv79w000ee4vc1yv5cixb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -887,7 +1149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjuzodosr000910vc930w8zdq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjvfbv79z000ge4vcwbcdycdx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -998,69 +1260,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cjuzodoso000610vcot4vu46m" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-other/getaddrinfo爬坑" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/02/21/other/getaddrinfo爬坑/" class="article-date">
-  <time datetime="2019-02-21T14:49:41.000Z" itemprop="datePublished">2019-02-21</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/笔记/">笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/21/other/getaddrinfo爬坑/">getaddrinfo爬坑</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近发现了客户一个问题， LE程序自启动一直连接不上服务端， 重启程序后成功</p>
-<p>查看日志， getaddrinfo一直打印Tempoary failed in name soluation</p>
-<p>开机时由systemd拉起程序, 此时网络服务并没有初始化成功， 此时连接失败时符合预期的， 间隔一段时间后， 发现还一直报域名服务失败</p>
-<ol>
-<li>此时采用ping 服务器域名， 发现网络正常</li>
-<li>编写demo, 手动执行发现可以正常获取域名</li>
-</ol>
-<p>一开始被getaddrinfo文档误导了,一开始也考虑过缓存的问题，但getaddrinfow文档显示为MT-safe， 就首先排除这个选项</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌────────────────┬───────────────┬────────────────────┐</span><br><span class="line">│Interface       │ Attribute     │ Value              │</span><br><span class="line">├────────────────┼───────────────┼────────────────────┤</span><br><span class="line">│getaddrinfo()   │ Thread safety │ MT-Safe env locale │</span><br><span class="line">├────────────────┼───────────────┼────────────────────┤</span><br><span class="line">│freeaddrinfo(), │ Thread safety │ MT-Safe            │</span><br><span class="line">│gai_strerror()  │               │                    │</span><br><span class="line">└────────────────┴───────────────┴────────────────────┘</span><br></pre></td></tr></table></figure>
-<p>后期发现DNS做了一次缓存…….</p>
-<p>在使用 getaddrinfo 函数的时候，实际会使用 glibc 的相关函数，glibc 在应用第一次域名解析的时候会触发 res_init() 函数的调用，res_init() 函数的作用是读取 /etc/resolv.conf 的内容, 如 nameserver 地址、负载均衡策略、重试次数、超时时间等，并将读取的这些数据放到 static 类型的 <em>res</em> 结构体中。</p>
-<p>由于 Linux 的进程在使用 glibc 动态链接库全局静态变量的时候，都会在用户进程空间生成自己独立的变量副本（感兴趣的同学可以查看每个进程的 smaps 文件，glibc 在每个用户进程空间都有可读、可写的 segment），所以每个发起 DNS 解析的进程都具有独立的 <em>res</em> 结构体变量。</p>
-<p>回到 salt-minio 这个具体案例，salt-minion 进程启动后发起第一次域名解析请求，该请求最后会调用底层的 res_query，第一次 res_query 会调用 res_init()，res_init() 初始化后，nameserver 地址被初始化到当前进程的 <em>res</em> 结构体中， 然而 res_init() 对于每个进程来说，只会执行一次。</p>
-<p>运维同学在用户进程运行的时候修改掉 /etc/resolv.conf 中的配置，但修改配置后无法生效的根本原因就在此（因为用户进程空间的 _res 结构体中仍然存放的是老的 nameserver 配置）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The functions described below make queriesto and interpret the responses from Internet domain name servers.The API consists of a set of more modern, reentrant functions and an older set of nonreentrant functions that have been superseded. The traditional resolver interfaces such as res_init() and res_query() use some static (global) state stored in the _res structure, rendering these functions non-thread-safe. BIND 8.2 introduced a set of new interfaces res_ninit(), res_nquery(), and so on, which take a res_state as their first argument, so you can use a per-thread</span><br><span class="line"></span><br><span class="line">resolver state.The res_ninit() and res_init() functions read the configuration files (see resolv.conf(5)) to get the default domain name and name server address(es).If no server isgiven, the local host is tried. If no domain is given, that associated with thelocal host is used. It can be overridden with the environment variable LOCALDOMAIN. res_ninit() or res_init() is normally executed by the first call to one of the other functions.</span><br></pre></td></tr></table></figure>
-<p>解决方法:</p>
-<ol>
-<li>用户进程直接调用底层的接口，并且定期调用 res_init() 以防止 /etc/resolov.conf 文件被修改而无法感知(有一定的实现成本)。</li>
-<li>直接重启用户进程，使用户进程在做第一次域名解析的时候触发 res_init()</li>
-<li>用户进程实现 DNS 的 client 全部功能</li>
-<li>通过非常规手段修改用户进程空间的数据</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/21/other/getaddrinfo爬坑/" data-id="cjuzodosv000h10vcjxvq4mz1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cjvfbv78g0001e4vcfuvn54ex" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1100,7 +1300,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -1111,6 +1311,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/07/SQL/mongodb/">mongodb</a>
+          </li>
         
           <li>
             <a href="/2019/04/27/linux/linux应用程序加载/">linux应用程序加载</a>
@@ -1126,10 +1330,6 @@
         
           <li>
             <a href="/2019/04/01/编译框架/cmake/">cmake-find_package</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/30/C++/类型转换/">类型转换</a>
           </li>
         
       </ul>
