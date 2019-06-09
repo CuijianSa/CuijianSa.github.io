@@ -66,6 +66,81 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-网络/TCP三次握手+四次挥手" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/05/网络/TCP三次握手+四次挥手/" class="article-date">
+  <time datetime="2019-06-05T15:55:54.000Z" itemprop="datePublished">2019-06-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/网络/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/05/网络/TCP三次握手+四次挥手/">TCP三次握手+四次挥手</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p><img src="/2019/06/05/网络/TCP三次握手+四次挥手/connect.png" alt=""></p>
+<h2 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题:"></a>解决的问题:</h2><p>以最小的握手次数，达到C-S可靠的连接</p>
+<h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><ul>
+<li>第一次握手: 建立连接时，客户端发送SYN(seq = x)包,并进入SYS_SENT状态，并等待信号回复</li>
+<li>第二次握手: 服务端收到SYN包，必须确定客户的SYN，并且同时发送SYN+ACK(seq = y, ack = x+1)包，此时服务器进入SYN_RECV状态</li>
+<li>第三次握手: 客户端收到服务器的SYN+ACK包，并向服务器发送确认包ACK(seq = x+1, ack = y+1),此时客户端及服务端ESTABLISHED状态</li>
+</ul>
+<h1 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h1><h2 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h2><p><img src="/2019/06/05/网络/TCP三次握手+四次挥手/disconnect.png" alt=""></p>
+<h2 id="解决的问题-1"><a href="#解决的问题-1" class="headerlink" title="解决的问题:"></a>解决的问题:</h2><p>实现C-S间挥手同步，因为涉及到数据的断开，多了一次挥手</p>
+<h2 id="过程-1"><a href="#过程-1" class="headerlink" title="过程"></a>过程</h2><ul>
+<li>客户端发送连接释放报文，并且停止发送数据。FIN = 1,seq = u并进入FIN-WAIT-1状态</li>
+<li>服务器收到FIN，并发出确认报文，ACK=1, ack = u+1,此时进入CLOSW-WAIT状态，并通知应用层客户端向服务端方向连接断开，此时客户端没有数据要发送了，此时服务器发送数据，客户端依然要接收</li>
+<li>客户端收到服务器的确认请求后，客户端进入FIN-WAIT-2状态，等待服务器发送连接断开请求</li>
+<li>服务器将最后的数据发送完毕后，向客户端发送连接释放报文,FIN=1,ack=u+1,服务器进入LAST-ACK状态</li>
+<li>客户收到服务器的连接释放报文，必须发出确认，ACK=1,ack=w+1,seq=u+1,此时客户端进入TIME-WAIT状态。</li>
+<li>注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态</li>
+<li>服务器只要收到了客户端发出的确认，立即进入CLOSED状态。同样，撤销TCB后，就结束了这次的TCP连接。可以看到，服务器结束TCP连接的时间要比客户端早一些</li>
+</ul>
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><ul>
+<li>为什么连接的时候是三次握手，关闭的时候却是四次握手</li>
+</ul>
+<p>因为当Server收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文。其中SYN用来同步，ACK报文用来应答。在关闭连接时，Server收到FIN时，可能不会立即关闭SOCKET，可能并不会立即关闭SCOKET，所以只能先回复一个ACK报文，告诉Client端,”你发的FIN报文我收到了”。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手</p>
+<ul>
+<li>为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态</li>
+</ul>
+<p>虽然按道理，四个报文都发送完毕，我们可以直接进入CLOSE状态了，但是我们必须假象网络是不可靠的，有可以最后一个ACK丢失。所以TIME_WAIT状态就是用来重发可能丢失的ACK报文。在Client发送出最后的ACK回复，但该ACK可能丢失。Server如果没有收到ACK，将不断重复发送FIN片段。所以Client不能立即关闭，它必须确认Server接收到了该ACK。Client会在发送出ACK之后进入到TIME_WAIT状态。Client会设置一个计时器，等待2MSL的时间。如果在该时间内再次收到FIN，那么Client会重发ACK并再次等待2MSL。所谓的2MSL是两倍的MSL(Maximum Segment Lifetime)。MSL指一个片段在网络中最大的存活时间，2MSL就是一个发送和一个回复所需的最大时间。如果直到2MSL，Client都没有再次收到FIN，那么Client推断ACK已经被成功接收，则结束TCP连接。</p>
+<ul>
+<li>为什么不能用两次握手进行连接？</li>
+</ul>
+<p>3次握手完成两个重要的功能，既要双方做好发送数据的准备工作(双方都知道彼此已准备好)，也要允许双方就初始序列号进行协商，这个序列号在握手过程中被发送和确认。现在把三次握手改成仅需要两次握手，死锁是可能发生的。</p>
+<p>作为例子，考虑计算机S和C之间的通信，假定C给S发送一个连接请求分组，S收到了这个分组，并发 送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S 是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分 组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
+<ul>
+<li>如果已经建立了连接，但是客户端突然出现故障了怎么办？</li>
+</ul>
+<p>TCP还设有一个保活计时器，显然，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/05/网络/TCP三次握手+四次挥手/" data-id="cjwjhd1w7000db4vcp56dw84n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-SQL/mongodb" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/07/SQL/mongodb/" class="article-date">
@@ -318,7 +393,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/07/SQL/mongodb/" data-id="cjvfbv78p0004e4vcnrpmnhv6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/07/SQL/mongodb/" data-id="cjwjhd1vm0002b4vc2dr6vkuj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -390,7 +465,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjvfbv78k0002e4vc336i6tox" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjwjhd1xm001fb4vcf14z3zku" class="article-share-link">Share</a>
       
       
     </footer>
@@ -468,7 +543,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjvfbv7bj001he4vcvzufircx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjwjhd1x6000ub4vcnr1p9pd7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -777,7 +852,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjvfbv7c10021e4vcjnr9dm0m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjwjhd1y10021b4vch5cvc9mn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -842,7 +917,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjvfbv7bk001je4vcgngcu3za" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjwjhd1x9000wb4vcqvmu75ei" class="article-share-link">Share</a>
       
       
     </footer>
@@ -883,7 +958,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjvfbv7a6000le4vczcfkl8ds" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjwjhd1x8000vb4vclo925vwq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -941,7 +1016,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjvfbv7a3000je4vcrnl4yq3d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjwjhd1w00008b4vc3vagb1a9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1078,7 +1153,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjvfbv79w000ee4vc1yv5cixb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjwjhd1xi0016b4vcym27te1w" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1149,118 +1224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjvfbv79z000ge4vcwbcdycdx" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-SQL/SQL语句" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/10/SQL/SQL语句/" class="article-date">
-  <time datetime="2019-03-10T08:06:36.000Z" itemprop="datePublished">2019-03-10</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/SQL/">SQL</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/10/SQL/SQL语句/">SQL语句</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><table>
-<thead>
-<tr>
-<th>存储类</th>
-<th>Describe</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>NULL</td>
-<td>NULL值</td>
-</tr>
-<tr>
-<td>INTEGER</td>
-<td>带符号整数，size=1,2,3,4,6 or 8</td>
-</tr>
-<tr>
-<td>REAL</td>
-<td>浮点值,size=8的IEEE浮点数字</td>
-</tr>
-<tr>
-<td>TEXT</td>
-<td>文本字符串</td>
-</tr>
-<tr>
-<td>BLOB</td>
-<td>blob数据， 类型由输入存储</td>
-</tr>
-</tbody>
-</table>
-<h1 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE if not exists database_name.table_name(</span><br><span class="line">   column1 datatype  PRIMARY KEY(one or more columns),</span><br><span class="line">   column2 datatype,</span><br><span class="line">   column3 datatype,</span><br><span class="line">   .....</span><br><span class="line">   columnN datatype,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h1 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE database_name.table_name;</span><br></pre></td></tr></table></figure>
-<h1 id="插入表"><a href="#插入表" class="headerlink" title="插入表"></a>插入表</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TABLE_NAME(column1, column2, ... columnN)</span><br><span class="line">VALUES (value1, value2, ... valueN)</span><br></pre></td></tr></table></figure>
-<h1 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2, columnN FROM table_name;</span><br></pre></td></tr></table></figure>
-<h1 id="WHERE"><a href="#WHERE" class="headerlink" title="WHERE"></a>WHERE</h1><p>可应用于SELCT、UPDATE、DELETE,用来过滤记录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, column2, columnN FROM table_name</span><br><span class="line">WHERE[CONDITION | EXPRESSION];</span><br></pre></td></tr></table></figure>
-<h1 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UPDATE table_name </span><br><span class="line">set column1=value1, column2=value2...., columnN=valueN</span><br><span class="line">where[CONDITION];</span><br></pre></td></tr></table></figure>
-<h1 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DELETE FROM table_name</span><br><span class="line">WHERE[CONDITION];</span><br></pre></td></tr></table></figure>
-<h1 id="LIKE"><a href="#LIKE" class="headerlink" title="LIKE"></a>LIKE</h1><p>LINK匹配通配符</p>
-<ul>
-<li>%：表示0、1或者多个数字或字符</li>
-<li>_：表示单一的数字或字符</li>
-</ul>
-<p>such as:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SET column_list FROM table_name</span><br><span class="line">where column LIKE &apos;xxx%&apos;;</span><br></pre></td></tr></table></figure></p>
-<h1 id="Glob"><a href="#Glob" class="headerlink" title="Glob"></a>Glob</h1><p>Glob匹配通配符， 大小敏感</p>
-<ul>
-<li>*：表示0、1或者多个数字或字符</li>
-<li>?： 表示单一的数字或字符</li>
-</ul>
-<h1 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h1><p>Limit限制SELECT 返回的数据量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT cloumn1, column2 ...</span><br><span class="line">FROM table_name</span><br><span class="line">LIMIT [no of rows]</span><br><span class="line"></span><br><span class="line">such as:</span><br><span class="line">SELECT * FROM COMPANY LIMIT 3 OFFSET 2;</span><br></pre></td></tr></table></figure>
-<h1 id="Order-By"><a href="#Order-By" class="headerlink" title="Order By"></a>Order By</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT column-list</span><br><span class="line">FROM table_name</span><br><span class="line">[WHERE condition]</span><br><span class="line">[ORDER BY column1, coulum2, ...][ASC|DESC];</span><br></pre></td></tr></table></figure>
-<h1 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h1><p>SQLite 的 GROUP BY 子句用于与 SELECT 语句一起使用，来对相同的数据进行分组。<br>在 SELECT 语句中，GROUP BY 子句放在 WHERE 子句之后，放在 ORDER BY 子句之前。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT column-list </span><br><span class="line">FROM table_name</span><br><span class="line">WHERE[conditions]</span><br><span class="line">GROUP BY column1, ....</span><br><span class="line">ORDER BY column1,....;</span><br></pre></td></tr></table></figure>
-<h1 id="Having-子句"><a href="#Having-子句" class="headerlink" title="Having 子句"></a>Having 子句</h1><p>Having子句允许指定条件来过滤将出现在最终结果的分组<br>WHERE 子句在所选列上设置条件，而 HAVING 子句则在由 GROUP BY 子句创建的分组上设置条件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">FROM</span><br><span class="line">WHERE</span><br><span class="line">GROUP BY</span><br><span class="line">HAVING</span><br><span class="line">ORDER BY</span><br><span class="line"></span><br><span class="line">such as:</span><br><span class="line">SELECT * FROM COMPANY GROUP BY name HAVING count(name) &lt; 2;</span><br></pre></td></tr></table></figure>
-<h1 id="DISTINCT"><a href="#DISTINCT" class="headerlink" title="DISTINCT"></a>DISTINCT</h1><p>DISTINCT 关键字与 SELECT 语句一起使用，来消除所有重复的记录，并只获取唯一一次记录。</p>
-<p>有可能出现一种情况，在一个表中有多个重复的记录。当提取这样的记录时，DISTINCT 关键字就显得特别有意义，它只获取唯一一次记录，而不是获取重复记录。</p>
-<h1 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h1><ul>
-<li>NOT NULL: 确保某列不能为NULL</li>
-<li>DEFAULT: 当莫列没有指定值时， 为该列提供默认值</li>
-<li>UNIQUE: 确保某列的所有值不同</li>
-<li>PRIMARY Key: 为一标识数据库表的各行和数据</li>
-<li>CHECK 约束：CHECK 约束确保某列中的所有值满足一定条件</li>
-</ul>
-<h1 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h1><p>SQLite 的 Join 子句用于结合两个或多个数据库中表的记录。JOIN 是一种通过共同值来结合两个表中字段的手段</p>
-<ul>
-<li>交叉连接 - CROSS JOIN</li>
-<li>内连接 - INNER JOIN</li>
-<li>外连接 - OUTER JOIN</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/10/SQL/SQL语句/" data-id="cjvfbv78g0001e4vcfuvn54ex" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjwjhd1xb0010b4vc9nrf25c6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1300,7 +1264,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -1311,6 +1275,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/05/网络/TCP三次握手+四次挥手/">TCP三次握手+四次挥手</a>
+          </li>
         
           <li>
             <a href="/2019/05/07/SQL/mongodb/">mongodb</a>
@@ -1326,10 +1294,6 @@
         
           <li>
             <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/01/编译框架/cmake/">cmake-find_package</a>
           </li>
         
       </ul>

@@ -66,6 +66,286 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-流媒体/live555分析-RTSP通信" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/26/流媒体/live555分析-RTSP通信/" class="article-date">
+  <time datetime="2018-12-25T16:03:00.000Z" itemprop="datePublished">2018-12-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/流媒体/">流媒体</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/26/流媒体/live555分析-RTSP通信/">live555分析-RTSP通信</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RTSP是一种基于文本的协议，负责定义具体的控制信息、操作方法、状态码及描述与RTP之间的交互</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OPTIONS</td>
+<td>获得服务器提供的可用方法</td>
+</tr>
+<tr>
+<td>DESCRIBE</td>
+<td>获得会话描述信息</td>
+</tr>
+<tr>
+<td>SETUP</td>
+<td>客户端请求建立会话，确定传输模式</td>
+</tr>
+<tr>
+<td>TEARDOWN</td>
+<td>客户端发起关闭会话请求</td>
+</tr>
+<tr>
+<td>PLAY</td>
+<td>客户端发起播放请求</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://blog.csdn.net/deliapu/article/details/79199023" target="_blank" rel="noopener">https://blog.csdn.net/deliapu/article/details/79199023</a></p>
+<h1 id="RTSP-RTP-RTCP简介"><a href="#RTSP-RTP-RTCP简介" class="headerlink" title="RTSP/RTP/RTCP简介"></a>RTSP/RTP/RTCP简介</h1><ul>
+<li>RTP：实时传输协议（Real-time Transport Protocol）RTP/RTCP是实际传输数据的协议 RTP传输音频/视频数据，如果是PLAY，Server发送到Client端，如果是RECORD，可以由Client发送到Server 整个RTP协议由两个密切相关的部分组成：RTP数据协议和RTP控制协议（即RTCP)</li>
+<li>RTSP：实时流协议（Real Time Streaming Protocol，RTSP）RTSP的请求主要有DESCRIBE,SETUP,PLAY,PAUSE,TEARDOWN,OPTIONS等，顾名思义可以知道起对话和控制作用 RTSP的对话过程中SETUP可以确定RTP/RTCP使用的端口，PLAY/PAUSE/TEARDOWN可以开始或者停止RTP的发送，等等</li>
+<li>RTCP：RTP/RTCP是实际传输数据的协议 RTCP包括Sender Report和Receiver Report，用来进行音频/视频的同步以及其他用途，是一种控制协议</li>
+</ul>
+<h2 id="RTSP协议分析"><a href="#RTSP协议分析" class="headerlink" title="RTSP协议分析"></a>RTSP协议分析</h2><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtsp_summary.JPG" alt=""></p>
+<p>由wireshark抓包来看，客户端地址为192.168.248.1,这是因为服务器是在虚拟机中跑的，采用NAT模式。故客户端连接服务端是通过虚拟网卡进行访问的，所以和客户端实际地址不符</p>
+<p>由图可知，vlc实际上是通过rtsp over tcp,首先客户端和服务端建连，进行三次握手</p>
+<pre><code>C                         S
+|    SYN,Seq = 0          |
+|    --------------&gt;      |
+|   SYN,Seq = 0, Ack = 1  | 
+|   &lt;---------------      |
+|   ACK, Seq = 1, Ack = 1 |
+|   ----------------&gt;     |
+</code></pre><ul>
+<li><p>建连成功后，vlc发送一个OPTIONS,请求获得服务器提供的可用方法</p>
+<pre><code>OPTIONS rtsp://192.168.248.128:8554/test.264 RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+
+RTSP/1.0 200 OK
+CSeq: 2
+Date: Wed, May 09 2018 16:47:04 GMT
+Public: OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER
+
+由OPTIONS Ack可知，live555 rtsp服务器支持OPTIONS, DESCRIBE, SETUP, TEARDOWN, PLAY, PAUSE, GET_PARAMETER, SET_PARAMETER方法
+</code></pre></li>
+<li><p>请求获得SDP会话消息</p>
+<pre><code>DESCRIBE rtsp://192.168.248.128:8554/test.264 RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Accept: application/sdp
+
+RTSP/1.0 200 OK
+CSeq: 3
+Date: Wed, May 09 2018 16:47:04 GMT
+Content-Base: rtsp://192.168.248.128:8554/test.264/
+Content-Type: application/sdp
+Content-Length: 519
+
+v=0  //protocol version
+o=- 1525884424436139 1 IN IP4 192.168.248.128 //owner
+s=H.264 Video, streamed by the LIVE555 Media Server //session name
+i=test.264 //session info
+t=0 0 //time &lt;start&gt; &lt;end&gt;
+a=tool:LIVE555 Streaming Media v2017.10.28 //&lt;属性&gt;
+a=type:broadcast
+a=control:*
+a=range:npt=0-
+a=x-qt-text-nam:H.264 Video, streamed by the LIVE555 Media Server
+a=x-qt-text-inf:test.264
+m=video 0 RTP/AVP 96 //media name and transport address
+c=IN IP4 0.0.0.0 //connect info
+b=AS:500 // same as c
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1;profile-level-id=4D4033;sprop-parameter-sets=Z01AM5JUDAS0IAAAAwBAAAAM0eMGVA==,aO48gA==
+a=control:track1 //视频流通道1
+</code></pre><p>  SDP定义了一些对此会话的描述信息</p>
+</li>
+<li><p>建立会话，确定传输模式</p>
+<pre><code>SETUP rtsp://192.168.248.128:8554/test.264/track1 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Transport: RTP/AVP;unicast;client_port=57814-57815
+
+RTSP/1.0 200 OK
+CSeq: 4
+Date: Wed, May 09 2018 16:47:04 GMT
+Transport: RTP/AVP;unicast;destination=192.168.248.1;source=192.168.248.128;client_port=57814-57815;server_port=6970-6971
+Session: ECAAF3DE;timeout=65
+</code></pre><p>  确定RTP/AVP协议传输，确定ip和端口号，客户端ip:192.168.248.1,RTP port:57814, RTCP port:57815;服务端ip:192.168.248.128 RTP和RTCP端口号分别为6970-6971</p>
+</li>
+<li><p>发送播放请求</p>
+<pre><code>PLAY rtsp://192.168.248.128:8554/test.264/ RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Session: ECAAF3DE
+Range: npt=0.000-
+
+RTSP/1.0 200 OK
+CSeq: 5
+Date: Wed, May 09 2018 16:47:04 GMT
+Range: npt=0.000-
+Session: ECAAF3DE
+RTP-Info: url=rtsp://192.168.248.128:8554/test.264/track1;seq=54629;rtptime=1046126938
+</code></pre><p>  Range:0.000-标示播放到视频结束，客户端返回通道1,</p>
+</li>
+<li><p>关闭请求</p>
+<pre><code>TEARDOWN rtsp://192.168.248.128:8554/test.264/ RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/3.0.0 (LIVE555 Streaming Media v2016.11.28)
+Session: ECAAF3DE
+
+RTSP/1.0 200 OK
+CSeq: 6
+</code></pre></li>
+</ul>
+<p>RTSP已经分析完毕，现在对RTP H264进行梳理一下了</p>
+<h2 id="H264-over-RTP分析"><a href="#H264-over-RTP分析" class="headerlink" title="H264 over RTP分析"></a>H264 over RTP分析</h2><h3 id="RTP-HEADER"><a href="#RTP-HEADER" class="headerlink" title="RTP HEADER"></a>RTP HEADER</h3><p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header.JPG" alt=""></p>
+<ul>
+<li>V: RTP version</li>
+<li>P: 填充标志，if P = 1, 则在payload后面填充一个或者多个额外的8位组，非有效载荷的一部分</li>
+<li>X: 拓展标志，if X = 1, 则在RTP包头后有一个拓展报头(需特殊处理)</li>
+<li>CC: CSRC计数器，标示CSRC个数</li>
+<li>M:标记，不同载荷有不同含义，对于视频，标示一帧的结束；对于音频，标记会话的开始(Payload FU也有S和E)</li>
+<li>PT: 有效载荷类型</li>
+<li>squence number:序列号，标示RTP报文序列号，可用来检查丢包，音视频包sequence是分别计数的</li>
+<li>Timestamp:90HZ评率，用于计算延迟和延迟抖动，并进行同步控制</li>
+<li>SSRC： 标示同步信源，随机选择的，参加同一视频会议的两个SSRC不能相同</li>
+<li>CSRC: 可有0~15个，每个CSRC标识了包含在该RTP报文有效载荷中的所有特约信源。</li>
+</ul>
+<p><img src="/2018/12/26/流媒体/live555分析-RTSP通信/rtp_header_package.JPG" alt=""></p>
+<ul>
+<li>V: rtp version, 2</li>
+<li>P: 0 无填充</li>
+<li>X: 0 无拓展</li>
+<li>CC: 0 CSRC</li>
+<li>M：0</li>
+<li>PT: DynamicRTP-Type-9</li>
+<li>Sequence number: 54629</li>
+<li>Timestamp:1046126938</li>
+<li>SSRC: 0x89312047</li>
+</ul>
+<h3 id="RTP-Payload"><a href="#RTP-Payload" class="headerlink" title="RTP Payload"></a>RTP Payload</h3><p>H264定义了三种不同的基本的载荷结构，接收端可通过RTP Payload的Type字段辨别</p>
+<pre><code>+---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI|  Type   |
++---------------+
+</code></pre><p>RTP payload H和H264的NALU头结构是一样的，但type是特殊的格式，而h264type只取1~23是有效值</p>
+<p>FH type:</p>
+<ul>
+<li>24 STAP-A 单一时间的组合包</li>
+<li>25 STAP-B 单一时间的组合包</li>
+<li>26 MTAP16 多个时间的组合包</li>
+<li>27 MTAP24 多个时间的组合包</li>
+<li>28 FU-A 分片的单元</li>
+<li>29 FU-B 分片的单元</li>
+<li>30-31 无定义</li>
+</ul>
+<h3 id="单一NAL单元模式"><a href="#单一NAL单元模式" class="headerlink" title="单一NAL单元模式"></a>单一NAL单元模式</h3><p>一个RTP仅仅由一个完整的NALU组成，此时RTP NAL Header和原始的H、264的头类型相同。</p>
+<p>对于NALU的长度小于MTU，一般采用单一NAL单元模式， 原始的H264 NALU单元常由[start code] [NALU header] [NALU Payload]三部分组成，start code必须是”00 00 00 01”或”00 00 01”，其后是FH, 然后都是Payload</p>
+<p>RTP打包时取出”00 00 00 01”或者”00 00 01”开始码，其他数据封包即可</p>
+<pre><code> 0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |F|NRI|  type  |                                              |
++-+-+-+-+-+-+-+-+                                              |
+|                                                              |
+|              Bytes 2..n of a Single NALunit                |
+|                                                              |
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><h3 id="组合封包模式"><a href="#组合封包模式" class="headerlink" title="组合封包模式"></a>组合封包模式</h3><p>当NALU长度特别小时，可将几个NALU单元封在一个RTP包中<br>，有四种组合方式STAP-A(24)、STAP-B(25)、MTAP16(26)、MTAP24(27)</p>
+<pre><code> 0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                         RTPHeader                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |STAP-A NAL HDR|         NALU 1Size           | NALU 1HDR    |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        NALU 1 Data                          |
+:                                                              :
++              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              | NALU 2Size                  | NALU 2 HDR    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        NALU 2 Data                          |
+:                                                              :
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><h3 id="分片封包模式"><a href="#分片封包模式" class="headerlink" title="分片封包模式"></a>分片封包模式</h3><p>FU-A</p>
+<pre><code>0                  1                  2                  3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ | FU indicator  |   FUheader  |                              |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                              |
+|                                                              |
+|                        FU payload                           |
+|                                                              |
+|                              +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                              :...OPTIONAL RTP padding        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</code></pre><p>其中FU indicator格式</p>
+<pre><code>+---------------+
+|0|1|2|3|4|5|6|7|
++-+-+-+-+-+-+-+-+
+|F|NRI|  Type   |
++---------------+
+</code></pre><p>FU header格式<br>     +—————+<br>     |0|1|2|3|4|5|6|7|<br>     +-+-+-+-+-+-+-+-+<br>     |S|E|R|  Type   |<br>     +—————+</p>
+<ul>
+<li>S: 1是分片NAL单元的开始</li>
+<li>E: 1只是NAL单元的结束</li>
+<li>R: 必须为0</li>
+</ul>
+<p>其中FU indicator前三个bit = NALU的F和NRI,FU header的type = NALU的type</p>
+<p>nal_uniy_type = (fu_indicator &amp; 0xe0) | (fu_header &amp; 0x1f)</p>
+<p>-|-|-<br>0 | undefine |<br>1~23 | NALU | NAL单一NAL单元模式<br>24 | STAP-A |<br>25 | STAP-B |<br>26 | MTAP16 |<br>27 | MTAP24 |<br>28 | FU-A |<br>29 | FU-B |<br>30 ~31 | undefined</p>
+<p>当NALU长度超过MTU时，就必须对NALU单元进行分片分包</p>
+<p>Tips:<br>这两天对RTSP、RTP协议梳理了一下， 对以下还有疑问.<br>RTP可以跑在TCP或者UDP协议上 查看协议并未看到RTP Protocol有对粘包的问题有所处理(RTP header并无一个RTP包长度字段或者包界限符)。虽然RTP protocol规定了一个package不能大于MTU,避免被协议栈分包(TCP是传输的数据流,而RTP是数据报文,如果使用TCP传输就无法知道RTP包有多长,不知如何区分RTP包),但MTU分包只是粘包的其中一个原因</p>
+<ul>
+<li>应用层调用write方法，将应用层的缓冲区中的数据拷贝到套接字的发送缓冲区。而发送缓冲区有一个SO_SNDBUF的限制，如果应用层的缓冲区数据大小大于套接字发送缓冲区的大小，则数据需要进行多次的发送。</li>
+<li>TCP所传输的报文段有MSS的限制，如果套接字缓冲区的大小大于MSS，也会导致消息的分割发送。</li>
+<li>链路层最大发送单元MTU，在IP层会进行数据的分片。</li>
+<li>接收端接收BUF不足以接收所有的stream,故对数据分多次保存。</li>
+</ul>
+<h1 id="SDP格式"><a href="#SDP格式" class="headerlink" title="SDP格式"></a>SDP格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">v=&lt;version&gt; </span><br><span class="line">o=&lt;username&gt; &lt;session id&gt; &lt;version&gt; &lt;network type&gt; &lt;address type&gt; &lt;address&gt; </span><br><span class="line">s=&lt;session name&gt; </span><br><span class="line">i=&lt;session description&gt; </span><br><span class="line">u=&lt;URI&gt; </span><br><span class="line">e=&lt;email address&gt; </span><br><span class="line">p=&lt;phone number&gt; </span><br><span class="line">c=&lt;network type&gt; &lt;address type&gt; &lt;connection address&gt; </span><br><span class="line">b=&lt;modifier&gt;:&lt;bandwidth-value&gt; </span><br><span class="line">t=&lt;start time&gt; &lt;stop time&gt; </span><br><span class="line">r=&lt;repeat interval&gt; &lt;active duration&gt; &lt;list of offsets from start-time&gt; </span><br><span class="line">z=&lt;adjustment time&gt; &lt;offset&gt; &lt;adjustment time&gt; &lt;offset&gt; .... </span><br><span class="line">k=&lt;method&gt; </span><br><span class="line">k=&lt;method&gt;:&lt;encryption key&gt; </span><br><span class="line">a=&lt;attribute&gt; </span><br><span class="line">a=&lt;attribute&gt;:&lt;value&gt; </span><br><span class="line">m=&lt;media&gt; &lt;port&gt; &lt;transport&gt; &lt;fmt list&gt; </span><br><span class="line">v = （协议版本） </span><br><span class="line">o = （所有者/创建者和会话标识符） </span><br><span class="line">s = （会话名称） </span><br><span class="line">i = * （会话信息） </span><br><span class="line">u = * （URI 描述） </span><br><span class="line">e = * （Email 地址） </span><br><span class="line">p = * （电话号码） </span><br><span class="line">c = * （连接信息） </span><br><span class="line">b = * （带宽信息） </span><br><span class="line">z = * （时间区域调整） </span><br><span class="line">k = * （加密密钥） </span><br><span class="line">a = * （0 个或多个会话属性行） </span><br><span class="line">时间描述： </span><br><span class="line">t = （会话活动时间） </span><br><span class="line">r = * （0或多次重复次数） </span><br><span class="line">媒体描述： </span><br><span class="line">m = （媒体名称和传输地址） </span><br><span class="line">i = * （媒体标题） </span><br><span class="line">c = * （连接信息 — 如果包含在会话层则该字段可选） </span><br><span class="line">b = * （带宽信息） </span><br><span class="line">k = * （加密密钥） </span><br><span class="line">a = * （0 个或多个媒体属性行）</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/12/26/流媒体/live555分析-RTSP通信/" data-id="cjwjhd1xq001nb4vc5uifhcjp" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-流媒体/live555分析-rtsp-client接入" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/24/流媒体/live555分析-rtsp-client接入/" class="article-date">
@@ -100,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjvfbv7bz001xe4vcryh5iyou" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/24/流媒体/live555分析-rtsp-client接入/" data-id="cjwjhd1xs001pb4vcsodzy62i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -164,7 +444,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjvfbv7bx001ue4vcq8281giy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/21/流媒体/live555分析-TaskScheduler分析/" data-id="cjwjhd1xo001kb4vc9w2l4jni" class="article-share-link">Share</a>
       
       
     </footer>
@@ -233,7 +513,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjvfbv7bx001ve4vcp90m5fet" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/20/流媒体/live555分析/" data-id="cjwjhd1xu001sb4vcddfk4bln" class="article-share-link">Share</a>
       
       
     </footer>
@@ -283,7 +563,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjvfbv79x000fe4vcpgxz7gay" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/C++/C-回调函数的实现/" data-id="cjwjhd1v70001b4vc7bu1o00f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -328,7 +608,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjvfbv74u0000e4vcrz3slctw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/19/hello-world/" data-id="cjwjhd1tl0000b4vczsck2w02" class="article-share-link">Share</a>
       
       
     </footer>
@@ -377,7 +657,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjvfbv7ad000pe4vc9yc3c9t5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/12/01/other/github访问提速/" data-id="cjwjhd1xh0015b4vcrniw5bgk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -426,7 +706,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjvfbv7b7000ze4vc06j4hfdh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/11/14/other/数组地址操作/" data-id="cjwjhd1xn001ib4vc15zc4e2s" class="article-share-link">Share</a>
       
       
     </footer>
@@ -492,7 +772,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjvfbv7c50028e4vcux0flq3a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/10/13/流媒体/RTMP/RTMP/" data-id="cjwjhd1y40023b4vcdghqstp4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -669,105 +949,7 @@ class Person
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjvfbv7aa000me4vcozykmr3p" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-other/unsigned关键字" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/14/other/unsigned关键字/" class="article-date">
-  <time datetime="2018-07-14T05:33:51.000Z" itemprop="datePublished">2018-07-14</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/笔记/">笔记</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/14/other/unsigned关键字/">unsigned关键字</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>[转] <a href="https://blog.csdn.net/a997013919/article/details/76684179" target="_blank" rel="noopener">无法忽视的unsigned关键字</a></p>
-</blockquote>
-<h2 id="对unsigned解释"><a href="#对unsigned解释" class="headerlink" title="对unsigned解释"></a>对unsigned解释</h2><p>整型的每一种都分有无符号（unsigned）和有符号（signed）两种类型（float和double总是带符号的），在默认情况下声明的整型变量都是有符号的类型（char有点特别），如果需声明无符号类型的话就需要在类型前加上unsigned。无符号版本和有符号版本的区别就是无符号类型能保存2倍于有符号类型的正整数数据，比如16位系统中一个short能存储的数据的范围为-32768~32767，而unsigned能存储的数据范围则是0~65535。由于在计算机中,整数是以补码形式存放的。根据最高位的不同，如果是1,有符号数的话就是负数；如果是无符号数,则都解释为正数。另外，unsigned若省略后一个关键字，大多数编译器都会认为是unsigned int。</p>
-<pre><code>char c = 0xc9;
-printf(&quot;A:c = %2x\n&quot;,(unsigned char)c);
-printf(&quot;B:c = %2x\n&quot;,c &amp; 0xff);
-printf(&quot;C:c = %2x\n&quot;,c);
-
-输出如下：
-
-A:c = c9
-B:c = c9
-C:c = ffffffc9
-</code></pre><p>　首先我们必须知道，printf()函数的%x(X)输出的是Int型别的16进制格式。所以char型别的c变量会被转换成Int型别。</p>
-<p>　其次，我们的知道计算机是用补码表示数据的</p>
-<ul>
-<li><p>情况C:</p>
-<p>  　　　c的补码：11001001（0xc9）。</p>
-<p>  　　　c的反码：11001000（0xc9）。</p>
-<p>  　　　c的原码：10110111（0xc9）。　</p>
-<p>  　　　因为char型别是带符号的，所以最高位的1这里视为负号。</p>
-<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
-<p>  　　　Int_c的原码：10000000 00000000 00000000 00110111（把c原码的最高位1  提到最高位。其余高位补0）。</p>
-<p>  　　　Int_c的反码：11111111 11111111 11111111 11001000</p>
-<p>  　　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
-<p>  　　　所以打印出来看似诡异的值其实是合情合理的。如何避免？看AB情况。</p>
-</li>
-</ul>
-<ul>
-<li><p>情况B:</p>
-<p>  　　我们在情况C的基础上将c与0xff做&amp;操作。</p>
-<p>  　　Int_c的补码：11111111 11111111 11111111 11001001(0xffffffc9)。</p>
-<p>  　　　　　　　　 &amp;</p>
-<p>  　　　　　　　　 00000000 00000000 00000000 11111111</p>
-<p>  　　最终结果为： 00000000 00000000 00000000 11001001(0xc9)。</p>
-</li>
-</ul>
-<ul>
-<li><p>情况A:</p>
-<p>  　　　c的补码：11001001（0xc9）。</p>
-<p>  　　　c的反码：11001001（0xc9）。</p>
-<p>  　　　c的原码：11001001（0xc9）。　</p>
-<p>  　　　这里强制转换c为unsigned char型别。因此最高位的1不是正负号</p>
-<p>  　　　把c转换成Int型别   char  —–&gt; Int</p>
-<p>  　　　Int_c的原码：00000000 00000000 00000000 11001001（把c原码的最高位1  提到最高位。其余高位补0）。</p>
-<p>  　　　Int_c的反码：00000000 00000000 00000000 11001001</p>
-<p>  　　　Int_c的补码：00000000 00000000 00000000 11001001(0xc9)。</p>
-<p>  以32位机为例，int 分为无符号 unsigned 和有符号 signed 两种类型，默认为signed。二者的区别就是无符号类型能保存2倍于有符号类型的数据。32位下，signed int 的表示范围为：-2147483648 ~ 2147483647 (最高位做符号位)。unsigned int 的表示范围为：0 ~ 4294967295 （不保留符号位）。我们都知道，两个不同的数据类型在进行混合使用时，会自动进行类型转换。其转换原则就是：向着精度更高、长度更长的方向转换。也就是我们平常见到的 char 转为 int ，int 转为 long，float 转为 double  . etc.</p>
-</li>
-</ul>
-<p>相关资料:</p>
-<blockquote>
-<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">C语言打印16进制出现0xffffff现象的问题剖析</a></p>
-</blockquote>
-<blockquote>
-<p><a href="http://www.cnblogs.com/acool/p/4790069.html" target="_blank" rel="noopener">unsigned关键字，你真的懂了吗</a></p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/14/other/unsigned关键字/" data-id="cjvfbv7aj000te4vcop8n23de" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/07/31/架构/thinking-in-uml/" data-id="cjwjhd1vr0004b4vcy8nwpr4h" class="article-share-link">Share</a>
       
       
     </footer>
@@ -807,7 +989,7 @@ C:c = ffffffc9
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li></ul>
     </div>
   </div>
 
@@ -818,6 +1000,10 @@ C:c = ffffffc9
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/05/网络/TCP三次握手+四次挥手/">TCP三次握手+四次挥手</a>
+          </li>
         
           <li>
             <a href="/2019/05/07/SQL/mongodb/">mongodb</a>
@@ -833,10 +1019,6 @@ C:c = ffffffc9
         
           <li>
             <a href="/2019/04/04/编译框架/cmake-基本命令/">cmake-基本命令</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/01/编译框架/cmake/">cmake-find_package</a>
           </li>
         
       </ul>
