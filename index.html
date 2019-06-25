@@ -66,6 +66,102 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux/linux应用程序加载" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/26/linux/linux应用程序加载/" class="article-date">
+  <time datetime="2019-06-25T16:08:42.000Z" itemprop="datePublished">2019-06-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/linux/">linux</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/26/linux/linux应用程序加载/">linux应用程序加载</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------</span><br><span class="line">|             APPLICATION                 |</span><br><span class="line">-------------------------------------------</span><br><span class="line"></span><br><span class="line">---------------------- --------------------         </span><br><span class="line">| libc.so ld-linux.so| | LD_LOADER|libso.z|</span><br><span class="line">---------------------- --------------------</span><br><span class="line"></span><br><span class="line">-------------------------------------------</span><br><span class="line">|            LINUX KERNEL                 |</span><br><span class="line">-------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>在同一个ARCH Machine, 一个完整的运行库都是可以运行的<br>ld-linux.so和libc.so强关联</p>
+<h1 id="静态库搜索路径"><a href="#静态库搜索路径" class="headerlink" title="静态库搜索路径"></a>静态库搜索路径</h1><ul>
+<li>gcc先从-L搜索</li>
+<li>再从LIBRARY_PATH路径搜索</li>
+<li>再从/usr /usr/lib /usr/local/lib. 这是由compile gcc编写在程序中</li>
+</ul>
+<h1 id="动态库搜索路径"><a href="#动态库搜索路径" class="headerlink" title="动态库搜索路径"></a>动态库搜索路径</h1><ul>
+<li>编译目标代码时指定的动态库搜索路径-L</li>
+<li>环境变量LD_LIBRARY_PATH指定的动态库搜索路径</li>
+<li>配置文件/etc/ld.so.conf中指定的动态库搜索路径</li>
+<li>默认的动态库搜索路径/lib /usr/lib/ /usr/local/lib</li>
+</ul>
+<h1 id="静态链接-编译时"><a href="#静态链接-编译时" class="headerlink" title="静态链接(编译时)"></a>静态链接(编译时)</h1><p>链接器将函数的代码从其所在地（目标文件或静态链接库中）拷贝到最终的可执行程序中。这样该程序在被执行时这些代码将被装入到该进程的虚拟地址空间中。静态链接库实际上是一个目标文件的集合，其中的每个文件含有库中的一个或者一组相关函数的代码</p>
+<p>为创建可执行文件，链接器必须要完成的主要任务：</p>
+<ul>
+<li>符号解析：把目标文件中符号的定义和引用联系起来</li>
+<li>重定位：把符号定义和内存地址对应起来，然后修改所有对符号的引用</li>
+</ul>
+<h1 id="动态链接-加载、运行时"><a href="#动态链接-加载、运行时" class="headerlink" title="动态链接(加载、运行时)"></a>动态链接(加载、运行时)</h1><p>在此种方式下，函数的定义在动态链接库或共享对象的目标文件中。在编译的链接阶段，动态链接库只提供符号表和其他少量信息用于保证所有符号引用都有定义，保证编译顺利通过。动态链接器(ld-linux.so)链接程序在运行过程中根据记录的共享对象的符号定义来动态加载共享库，然后完成重定位。在此可执行文件被执行时，动态链接库的全部内容将被映射到运行时相应进程的虚地址空间。动态链接程序将根据可执行程序中记录的信息找到相应的函数代码</p>
+<h1 id="加载工程"><a href="#加载工程" class="headerlink" title="加载工程"></a>加载工程</h1><p>加载器首先创建如上图所示的内存映像，然后根据段头部表，把目标文件拷贝到内存的数据和代码段中。然后，加载器跳转到程序入口点（即符号_start 的地址），执行启动代码（startup code）</p>
+<ul>
+<li>AR ：创建静态库，插入、删除、列出和提取成员</li>
+<li>STRINGS ：列出目标文件中所有可以打印的字符串</li>
+<li>STRIP ：从目标文件中删除符号表信息</li>
+<li>NM ：列出目标文件符号表中定义的符号</li>
+<li>SIZE ：列出目标文件中节的名字和大小</li>
+<li>READELF ：显示一个目标文件的完整结构，包括ELF 头中编码的所有信息</li>
+<li>OBJDUMP ：显示目标文件的所有信息，最有用的功能是反汇编.text节中的二进制指令</li>
+<li>LDD ：列出可执行文件在运行时需要的共享库</li>
+<li>PATCHELF : ELF解析工具</li>
+</ul>
+<h1 id="软件打包"><a href="#软件打包" class="headerlink" title="软件打包"></a>软件打包</h1><h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="patchelf-可以修改已编译运行程序的依赖库位置和指定库链接器"><a href="#patchelf-可以修改已编译运行程序的依赖库位置和指定库链接器" class="headerlink" title="patchelf 可以修改已编译运行程序的依赖库位置和指定库链接器"></a>patchelf 可以修改已编译运行程序的依赖库位置和指定库链接器</h3><ul>
+<li>set-rpath: 修改可执行库的RPATH</li>
+<li>set-interpreter: 修改动态加载”ELF解析器”给INTERPRETER</li>
+<li>print-interpreter: 查找解析器</li>
+<li>print-needed:查看file依赖库</li>
+</ul>
+<h3 id="file查看文件类型，ELF"><a href="#file查看文件类型，ELF" class="headerlink" title="file查看文件类型，ELF"></a>file查看文件类型，ELF</h3><p><code>getopt_long: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/l, for GNU/Linux 3.2.0, BuildID[sha1]=1f8be3f23fd0851687854682e57818954e8a04e8, not stripped</code></p>
+<ul>
+<li>ELF:二进制文件、可执行文件、目标代码、共享库和核心转储格式文件</li>
+<li>x86-64: CPU架构</li>
+</ul>
+<h3 id="readelf"><a href="#readelf" class="headerlink" title="readelf"></a>readelf</h3><ul>
+<li>Type:DYN，动态库</li>
+<li>Machine:机器类型</li>
+<li>Class：ELF位数</li>
+</ul>
+<h3 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h3><p>获取文件所有的依赖库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux-vdso.so.1 (0x00007ffe3c715000)</span><br><span class="line">libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f89780a4000)</span><br><span class="line">/lib64/ld-linux-x86-64.so.2 (0x00007f8978698000)</span><br></pre></td></tr></table></figure></p>
+<h2 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h2><ul>
+<li>readelf 查看目标文件的Machine、ELF位数</li>
+<li>ldd查看依赖库</li>
+<li>搜索/usr/lib及/usr/lib64,匹配Machine、ELF、type，将动态库拷贝至目标文件夹</li>
+<li>将ELF LD加载器拷贝至目标文件夹</li>
+<li>使用patchelf,set-rpath、set-interpreter配置可执行库路径、libc加载器</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/26/linux/linux应用程序加载/" data-id="cjxc06q3m0002r0vcsv9ac483" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-网络/TCP三次握手+四次挥手" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/06/05/网络/TCP三次握手+四次挥手/" class="article-date">
@@ -131,7 +227,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/05/网络/TCP三次握手+四次挥手/" data-id="cjwjhd1w7000db4vcp56dw84n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/05/网络/TCP三次握手+四次挥手/" data-id="cjxc06q4s0015r0vc8e4ebdqj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -393,79 +489,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/07/SQL/mongodb/" data-id="cjwjhd1vm0002b4vc2dr6vkuj" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-linux/linux应用程序加载" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/27/linux/linux应用程序加载/" class="article-date">
-  <time datetime="2019-04-27T14:57:42.000Z" itemprop="datePublished">2019-04-27</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/linux/">linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/27/linux/linux应用程序加载/">linux应用程序加载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">-------------------------------------------</span><br><span class="line">|             APPLICATION                 |</span><br><span class="line">-------------------------------------------</span><br><span class="line"></span><br><span class="line">---------------------- --------------------         </span><br><span class="line">| libc.so ld-linux.so| | LD_LOADER|libso.z|</span><br><span class="line">---------------------- --------------------</span><br><span class="line"></span><br><span class="line">-------------------------------------------</span><br><span class="line">|            LINUX KERNEL                 |</span><br><span class="line">-------------------------------------------</span><br></pre></td></tr></table></figure>
-<p>在同一个ARCH Machine, 一个完整的运行库都是可以运行的<br>ld-linux.so和libc.so强关联</p>
-<h1 id="静态库搜索路径"><a href="#静态库搜索路径" class="headerlink" title="静态库搜索路径"></a>静态库搜索路径</h1><ul>
-<li>gcc先从-L搜索</li>
-<li>再从LIBRARY_PATH路径搜索</li>
-<li>再从/usr /usr/lib /usr/local/lib. 这是由compile gcc编写在程序中</li>
-</ul>
-<h1 id="动态库搜索路径"><a href="#动态库搜索路径" class="headerlink" title="动态库搜索路径"></a>动态库搜索路径</h1><ul>
-<li>编译目标代码时指定的动态库搜索路径-L</li>
-<li>环境变量LD_LIBRARY_PATH指定的动态库搜索路径</li>
-<li>配置文件/etc/ld.so.conf中指定的动态库搜索路径</li>
-<li>默认的动态库搜索路径/lib /usr/lib/ /usr/local/lib</li>
-</ul>
-<h1 id="静态链接-编译时"><a href="#静态链接-编译时" class="headerlink" title="静态链接(编译时)"></a>静态链接(编译时)</h1><p>链接器将函数的代码从其所在地（目标文件或静态链接库中）拷贝到最终的可执行程序中。这样该程序在被执行时这些代码将被装入到该进程的虚拟地址空间中。静态链接库实际上是一个目标文件的集合，其中的每个文件含有库中的一个或者一组相关函数的代码</p>
-<p>为创建可执行文件，链接器必须要完成的主要任务：</p>
-<ul>
-<li>符号解析：把目标文件中符号的定义和引用联系起来</li>
-<li>重定位：把符号定义和内存地址对应起来，然后修改所有对符号的引用</li>
-</ul>
-<h1 id="动态链接-加载、运行时"><a href="#动态链接-加载、运行时" class="headerlink" title="动态链接(加载、运行时)"></a>动态链接(加载、运行时)</h1><p>在此种方式下，函数的定义在动态链接库或共享对象的目标文件中。在编译的链接阶段，动态链接库只提供符号表和其他少量信息用于保证所有符号引用都有定义，保证编译顺利通过。动态链接器(ld-linux.so)链接程序在运行过程中根据记录的共享对象的符号定义来动态加载共享库，然后完成重定位。在此可执行文件被执行时，动态链接库的全部内容将被映射到运行时相应进程的虚地址空间。动态链接程序将根据可执行程序中记录的信息找到相应的函数代码</p>
-<h1 id="加载工程"><a href="#加载工程" class="headerlink" title="加载工程"></a>加载工程</h1><p>加载器首先创建如上图所示的内存映像，然后根据段头部表，把目标文件拷贝到内存的数据和代码段中。然后，加载器跳转到程序入口点（即符号_start 的地址），执行启动代码（startup code）</p>
-<ul>
-<li>AR ：创建静态库，插入、删除、列出和提取成员</li>
-<li>STRINGS ：列出目标文件中所有可以打印的字符串</li>
-<li>STRIP ：从目标文件中删除符号表信息</li>
-<li>NM ：列出目标文件符号表中定义的符号</li>
-<li>SIZE ：列出目标文件中节的名字和大小</li>
-<li>READELF ：显示一个目标文件的完整结构，包括ELF 头中编码的所有信息</li>
-<li>OBJDUMP ：显示目标文件的所有信息，最有用的功能是反汇编.text节中的二进制指令</li>
-<li>LDD ：列出可执行文件在运行时需要的共享库</li>
-<li>PATCHELF : ELF解析工具</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjwjhd1xm001fb4vcf14z3zku" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/07/SQL/mongodb/" data-id="cjxc06q3q0004r0vc57imiqdh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -543,7 +567,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjwjhd1x6000ub4vcnr1p9pd7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/08/网络/epoll框架/" data-id="cjxc06q54001lr0vc44xd40f3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -852,7 +876,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjwjhd1y10021b4vch5cvc9mn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/04/编译框架/cmake-基本命令/" data-id="cjxc06q5p0021r0vcjn4wqwie" class="article-share-link">Share</a>
       
       
     </footer>
@@ -917,7 +941,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjwjhd1x9000wb4vcqvmu75ei" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/04/01/编译框架/cmake/" data-id="cjxc06q55001mr0vcfv3u53ge" class="article-share-link">Share</a>
       
       
     </footer>
@@ -958,7 +982,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjwjhd1x8000vb4vclo925vwq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/30/C++/类型转换/" data-id="cjxc06q4b000jr0vcpfin2ip2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1016,7 +1040,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjwjhd1w00008b4vc3vagb1a9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/C++/指针详解/" data-id="cjxc06q3u0006r0vcy0qg6ji2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1153,7 +1177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjwjhd1xi0016b4vcym27te1w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/linux/多进程线程通信同步总结/" data-id="cjxc06q40000cr0vclhapojt0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1224,7 +1248,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjwjhd1xb0010b4vc9nrf25c6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/20/linux/多线程调试/" data-id="cjxc06q3y0009r0vc9gnhvoze" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1277,15 +1301,15 @@
       <ul>
         
           <li>
+            <a href="/2019/06/26/linux/linux应用程序加载/">linux应用程序加载</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/05/网络/TCP三次握手+四次挥手/">TCP三次握手+四次挥手</a>
           </li>
         
           <li>
             <a href="/2019/05/07/SQL/mongodb/">mongodb</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/27/linux/linux应用程序加载/">linux应用程序加载</a>
           </li>
         
           <li>

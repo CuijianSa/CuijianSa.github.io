@@ -10,11 +10,11 @@
   <meta name="description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux应用程序加载">
-<meta property="og:url" content="http://yoursite.com/2019/04/27/linux/linux应用程序加载/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/06/26/linux/linux应用程序加载/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
 <meta property="og:description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-27T15:44:59.145Z">
+<meta property="og:updated_time" content="2019-06-25T16:08:16.049Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux应用程序加载">
 <meta name="twitter:description" content="1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- --------------------         | libc">
@@ -70,8 +70,8 @@
       <div class="outer">
         <section id="main"><article id="post-linux/linux应用程序加载" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/04/27/linux/linux应用程序加载/" class="article-date">
-  <time datetime="2019-04-27T14:57:42.000Z" itemprop="datePublished">2019-04-27</time>
+    <a href="/2019/06/26/linux/linux应用程序加载/" class="article-date">
+  <time datetime="2019-06-25T16:08:42.000Z" itemprop="datePublished">2019-06-26</time>
 </a>
     
   <div class="article-category">
@@ -126,11 +126,35 @@
 <li>LDD ：列出可执行文件在运行时需要的共享库</li>
 <li>PATCHELF : ELF解析工具</li>
 </ul>
+<h1 id="软件打包"><a href="#软件打包" class="headerlink" title="软件打包"></a>软件打包</h1><h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><h3 id="patchelf-可以修改已编译运行程序的依赖库位置和指定库链接器"><a href="#patchelf-可以修改已编译运行程序的依赖库位置和指定库链接器" class="headerlink" title="patchelf 可以修改已编译运行程序的依赖库位置和指定库链接器"></a>patchelf 可以修改已编译运行程序的依赖库位置和指定库链接器</h3><ul>
+<li>set-rpath: 修改可执行库的RPATH</li>
+<li>set-interpreter: 修改动态加载”ELF解析器”给INTERPRETER</li>
+<li>print-interpreter: 查找解析器</li>
+<li>print-needed:查看file依赖库</li>
+</ul>
+<h3 id="file查看文件类型，ELF"><a href="#file查看文件类型，ELF" class="headerlink" title="file查看文件类型，ELF"></a>file查看文件类型，ELF</h3><p><code>getopt_long: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/l, for GNU/Linux 3.2.0, BuildID[sha1]=1f8be3f23fd0851687854682e57818954e8a04e8, not stripped</code></p>
+<ul>
+<li>ELF:二进制文件、可执行文件、目标代码、共享库和核心转储格式文件</li>
+<li>x86-64: CPU架构</li>
+</ul>
+<h3 id="readelf"><a href="#readelf" class="headerlink" title="readelf"></a>readelf</h3><ul>
+<li>Type:DYN，动态库</li>
+<li>Machine:机器类型</li>
+<li>Class：ELF位数</li>
+</ul>
+<h3 id="ldd"><a href="#ldd" class="headerlink" title="ldd"></a>ldd</h3><p>获取文件所有的依赖库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">linux-vdso.so.1 (0x00007ffe3c715000)</span><br><span class="line">libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f89780a4000)</span><br><span class="line">/lib64/ld-linux-x86-64.so.2 (0x00007f8978698000)</span><br></pre></td></tr></table></figure></p>
+<h2 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h2><ul>
+<li>readelf 查看目标文件的Machine、ELF位数</li>
+<li>ldd查看依赖库</li>
+<li>搜索/usr/lib及/usr/lib64,匹配Machine、ELF、type，将动态库拷贝至目标文件夹</li>
+<li>将ELF LD加载器拷贝至目标文件夹</li>
+<li>使用patchelf,set-rpath、set-interpreter配置可执行库路径、libc加载器</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/04/27/linux/linux应用程序加载/" data-id="cjwjhd1xm001fb4vcf14z3zku" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/26/linux/linux应用程序加载/" data-id="cjxc06q3m0002r0vcsv9ac483" class="article-share-link">Share</a>
       
       
     </footer>
@@ -139,19 +163,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/05/07/SQL/mongodb/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          mongodb
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/08/网络/epoll框架/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/06/05/网络/TCP三次握手+四次挥手/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">epoll框架</div>
+      <div class="article-nav-title">TCP三次握手+四次挥手</div>
     </a>
   
 </nav>
@@ -195,15 +210,15 @@
       <ul>
         
           <li>
+            <a href="/2019/06/26/linux/linux应用程序加载/">linux应用程序加载</a>
+          </li>
+        
+          <li>
             <a href="/2019/06/05/网络/TCP三次握手+四次挥手/">TCP三次握手+四次挥手</a>
           </li>
         
           <li>
             <a href="/2019/05/07/SQL/mongodb/">mongodb</a>
-          </li>
-        
-          <li>
-            <a href="/2019/04/27/linux/linux应用程序加载/">linux应用程序加载</a>
           </li>
         
           <li>
