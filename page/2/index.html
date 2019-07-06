@@ -153,7 +153,7 @@
                 
 <div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
     <div class="column  is-7-desktop">
-        <a href="/2019/03/20/linux/多线程调试/">
+        <a href="/2019/03/29/linux/多进程线程通信同步总结/">
             <div class="full-height post-hover" style="
                          background-image: url('');
                          height: 350px;
@@ -162,7 +162,7 @@
                          ">
                     <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
                         <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            多线程调试
+                            多进程线程通信同步总结
                         </h1>
                         <div>
                         
@@ -170,13 +170,20 @@
                         
                         </div>
                         <p class="post-content-text is-marginless has-padding text-shadow">
-                            常用命令
-gdb attach $PID:attach 进程
-info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID
+                            进程间通信
+pipe and fifo
 
-12345678    Id   Target..
+
+管道（pipe): 具有亲缘关系进程的通信
+命名管道(fifo): 支持无亲缘关系进程的通信
+
+
+signal
+
+
+用于通知接受进程有某种事件发生，除了用于进程间通信外，进程还可以发送信号给进..
                         </p>
-                        <p class="date text-shadow">2019-03-20</p>
+                        <p class="date text-shadow">2019-03-29</p>
                         <button class="button is-info is-small">Read More</button>
                     </div>
             </div>
@@ -186,6 +193,28 @@ info threads: 显示当前可调试的所有线程，每个线程会有一个GDB
         <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
                 
+<a class="post-hover" href="/2019/03/20/linux/多线程调试/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                多线程调试
+            </h3>
+            
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                常用命令
+gdb attach $PID:attach 进程
+info threads: 显示当..
+            </p>
+            <p class="date text-shadow is-marginless">2019-03-20</p>
+        </div>
+    </div>
+</a>
+            
+            
+                
 <a class="post-hover" href="/2019/03/10/SQL/SQL语句/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -214,27 +243,6 @@ INTEGER
 带符号..
             </p>
             <p class="date text-shadow is-marginless">2019-03-10</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2019/02/21/other/getaddrinfo爬坑/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                getaddrinfo爬坑
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                最近发现了客户一个问题， LE程序自启动一直连接不上服务端， 重启程序后成功
-查看日志， get..
-            </p>
-            <p class="date text-shadow is-marginless">2019-02-21</p>
         </div>
     </div>
 </a>
@@ -244,6 +252,28 @@ INTEGER
     <div class="column is-12 is-hidden-desktop">
         
         
+<a class="post-hover" href="/2019/03/20/linux/多线程调试/" style="height: 48.5%">
+    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
+        <div class="content-bg-mask full-width full-height has-padding">
+            <h3 class="title is-marginless text-shadow">
+                多线程调试
+            </h3>
+            
+            
+            
+            <p class="sub-title text-shadow"></p>
+            <p class="is-marginless text-shadow post-content-text">
+                常用命令
+gdb attach $PID:attach 进程
+info threads: 显示当..
+            </p>
+            <p class="date text-shadow is-marginless">2019-03-20</p>
+        </div>
+    </div>
+</a>
+        
+        
+        
 <a class="post-hover" href="/2019/03/10/SQL/SQL语句/" style="height: 48.5%">
     <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
         <div class="content-bg-mask full-width full-height has-padding">
@@ -276,31 +306,38 @@ INTEGER
     </div>
 </a>
         
-        
-        
-<a class="post-hover" href="/2019/02/21/other/getaddrinfo爬坑/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                getaddrinfo爬坑
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                最近发现了客户一个问题， LE程序自启动一直连接不上服务端， 重启程序后成功
-查看日志， get..
-            </p>
-            <p class="date text-shadow is-marginless">2019-02-21</p>
-        </div>
-    </div>
-</a>
-        
     </div>
 </div>
 
                     
+                    
+                
+                    
+                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
+                            <a class="post-hover" href="/2019/03/20/linux/多线程调试/">
+                            <div class="columns" style="min-height: 230px;">
+                                
+                                <div class="column is-8-desktop post-content is-flex align-center">
+                                    <div class="content">
+                                        <h3>多线程调试</h3>
+                                        
+                                        <p>
+                                            
+                                        </p>
+                                        <p>
+                                            常用命令
+gdb attach $PID:attach 进程
+info threads: 显示当前可调试的所有线程，每个线程会有一个GDB为其分配的ID，后面操作线程的时候会用到这个ID
+
+12345678    Id   Target Id         Frame * 1    Thread 0x7f8ef79ec740 (LWP 3994) &q..
+                                        </p>
+                                        <p>2019-03-20</p>
+                                        <button class="button is-small">Read More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
                     
                 
                     
@@ -358,7 +395,7 @@ blob数据， 类型由输入存储
                     
                 
                     
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
+                        <div class="content-box  " style="margin-bottom: 27px;">
                             <a class="post-hover" href="/2019/02/21/other/getaddrinfo爬坑/">
                             <div class="columns" style="min-height: 230px;">
                                 
@@ -554,32 +591,6 @@ int (*fun)(int x,int y);..
                         </div>
                     
                 
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/04/linux/mount/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>mount</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）
-
-利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点..
-                                        </p>
-                                        <p>2019-01-04</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
                 <!--翻頁-->
                 <nav class="pagination is-flex" style="justify-content: flex-end">
                     
@@ -691,7 +702,7 @@ int (*fun)(int x,int y);..
         <!--post数量和tag category 数量-->
         <div class="site-box is-flex">
             <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>35</strong>
+                <strong>36</strong>
                 <p>Posts</p>
             </div>
             <div class="flex-1 is-flex flex-column center full-height">
@@ -713,7 +724,7 @@ int (*fun)(int x,int y);..
             <strong>Categories</strong>
         </div>
         <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a><span class="category-list-count">1</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a><span class="category-list-count">1</span></li></ul>
         </div>
     </div>
     <div class="content-inner content-box">
@@ -721,7 +732,7 @@ int (*fun)(int x,int y);..
             <strong>Archives</strong>
         </div>
         <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">2</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">2</span></li></ul>
         </div>
     </div>
 </aside>
