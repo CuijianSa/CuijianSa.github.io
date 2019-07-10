@@ -15,15 +15,24 @@
   </script>
 
   
-  <title>CuijianSa.github.io</title>
+  <title>原码、反码、补码 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+  <meta name="description" content="转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解 最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻  概念 字节 二进制计算 如何理解原码、反码、补码？   机器数与真值 什么是机器数 什么是真值和形式值？ 机器数和源码、反码、补码的关系   同余定理的应用 什么是同余定理？ 模，互为补数，同余 模 互为补数     原码，反码，补码 原码 反码 补码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原码、反码、补码">
+<meta property="og:url" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解 最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻  概念 字节 二进制计算 如何理解原码、反码、补码？   机器数与真值 什么是机器数 什么是真值和形式值？ 机器数和源码、反码、补码的关系   同余定理的应用 什么是同余定理？ 模，互为补数，同余 模 互为补数     原码，反码，补码 原码 反码 补码">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/bit.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/inverse.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/complement.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/overfill.png">
+<meta property="og:updated_time" content="2019-07-10T16:28:25.746Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="原码、反码、补码">
+<meta name="twitter:description" content="转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解 最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻  概念 字节 二进制计算 如何理解原码、反码、补码？   机器数与真值 什么是机器数 什么是真值和形式值？ 机器数和源码、反码、补码的关系   同余定理的应用 什么是同余定理？ 模，互为补数，同余 模 互为补数     原码，反码，补码 原码 反码 补码">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/07/C++/原码、反码、补码/bit.png">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,526 +118,390 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
-    }
-
-    .primary-container .post-hover {
-        background: black;
-    }
-
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
-    }
-
-</style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2018/11/14/other/数组地址操作/">
-            <div class="full-height post-hover" style="
-                         background-image: url('');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            数组地址操作
-                        </h1>
-                        <div>
-                        
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            对指针取址和对数组取地址含义是不同的
-arr和&amp;arr结果都是数组的首地址，但是他们类型不相同
-arr表示&amp;arr[0],即数组首元素取址
-arr+1=首地址+sizeof(char)
-&amp;arr虽值为数组首元素地..
-                        </p>
-                        <p class="date text-shadow">2018-11-14</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
-            </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
-            
-                
-<a class="post-hover" href="/2018/10/13/流媒体/RTMP/RTMP/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                RTMP
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                从腾讯云中看到一篇对RTMP介绍比较好的文章转自视频协议学习：推流拉流都擅长的 RTMP
-简介R..
-            </p>
-            <p class="date text-shadow is-marginless">2018-10-13</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2018/07/31/架构/thinking-in-uml/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2018/07/31/架构/thinking-in-uml/relation.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                thinking_in_uml
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                比较好的UML类图实例
-UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合）
-面向对象面..
-            </p>
-            <p class="date text-shadow is-marginless">2018-07-31</p>
-        </div>
-    </div>
-</a>
-            
-        </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2018/10/13/流媒体/RTMP/RTMP/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                RTMP
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                从腾讯云中看到一篇对RTMP介绍比较好的文章转自视频协议学习：推流拉流都擅长的 RTMP
-简介R..
-            </p>
-            <p class="date text-shadow is-marginless">2018-10-13</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2018/07/31/架构/thinking-in-uml/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2018/07/31/架构/thinking-in-uml/relation.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                thinking_in_uml
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                比较好的UML类图实例
-UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合）
-面向对象面..
-            </p>
-            <p class="date text-shadow is-marginless">2018-07-31</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
-
-                    
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/10/13/流媒体/RTMP/RTMP/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>RTMP</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            从腾讯云中看到一篇对RTMP介绍比较好的文章转自视频协议学习：推流拉流都擅长的 RTMP
-简介RTMP(Real Time Message Protocol)是进行实时通信协议的网络，用于Flash/AIR平台及支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信
-RTMP有多个变种
-
-RTMP工作在TCP之上，默认使用端口1935；
-RTMPE..
-                                        </p>
-                                        <p>2018-10-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/07/31/架构/thinking-in-uml/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2018/07/31/架构/thinking-in-uml/relation.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>thinking_in_uml</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            比较好的UML类图实例
-UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合）
-面向对象面向对象是将世界看成一个个独立的对象， 相互之间没有因果关系。只有在某个外部驱动下，对象之间才会根据某种规律相互传递信息。
-将对客观事物建立一种抽象的方法用以表征事物并获得对事物本身的理解，同时将理解概念化， 将逻辑组织起来构成一种对所观察的对象的内部结构和工作..
-                                        </p>
-                                        <p>2018-07-31</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/07/14/other/unsigned关键字/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>unsigned关键字</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            
-[转] 无法忽视的unsigned关键字
-
-对unsigned解释整型的每一种都分有无符号（unsigned）和有符号（signed）两种类型（float和double总是带符号的），在默认情况下声明的整型变量都是有符号的类型（char有点特别），如果需声明无符号类型的话就需要在类型前加上unsigned。无符号版本和有符号版本的区别就是无符号类型能保..
-                                        </p>
-                                        <p>2018-07-14</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/06/13/网络/OSI七层模型/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2018/06/13/网络/OSI七层模型/osi_model.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>OSI网络模型</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            OSI网络模型
-
-
-OSI七层网络模型
-TCP/IP四层模型
-功能
-协议
-数据单位
-
-
-
-
-应用层
-应用层
-面向用户应用，为用户提供对各种网络资源的方便访问服务
-TFTP、HTTP、SNMP
-消息
-
-
-表示层
--
-对来自应用层的命令和数据进行解析，对各种语法赋予相应的含义，并按照一定的格式传送给会话层
-Telnet、SNMP
-消息
-
-
-会话层
--
-向两个..
-                                        </p>
-                                        <p>2018-06-13</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/05/29/网络/HTTP/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>HTTP</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            HTTP报文是面向文本的，每个字段都是ANSII码串，各个字段长度不确定
-HTTP请求报文
-request line
-  由请求方法字段、URL、HTTP协议版本组成，空格分割，例如Get /index/html HTTP/1.1
-
-Get
-  常见的请求模式，当客户端要从服务器中读取文档.Get方法要求服务器将URL定位的资源放到响应报文的数据部分，回..
-                                        </p>
-                                        <p>2018-05-29</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2018/05/29/other/爬坑笔记/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>爬坑笔记</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            爬坑笔记本文对日常工作及学习中遇到的问题做个记录
-
-2018/5/18 1:01:33 
-
-编译QT UI使用QMake实在很方面，不过打算将自己的一系列代码集成到一个project上，所以使用CMake编译，比较曲折
-undefined reference vtable for VideoDeviceclass VideoDevice: public ..
-                                        </p>
-                                        <p>2018-05-29</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                        
-                            <a class="pagination-previous" href="/page/3/">Previous</a>
-                        
-                        
-                    
-                </nav>
-            </section>
-            
-                <style>
-    /*user info start*/
-    .user-info {
-        padding: 15px 0 0;
-    }
-
-    .user-info .avatar {
-        width: 155px;
-        height: 155px;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
         border-radius: 50%;
     }
 
-    .sns-container {
-        flex-wrap: wrap;
-    }
-
-    .sns-container a{
-        color: black;
-    }
-    /*user info end*/
-
-    /*Tag start*/
-    #tag_cloud .tags-item{
-        display: inline-block;
-        color: #000;
-        border: 1px solid gray;
-
-        margin: 4px 2px;
-        padding: 0 4px;
-        border-radius: 6px;
-    }
-    /*Tag end*/
-
-    /*Site box start*/
-    .site-box {
-        height: 60px;
-    }
-    /*Site box end*/
-
-    .category-list-item,
-    .archive-list-item {
-        display: flex;
-        margin-bottom: 4px;
-        justify-content: space-between;
-    }
-    .category-list-link,
-    .archive-list-link {
-        color: black;
-    }
-
-    .category-list-count,
-    .archive-list-count {
-        width: 32px;
+    .flow-chart {
         text-align: center;
-        border-radius: 4px;
-        color: #fff;
-        background-color: gray;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-<aside class="column is-hidden-touch is-3" style="max-width: 280px; min-width: 230px">
-    <div class="content-box user-info">
-        <div class="has-padding">
-            <header class="has-text-centered">
-                <img class="avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-            </header>
-            <section class="has-text-centered">
-                <h3><strong>Olin</strong></h3>
-                <p class="sub-title">Embedded Software Engineer</p>
-                
-                <p class="is-flex center" style=" color: gray">
-                    <i class="fa fa-map-marker" style="padding: 5px"></i>
-                    Nanjing
-                </p>
-                
-            </section>
-        </div>
-        <div class="top-line">
-            <ul class="sns-container justify-center is-flex has-padding">
-                
-
-                
-
-                
-
-                
-
-                
-
-                
-
-                
-            </ul>
-        </div>
-    </div>
-    <div class="content-box">
-        <!--post数量和tag category 数量-->
-        <div class="site-box is-flex">
-            <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>37</strong>
-                <p>Posts</p>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>原码、反码、补码</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-07-07</span>
             </div>
-            <div class="flex-1 is-flex flex-column center full-height">
-                <strong></strong>
-                <p>Tags</p>
-            </div>
+            
+                <div>
+                    
+                </div>
+            
         </div>
-    </div>
-    <div id="tag_cloud" class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Tags</strong>
+        <div class="content" style="overflow: auto">
+            <p><a href="https://blog.csdn.net/SnailMann/article/details/94436918" target="_blank" rel="noopener">转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解</a></p>
+<p>最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻</p>
+<ul>
+<li><a href="#%E6%A6%82%E5%BF%B5">概念</a><ul>
+<li><a href="#%E5%AD%97%E8%8A%82">字节</a></li>
+<li><a href="#%E4%BA%8C%E8%BF%9B%E5%88%B6%E8%AE%A1%E7%AE%97">二进制计算</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%8E%9F%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81">如何理解原码、反码、补码？</a></li>
+</ul>
+</li>
+<li><a href="#%E6%9C%BA%E5%99%A8%E6%95%B0%E4%B8%8E%E7%9C%9F%E5%80%BC">机器数与真值</a><ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%BA%E5%99%A8%E6%95%B0">什么是机器数</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9C%9F%E5%80%BC%E5%92%8C%E5%BD%A2%E5%BC%8F%E5%80%BC">什么是真值和形式值？</a></li>
+<li><a href="#%E6%9C%BA%E5%99%A8%E6%95%B0%E5%92%8C%E6%BA%90%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81%E7%9A%84%E5%85%B3%E7%B3%BB">机器数和源码、反码、补码的关系</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%8C%E4%BD%99%E5%AE%9A%E7%90%86%E7%9A%84%E5%BA%94%E7%94%A8">同余定理的应用</a><ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%90%8C%E4%BD%99%E5%AE%9A%E7%90%86">什么是同余定理？</a></li>
+<li><a href="#%E6%A8%A1%E4%BA%92%E4%B8%BA%E8%A1%A5%E6%95%B0%E5%90%8C%E4%BD%99">模，互为补数，同余</a><ul>
+<li><a href="#%E6%A8%A1">模</a></li>
+<li><a href="#%E4%BA%92%E4%B8%BA%E8%A1%A5%E6%95%B0">互为补数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%8E%9F%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81">原码，反码，补码</a><ul>
+<li><a href="#%E5%8E%9F%E7%A0%81">原码</a></li>
+<li><a href="#%E5%8F%8D%E7%A0%81">反码</a></li>
+<li><a href="#%E8%A1%A5%E7%A0%81">补码</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8E%9F%E7%A0%81%E5%8F%8D%E7%A0%81%E8%A1%A5%E7%A0%81">为什么需要原码，反码，补码？</a><ul>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8E%9F%E7%A0%81">为什么需要原码？</a></li>
+<li><a href="#%E6%97%A2%E7%84%B6%E6%9C%89%E4%BA%86%E5%8E%9F%E7%A0%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%88%E8%BF%98%E8%A6%81%E5%8F%8D%E7%A0%81%E5%91%A2">既然有了原码，为什么又还要反码呢？</a></li>
+<li><a href="#%E6%97%A2%E7%84%B6%E6%9C%89%E4%BA%86%E5%8F%8D%E7%A0%81%E8%BF%98%E8%A6%81%E8%A1%A5%E7%A0%81%E5%81%9A%E4%BB%80%E4%B9%88">既然有了反码，还要补码做什么？</a></li>
+<li><a href="#%E5%B0%8F%E5%B0%8F%E7%9A%84%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B">小小的总结一下：</a></li>
+</ul>
+</li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98">相关问题</a><ul>
+<li><a href="#%E8%A1%A5%E7%A0%81%E8%AE%A1%E7%AE%97%E7%9A%84%E6%BA%A2%E5%87%BA">补码计算的溢出</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="字节"><a href="#字节" class="headerlink" title="字节"></a>字节</h2><p>字长为8的计算机中，一个字节，有8位。2^8 = 256 , 既8位空间进行二进制的排列组合，最多可以有256种可能</p>
+<ul>
+<li>无符号位情况下，可表示最大的值为255，最小值为0</li>
+<li>有符号为情况下，可表示最大的值为127，最小值为-127(8)，8位二进制, 使用原码或反码表示的范围为[-127, +127], 而使用补码表示的范围为[-128, 127]</li>
+</ul>
+<h2 id="二进制计算"><a href="#二进制计算" class="headerlink" title="二进制计算"></a>二进制计算</h2><p>计算器默认只会做加法，例：<code>5-3 =&gt; 5+(-3)</code> 乘法除法:是通过左移 &lt;&lt; 和右移 &gt;&gt; 来实现</p>
+<ul>
+<li>&amp;: 全1为1，有0为0</li>
+<li>|: 有1为1，全0为0</li>
+<li>~: 逐位取反</li>
+<li>^: 相同位0，相异为1</li>
+</ul>
+<p>1000 mod 256  = 1000 &amp;(256-1), 通式是a mod b = a &amp; (b - 1)，不过需要在特定的条件下才能成立，需要满足b是2的次方数值</p>
+<h2 id="如何理解原码、反码、补码？"><a href="#如何理解原码、反码、补码？" class="headerlink" title="如何理解原码、反码、补码？"></a>如何理解原码、反码、补码？</h2><ul>
+<li>现代操作系统的数值运算是以补码的形式进行的</li>
+<li>在学习原码，反码，补码之前，我们有必要先来了解一下机器数,真值的知识</li>
+<li>然后了解一下同余定理在机器数中的运用，知道模, 互补数，这能让我们更好的理解补码运算中的溢出和为什么能化减为加的行为</li>
+<li>然后我们就可以学习一下原码，反码，补码的基本概念</li>
+<li>再了解一下为什么需要原码，反码和补码，以及他们的具体作用是什么</li>
+</ul>
+<h1 id="机器数与真值"><a href="#机器数与真值" class="headerlink" title="机器数与真值"></a>机器数与真值</h1><h2 id="什么是机器数"><a href="#什么是机器数" class="headerlink" title="什么是机器数"></a>什么是机器数</h2><p>一个数在”计算机”中的”二进制”表示形式, 叫做这个数的机器数。 机器数有以下两个特点</p>
+<ul>
+<li>数的符号数值化</li>
+</ul>
+<p>我们知道数值具有正负数之分，由于计算机内部的硬件只能表示0,1两种物理状态，因此数值的正负数，通常在机器中使用最高位的0,1来区分表示。正数为0, 负数为1</p>
+<ul>
+<li>二进制的位数受机器设备的限制</li>
+</ul>
+<p>机器设备一次能表示的二进制位数叫机器的字长，一台机器的字长是固定的。字长8位叫一个字节，机器字长一般都是字节的整数倍，如字长8位、16位、32位、64位</p>
+<p><img src="/2019/07/07/C++/原码、反码、补码/bit.png" alt=""></p>
+<p><strong>机器数由两部分组成，最高位的符号位和剩余位的数值位</strong></p>
+<p>举个粟子，十进制的+8, 转换成机器数就是00001000。十进制的-8，转换成机器数就是10001000<br><a href="https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E6%95%B0/1096838" target="_blank" rel="noopener">机器数 - @百度百科</a></p>
+<h2 id="什么是真值和形式值？"><a href="#什么是真值和形式值？" class="headerlink" title="什么是真值和形式值？"></a>什么是真值和形式值？</h2><p>我们知道机器数的重点是，一个数以 “二进制的形式” ，在 “计算机” 中存储，存在 “符号位”。所以我们要区别机器数和数学意义上的二进制数。</p>
+<p>因为机器数是带有符号位的，普通数学角度的二进制数是没有符合位概念的。所以机器数在计算机中所表示的真实值和机器数所表示的形式值是不相同的。比如说，十进制的-8，转换成机器数就是10001000，而10001000按照数学角度去转换为10进制应该是136, 而不是-8。</p>
+<table>
+<thead>
+<tr>
+<th>十进制</th>
+<th>机器数</th>
+<th>2进制数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+ 8</td>
+<td>0000 1000</td>
+<td>+ 0000 1000</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>1000 1000</td>
+<td>- 0000 1000</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>真值</li>
+</ul>
+<p>当我们把机器数当做有符号位的二进制数值去计算，得到的值就是机器数真实所表示的值，称之为真值</p>
+<ul>
+<li>形式值</li>
+</ul>
+<p>当我们把机器数当做数学角度的没有符合位的二进制数去计算，得到的值只是一个纯数学角度的数值，并非机器数真实代表的值，称之为形式值</p>
+<h2 id="机器数和源码、反码、补码的关系"><a href="#机器数和源码、反码、补码的关系" class="headerlink" title="机器数和源码、反码、补码的关系"></a>机器数和源码、反码、补码的关系</h2><ul>
+<li>机器数是一个概念，只要符合该概念定义的二进制数，我们就称为机器数。</li>
+<li>而原码，反码，补码都是机器数的一种表现形式，他们的定义都符合机器数的定义。</li>
+<li>也可以说，对于一个数, 计算机要使用一定的编码方式进行存储。原码, 反码, 补码是机器存储一个具体数字的编码方式.</li>
+</ul>
+<h1 id="同余定理的应用"><a href="#同余定理的应用" class="headerlink" title="同余定理的应用"></a>同余定理的应用</h1><p>计算机补码运算背后是具有一定的数理知识的，例如同余定理就是补码运算背后的基石</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">同余定理：</span><br><span class="line">数学上，两个整数除以同一个整数，若得相同余数，则二整数同余</span><br><span class="line"></span><br><span class="line">既两个整数a,b 分别除以一个整数m所得到的余数如果相同，则a,b对于模m同余，同余的意思就是效果是等价的</span><br><span class="line">(6 - 12) mod 12 = 6,(6 + 12) mod 12 = 6 , 所以 -6和18对模12同余 ，也就是说 -12和+12的行为在这个计量系统中是等价，可以互相代替的，既减12是可以被加12替代的</span><br></pre></td></tr></table></figure>
+<h2 id="什么是同余定理？"><a href="#什么是同余定理？" class="headerlink" title="什么是同余定理？"></a>什么是同余定理？</h2><h2 id="模，互为补数，同余"><a href="#模，互为补数，同余" class="headerlink" title="模，互为补数，同余"></a>模，互为补数，同余</h2><h3 id="模"><a href="#模" class="headerlink" title="模"></a>模</h3><ul>
+<li>模:模就像是一个计量系统的计数范围，如时钟只能表示0~11点的数值，12则是该时钟的模，当值大于等于12时，则需要对时钟的模(12)进行取余运算，得到该计量系统的值。</li>
+<li>例如时钟的计量范围是0～11，模为12。那么计算机补码运算中，n位计算机，其计算系统的模为2^n ，补码取值范围就是-2^n～(2^n)-1。例如8位的补码运算中，模为2^8 = 256，补码取值范围是-128 ~ 127</li>
+<li>计算机补码运算也可以看成一个计量机器，补码也有一个计量范围，即也存在一个“模”</li>
+</ul>
+<h3 id="互为补数"><a href="#互为补数" class="headerlink" title="互为补数"></a>互为补数</h3><p>“模” 实质上是计量器产生“溢出”的量，它的值在计量器上表示不出来，计量器上只能表示出模的余数。任何有模的计量器，均可化减法为加法运算。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">假设一个时钟，当前时针指向10点，而准确时间是6点，需要调整时间为正确的时间，那么就可以有以下两种拨法：一种是倒拨4小时，即10-4=6；另一种是顺拨8小时，既10+8=12+6=6</span><br><span class="line"></span><br><span class="line">- 所以在模为12的计量系统中，加8和减4效果是一样的，因此凡是减4运算，都可以用加8来代替。对“模”而言，+8和-4互为补数，+8和-4的行为是同余的，也可以说6和18模12的行为是同余的。实际上以12模的系统中，11和1，10和2，9和3，7和5，6和6都有这个特性。共同的特点是两者相加等于模</span><br><span class="line"></span><br><span class="line">对于计算机，其概念和方法完全一样</span><br><span class="line"></span><br><span class="line">- 8位计算机所能表示的最大数是1111 1111，若再加1成为1 0000 0000，但因计算机定长8位，所以最高位1自然丢失，又回了0000 0000，所以8位二进制系统的模为2^8 = 256。在这样的系统中减法问题也可以化成加法问题，只需把减数用相应的补数表示就可以了。把补数用到计算机对数的处理上，就是补码。</span><br></pre></td></tr></table></figure>
+<h1 id="原码，反码，补码"><a href="#原码，反码，补码" class="headerlink" title="原码，反码，补码"></a>原码，反码，补码</h1><p>计算机的二进制计算，都是使用补码进行计算的</p>
+<h2 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h2><p><strong>什么是原码？</strong></p>
+<ul>
+<li>原码是人脑最容易理解和计算的表示方式</li>
+<li>原码是机器数的一种表现形式，由符号位 + 数值位组成 ，数值位是真值的绝对值</li>
+<li>字长8位的1字节原码的取值范围是[-127,127], 0有两种表示编码<br>在这里插入图片描述</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>十进制真值</th>
+<th>原码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+1</td>
+<td>0 000 0001</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1 000 0001</td>
+</tr>
+<tr>
+<td>+123</td>
+<td>0 111 1011</td>
+</tr>
+<tr>
+<td>-123</td>
+<td>1 111 1011</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原码作用</strong></p>
+<ul>
+<li>计算机中无法直接使用原码进行计算，计算机内部运算使用的是补码，非原码。但如果要知道某个补码对应的机器数真值是什么，就需要先转换为原码，再通过原码快速的转换为真值</li>
+<li>通过原码，我们可以快速的知道其对应的真值是什么，这就是需要原码的主要原因</li>
+</ul>
+<h2 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h2><p><strong>什么是反码</strong></p>
+<ul>
+<li>反码是在原码的基础上，符号位不变，数值位全部取反的结果</li>
+<li>正数的反码是其本身，一定意义上说只有负数才有反码</li>
+<li>反码没有直接用于计算，并且通过反码也无法得知真值，反码是一个中间值</li>
+<li>字长8位的1字节反码的取值范围是[-127,127]，0有两种表示编码</li>
+</ul>
+<p><img src="/2019/07/07/C++/原码、反码、补码/inverse.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>十进制真值</th>
+<th>原码</th>
+<th>反码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+1</td>
+<td>0 000</td>
+<td>0001</td>
+<td>0</td>
+<td>111 1110</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1 000</td>
+<td>0001</td>
+<td>1</td>
+<td>111 1110</td>
+</tr>
+<tr>
+<td>+123</td>
+<td>0</td>
+<td>111</td>
+<td>1011</td>
+<td>0 000 0100</td>
+</tr>
+<tr>
+<td>-123</td>
+<td>1</td>
+<td>111</td>
+<td>1011</td>
+<td>1 000 0100</td>
+</tr>
+</tbody>
+</table>
+<p><strong>反码的作用</strong></p>
+<ul>
+<li>反码是一个中间值，既不能直接计算，也不能直接推断出真值</li>
+<li>其实反码已经可以表示负数了，既本质可以用来化减为加的去做机器数运算。只是反码运算留有一个小缺陷，既没有解决正负0的问题，所以最后没有被采用做计算的编码，而是作为原码和补码之间的中间值。</li>
+</ul>
+<h2 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h2><p><strong>什么是补码？</strong></p>
+<ul>
+<li>补码是原码符号位不变，数值位取反之后再 + 1得到的结果值，既在反码的基础上+1</li>
+<li>正数的反码，补码都是其本身</li>
+<li>补码的出现是为了解决正负0的问题，补充反码的缺陷</li>
+<li>补码是计算机存储和运算的直接编码，不过不能直接表示出真值，所以对外展示，还需要转换为原码</li>
+<li>字长8位的1字节反码的取值范围是[-128,127]，解决了正负0的问题，只有0 0000000代表0</li>
+<li>8位空间中，人为的定义原负0的编码1 0000000为-(2^8) = -128，所以-128，虽然是负的，但没有反码和补码。这个人为定义是可以通用扩展的n位空间的补码最小值是-(2^n)，如16位空间，原负0编码则为-(2^16) = -65536</li>
+</ul>
+<p><img src="/2019/07/07/C++/原码、反码、补码/complement.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>十进制真值</th>
+<th>原码</th>
+<th>反码</th>
+<th>补码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+1</td>
+<td>0 000 0001</td>
+<td>0 111 1110</td>
+<td>0 111 1111</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1 000 0001</td>
+<td>1 111 1110</td>
+<td>1 111 1111</td>
+</tr>
+<tr>
+<td>+123</td>
+<td>0 111 1011</td>
+<td>0 000 0100</td>
+<td>0 000 0101</td>
+</tr>
+<tr>
+<td>-123</td>
+<td>1 111 1011</td>
+<td>1 000 0100</td>
+<td>1 000 0101</td>
+</tr>
+</tbody>
+</table>
+<p><strong>补码作用</strong></p>
+<ul>
+<li>补码是为了解决反码中遗留的正负0问题。为了不浪费宝贵的空间资源，负0的二进制表示1 0000000为人为认定是-128,扩展多一位的新内容</li>
+<li>计算机最后采用的机器数存储方式就是补码方案，所以计算机中所有的二进制运算都是使用补码进行的。</li>
+<li>补码计算得到的结果也是补码，如果要想知道补码对应的机器数真值，需要把补码转换成原码，才能让人脑更好的识别</li>
+</ul>
+<h1 id="为什么需要原码，反码，补码？"><a href="#为什么需要原码，反码，补码？" class="headerlink" title="为什么需要原码，反码，补码？"></a>为什么需要原码，反码，补码？</h1><h2 id="为什么需要原码？"><a href="#为什么需要原码？" class="headerlink" title="为什么需要原码？"></a>为什么需要原码？</h2><p>因为计算机只能识别0和1，使用的是二进制。而在日常生活中人们使用的是十进制，并且有正负之分，由正负符号来表示。所以只有两种物理状态的计算机想要模拟出正负的概念，并以二进制的形式去存储，也就催生了机器数 原码的出现，既用一个数的最高位来表示符号，0为正，1为负，剩余位存储数值</p>
+<h2 id="既然有了原码，为什么又还要反码呢？"><a href="#既然有了原码，为什么又还要反码呢？" class="headerlink" title="既然有了原码，为什么又还要反码呢？"></a>既然有了原码，为什么又还要反码呢？</h2><p>因为原码的出现，我们在计算机中就有了可以表示有符号数值的方式。有了表现数值的方式，我们就可以进行加减乘除的计算。但是经过计算的实践，我们发现，直接拿原码进行四则运算中的减法运算(加乘除都可以)会得出错误的结果。比如</p>
+<p>1 - 1 = 1 + (-1) = 0 0000001 + 1 0000001 = 1 0000010 = -2</p>
+<p>我们期待的结果是0 (1 0000000 或 0 0000000), 但是却给得到了-2 (1 0000010)的答案，所以这明显是一个错误。为什么会出现错误呢？</p>
+<ul>
+<li>对于人脑来说，在计算的时候，我们可以根据符号位, 选择对数值位进行加减的操作。但是对于计算机而言，四则运算属于最底层的基础计算，需要设计的尽量简单，高效率。既根据运算法则，减去一个正数等于加上一个负数，比如1 - 1 = 1 + (-1)。 所以底层电路设计时，为了避免基础电路设计变得十分的复杂，就放弃了减法的概念，只有保留了加法。所以计算机运算中只有加法，没有减法，减去一个正数会被替换成加上一个负数。</li>
+<li>通过原码进行四则运算的实践，我们发现，乘除加法都没有问题，只有减法有问题。问题就出在了计算机中没有减法，只有加法，减去一个正数会被替换成了加上一个负数，这是原码设计之初本身就不能满足的事情。 既带有符号位的原码进行减法(加上一个负数)运算，很可能计算出错误的结果。</li>
+<li>Maybe，当初基础电路设计设计的更复杂点，可以容忍减法运算，那么可能原码就可以通过真正的“减法”进行减法运算了</li>
+</ul>
+<p>为了解决原码无法满足计算机减法运算的问题，反码就出现了<br>1 - 1 =&gt; 1 + (-1) =&gt; [0 0000001]原 + [1 0000001]原 =&gt; [0 0000001]反 + [1 1111110]反 =&gt;<br>[1 1111111]反 =&gt; [1 0000000]反 =&gt; 0</p>
+<p>很好，反码的出现就解决了原码无法进行减法运算的问题</p>
+<h2 id="既然有了反码，还要补码做什么？"><a href="#既然有了反码，还要补码做什么？" class="headerlink" title="既然有了反码，还要补码做什么？"></a>既然有了反码，还要补码做什么？</h2><p>我们知道反码是在原码的基础上，符号位不变，数值位取反得到的结果。反码解决了原码中无法与负数相加的问题。反码很棒，但是反码依然有一个小缺陷，就是没有解决原码留下来正负0的问题，所以正负0问题也就成为了反码的缺陷。人类总是精益求精的，为了解决反码留下来正负0缺陷，补码就出现了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">正负0问题：</span><br><span class="line"></span><br><span class="line">反码中+0由0 0000000表示，-0由1 0000000表示，然而-0在数学的角度来说是没有意义的，在计算机存储的角度也是多余的</span><br></pre></td></tr></table></figure>
+<p>在8位的补码中，只有+0的概念，+0由0 0000000所表示，原-0的编码被人为的指定是-128。所以8位的补码最小值是-128，取值范围不同于原码和反码的[-127,127],而是[-128,127]</p>
+<h2 id="小小的总结一下："><a href="#小小的总结一下：" class="headerlink" title="小小的总结一下："></a>小小的总结一下：</h2><ul>
+<li>原码就是计算机为了存储带符号的二进制数值而出现的机器数形式</li>
+<li>反码就是为了解决原码无法进行减法运算的问题，说白了就是为了解决与负数相加的问题</li>
+<li>补码就是为了解决反码遗留的正负0问题而出现的新机器数形式</li>
+</ul>
+<h1 id="相关问题"><a href="#相关问题" class="headerlink" title="相关问题"></a>相关问题</h1><h2 id="补码计算的溢出"><a href="#补码计算的溢出" class="headerlink" title="补码计算的溢出"></a>补码计算的溢出</h2><p>因为计算出来的结果值大于该计量系统能显示的值的范围，所以我们要得到与结果值同余，且计量系统能显示出来的值<br>重点是同余，所以理解同余定理可以更好的理解补码计算的溢出情况。</p>
+<p>Java的byte超过了[-128，127]时，怎么处理？<br>我们在进行byte计算的时候，肯定有会这样的思考</p>
+<ul>
+<li>我们知道-1-127的运算等于-128，刚好等于byte的最小值。那么-127-127得到的结果大于1个字节时，又怎么去计算呢？</li>
+<li>当计算出来的结果值大于8位二进制系统能存储的值时，怎么办？</li>
+</ul>
+<p>Java的byte是以补码进行计算的，当byte变量被赋予[-128,127]范围之外的值时，这就属于补码计算溢出的情况。那么Java是怎么处理的呢？</p>
+<ul>
+<li>它会以补码的形式值</li>
+</ul>
+<p>比如，我们将一个十进制值129赋予给byte, 129已经超过Java byte类型的值范围[-128，127], 所以Java最终输出的byte类型结果是129的补码形式值-127。过程如图</p>
+<p><img src="/2019/07/07/C++/原码、反码、补码/overfill.png" alt=""></p>
+<ul>
+<li>-129的原码形式 0 1 0000 0001(9位)，因为byte类型最多支持8位，所以溢出，最高位自然丢失，129在byte的原码形式成为1 0000001(8位)</li>
+<li>原码1 0000001(8位)的数值位取反，得到反码1 1111110(8位)</li>
+<li>补码1 11111111(8位)的十进制形式值是-127，真值是-1</li>
+</ul>
+<p>所以在Java中，如果值大于byte的取值范围，Java会以其补码的形式值方式展示</p>
+<ul>
+<li>当我们用Java的有符号位byte去接收其他语言无符号位的byte数据时，就会导致原义是正数的值在Java的byte中显示为负数情况。此时通常情况下的解决方案就是int = (byte &amp; 0xff), 0xff其实就是255的十六进制哈。byte &amp; 0xff的意思本质就是byte mod (255 +1)</li>
+<li>该解决方案的本质就是，负数不在无符号位byte计量系统的取值范围内，既不在[0,255]范围内。 所以我需要找出负数于模2^8 = 256同余，且在[0,255]范围内的值</li>
+<li>例如-135于模256同余，且在[0,255]范围内的值是121， -129于模256同余，且在[0,255]范围内的值是127</li>
+</ul>
+<p><strong>为什么有-0和+0的表示呢？</strong></p>
+<p>既-0由(1 0000000)表示，+0由(0 0000000)来表示。但是在数学的角度看，-0是没有意义的。而站在计算机存储的角度看，1个字节的空间有限且宝贵，-0的表示浪费了一个存储空间。所以综上所述，既然-0的表示没有意义，那么我们又不能浪费这么一个宝贵的空间，所以就人为的去规定了0只有一种表示手段，既0 0000000，而1 0000000则固定认为是 -128</p>
+
         </div>
-        <div class="content-inner is-flex flex-wrap justify-space-between">
+        <div class="post-reply">
+            
             
         </div>
     </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Categories</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/设计模式/">设计模式</a><span class="category-list-count">1</span></li></ul>
-        </div>
-    </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Archives</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">2</span></li></ul>
-        </div>
-    </div>
-</aside>
-            
-        </div>
-    </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
