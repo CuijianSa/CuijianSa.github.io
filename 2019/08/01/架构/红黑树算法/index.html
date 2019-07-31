@@ -15,15 +15,19 @@
   </script>
 
   
-  <title>Archives: 2019 | CuijianSa.github.io</title>
+  <title>红黑树算法! | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/archives/2019/page/3/index.html">
+  <meta name="description" content="在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观  什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：   节点是红色或者黑色 根节点是黑色 每个叶子的节点都是黑色的空节点（NULL） 每个红色节点的两个子节点都是黑色的。 从任意节点到其每个叶子的所有路径都包含相同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红黑树算法!">
+<meta property="og:url" content="http://yoursite.com/2019/08/01/架构/红黑树算法/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观  什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：   节点是红色或者黑色 根节点是黑色 每个叶子的节点都是黑色的空节点（NULL） 每个红色节点的两个子节点都是黑色的。 从任意节点到其每个叶子的所有路径都包含相同">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-31T16:52:54.158Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="红黑树算法!">
+<meta name="twitter:description" content="在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观  什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：   节点是红色或者黑色 根节点是黑色 每个叶子的节点都是黑色的空节点（NULL） 每个红色节点的两个子节点都是黑色的。 从任意节点到其每个叶子的所有路径都包含相同">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,259 +113,111 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
     }
 
-    .primary-container .post-hover {
-        background: black;
+    .flow-chart {
+        text-align: center;
     }
 
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
+    img[alt="post-cover"] {
+        display: none;
     }
-
 </style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2019/01/07/other/指针数组和数组指针/">
-            <div class="full-height post-hover" style="
-                         background-image: url('/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            指针数组和数组指针
-                        </h1>
-                        <div>
-                        
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            数组指针
-int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。
-
-12345如要将二维数组赋给一指针，应这样赋值：int a..
-                        </p>
-                        <p class="date text-shadow">2019-01-07</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>红黑树算法!</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-08-01</span>
             </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
-                
-<a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                函数指针和指针函数
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2019/01/05/流媒体/live555分析-startStream/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                live555分析-startStream
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-05</p>
-        </div>
-    </div>
-</a>
+                <div>
+                    
+                </div>
             
         </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                函数指针和指针函数
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2019/01/05/流媒体/live555分析-startStream/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                live555分析-startStream
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-05</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
+        <div class="content" style="overflow: auto">
+            <p>在CSDN看到了一篇文章， <a href="https://blog.csdn.net/csdnsevenn/article/details/97842196" target="_blank" rel="noopener">漫画：5 分钟学会红黑树算法</a></p>
+<p>文字永远也没有图直观</p>
+<ol>
+<li>什么是红黑树<br>红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：</li>
+</ol>
+<ul>
+<li>节点是红色或者黑色</li>
+<li>根节点是黑色</li>
+<li>每个叶子的节点都是黑色的空节点（NULL）</li>
+<li>每个红色节点的两个子节点都是黑色的。</li>
+<li>从任意节点到其每个叶子的所有路径都包含相同的黑色节点。</li>
+</ul>
+<ol start="2">
+<li><p>红黑树解决了什么问题<br>红黑树能够以O(log2 n)的时间复杂度进行搜索、插入、删除操作。此外，由于它的设计，任何不平衡都会在三次旋转之内解决。当然，还有一些更好的，但实现起来更复杂的数据结构能够做到一步旋转之内达到平衡，但红黑树能够给我们一个比较“便宜”的解决方案。红黑树的算法时间复杂度和AVL相同，但统计性能比AVL树更高</p>
+</li>
+<li><p>红黑树复杂度<br>能保证在最坏情况下，基本的动态几何操作的时间均为O（lgn）</p>
+</li>
+<li><p>如何构造</p>
+</li>
+</ol>
+<ul>
+<li>构造</li>
+<li>插入</li>
+<li>搜索</li>
+<li>删除</li>
+</ul>
 
-                    
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>函数指针和指针函数</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符 *函数名(参数表)
-例如:int *fun(int x,int y);
-函数指针其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。
-声明格式：类型说明符 (*函数名) (参数) 
-int (*fun)(int x,int y);..
-                                        </p>
-                                        <p>2019-01-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/05/流媒体/live555分析-startStream/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>live555分析-startStream</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            
-                                        </p>
-                                        <p>2019-01-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/04/linux/mount/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>mount</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）
-
-利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点..
-                                        </p>
-                                        <p>2019-01-04</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                </nav>
-            </section>
+        </div>
+        <div class="post-reply">
+            
             
         </div>
     </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
