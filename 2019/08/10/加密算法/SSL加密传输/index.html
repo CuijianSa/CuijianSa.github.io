@@ -15,15 +15,19 @@
   </script>
 
   
-  <title>Archives: 2019 | CuijianSa.github.io</title>
+  <title>加密算法 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/archives/2019/page/3/index.html">
+  <meta name="description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加密算法">
+<meta property="og:url" content="http://yoursite.com/2019/08/10/加密算法/SSL加密传输/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-10T15:08:43.296Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="加密算法">
+<meta name="twitter:description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,289 +113,141 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
     }
 
-    .primary-container .post-hover {
-        background: black;
+    .flow-chart {
+        text-align: center;
     }
 
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
+    img[alt="post-cover"] {
+        display: none;
     }
-
 </style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2019/01/07/linux/用户态和内核态/">
-            <div class="full-height post-hover" style="
-                         background-image: url('/2019/01/07/linux/用户态和内核态/Unix_Linux的体系架构.png');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            用户态和内核态
-                        </h1>
-                        <div>
-                        
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            用户态及内核态介绍
-从宏观上来看，Linux操作系统的体系架构分为用户态和内核态（或者用户空间和内核）。内核从本质上看是一种软件——控制计算机的硬件资源，并提供上层应用程序运行的环境。用户态即上层应用程序的活动空间，应用程序的执行必须依..
-                        </p>
-                        <p class="date text-shadow">2019-01-07</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>加密算法</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-08-10</span>
             </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
-                
-<a class="post-hover" href="/2019/01/07/other/指针数组和数组指针/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                指针数组和数组指针
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                数组指针
-int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                函数指针和指针函数
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
-        </div>
-    </div>
-</a>
+                <div>
+                    
+                </div>
             
         </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2019/01/07/other/指针数组和数组指针/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                指针数组和数组指针
-            </h3>
+        <div class="content" style="overflow: auto">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近项目用到SSL比较多，为了串联各个知识点</p>
+<p>应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。</p>
+<p>Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的传输提供安全性保证。SSL能够为HTTP提供安全连接，从而非常大程度上改善了万维网的安全性问题。</p>
+<ul>
+<li>SSL结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                         Application                                  |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">| SSL handshake | SSL change cipher spec protocol | SSL alert protocol |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                      SSL record protocol                             |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                             TCP                                      |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                             IP                                       |</span><br><span class="line">------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<h1 id="SSL加密"><a href="#SSL加密" class="headerlink" title="SSL加密"></a>SSL加密</h1><p>安利一本权威书籍&lt;&lt;应用密码学：协议、算法与C源程序&gt;&gt;</p>
+<p>整个加密的过程就是一种数学的变换：</p>
+<p>CT = f1(PT, KEY)<br>PT = f2(CT, KEY)</p>
+<p>加密时，f1是加密的函数变换，它的输入是明文和口令，<br>解密时，f2是解密的函数变换，它的输入是密文和口令。<br>f1和f2是互逆的两种变换，但是f1和f2输入的参数key可以相等也可以不相等。相等的时候就是用同一把密钥进行加密和解密，不相等的时候就是用不同的密钥进行加解密。</p>
+<p>根据加解密的key相同或者不同，加密术分为两个体系：对称式加密体系（传统加密体系）和非对称式加密体系。</p>
+<h2 id="对称式加密"><a href="#对称式加密" class="headerlink" title="对称式加密"></a>对称式加密</h2><p>这种加密体系的优点：加密速度很快，可以加密大量的数据</p>
+<p>但是有个致命的缺点：在非本地加密通信时，密钥的传输问题（把加密好的密文给接收方，你得把密钥给他，但是怎么安全传输这个密钥呢？）<br>虽然对称式加密体系有这个致命的缺点，但是它仍然是加密的主要手段，因为其加密速度快，能加密大量的数据。</p>
+<ul>
+<li>对称式加密测试</li>
+</ul>
+<p>openssl enc -des3 -in file -out ciphertext</p>
+<p>使用des3算法对file进行加密，生成目的文件ciphertext.</p>
+<p>openssl enc -des3 -d -in ciphertext -out deciphertext</p>
+<p>可以看到测试结果, 使用对称式算法进行加解密，可以看到ciphertext空deciphertext内容一致</p>
+<p>对称式加密算法在数据安全的领域下，有一个较为严重的问题， 关于密钥口令的传播并不能保证其安全</p>
+<p>这些问题可以使用非对称解密来解决</p>
+<h2 id="非对称式解密"><a href="#非对称式解密" class="headerlink" title="非对称式解密"></a>非对称式解密</h2><p>为了解决对称加密中密钥的传输的问题，一些提出了非对称式的加密体系</p>
+<p>加密及解密使用两个不同的密钥，分别为公钥及私钥</p>
+<p>公钥加密的数据只能由私钥进行解密， 私钥加密的数据只能由公钥解密</p>
+<p>在实际场景下，service将公钥发给各个client, client使用公钥解析server加密的数据。 client使用公钥加密发送给server, 私钥只由server保存，这种机制保证了数据的安全性</p>
+<p>这种情况下还有一个隐含的问题， 攻击者可以伪造server进行钓鱼工具；这里就需要一个权威结构CA进行验证公钥</p>
+<ul>
+<li>非对称式加密测试</li>
+</ul>
+<p>openssl genrsa -out file 1024</p>
+<p>openssl rsa -in file -pubout</p>
+<p>先产生1024bit私钥, 然后根据私钥再产生对应的公钥</p>
+<p>但是私钥的加密的速度很慢，比传统加密体系的速度慢三个数量级，所以只能加密少量的数据,了解决这个问题，我们综合对称加密和非对称加密</p>
+<h2 id="综合方案"><a href="#综合方案" class="headerlink" title="综合方案"></a>综合方案</h2><p>先发送方如果想加密发送一个很大的数据，由于非对称加密的速度很慢，所以只能采用对称式的加密方式，加密这个很大的明文数据。这时的口令就是一个session key，这个口令是个随机数，每次通讯的时候都不一样，发送方也不关心这个口令是什么，因为他只要能安全的给接收方就可以了</p>
+<p>那么怎样才能确保这个session key安全的到达接收方呢？</p>
+<p>用非对称加密的方式对session key加密，这样只有接收方用自己的私钥才能解密session key，并用session key解密那个很大的文件的密文</p>
+<h2 id="Hash-Function"><a href="#Hash-Function" class="headerlink" title="Hash Function"></a>Hash Function</h2><p>对一个大的文件进行签名，当文件比较大， 非对称签名很慢， 使用MD5可以对body进行签名， 对MD5签名进行加密</p>
+<p>任何人都可以看可以使用 这个明文，但是不能修改。一旦你修改了，别人也能很容易的看到这个不是原发送方的那个明文了，因为你没有原发送方的私钥，你无法对特征码签名，别人用原发送方的公钥验证的时候很容易就能发现你的明文是被修改过的</p>
+<h2 id="验证公钥"><a href="#验证公钥" class="headerlink" title="验证公钥"></a>验证公钥</h2><p>我怎么能确定我手里的公钥就是我心中的接收方的公钥呢？怎么防止被钓鱼呢？</p>
+<p>解决的办法就是引入一个第三方，一个权威机构，一个我们都相信的机构。</p>
+<p>验证公钥，Digital Certificate</p>
+<p>好的解决办法就是建立一个中介，我们所有的人都相信这个中介，中介对接收方的公钥的合法性进行认证，在接收方的公钥上签名，这样发送方在相信中介的基础上就能安全的给接收方发送信息了。</p>
+<p>具体的做法就是：中介要求接收方在他这里注册，验证其公钥，然后中介对接收方的公钥进行签名，也就是中介用自己的私钥对接收方的公钥进行加密。然而中介的公钥是众所周知，任何人都知道，不会被任何人假冒的，发送方如果能用中介的公钥认证这份证书，就证明里面的接收方的公钥是注册过的，是合法的。就能安全的给接收方发送信息了。</p>
+<p>也即是说如果我们想给某个人发送信息，必须得到他的公钥，但是为了防止钓鱼，这个公钥必须得被我们相信的中介签名后才是安全的。</p>
+<p>注意：这个证书仍是通信双方通信时，接收者给出的，不同的是这个证书已经被我们相信的中介签过名</p>
+<p>一张数字证书包含接收方的公钥、DN信息、签过名的哈希值。</p>
+<h1 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h1><p><a href="https://www.openssl.org/" target="_blank" rel="noopener">OpenSSL</a>是一种功能强大的商用级全功能工具包，适用于传输层安全性（TLS）和安全套接字层（SSL）协议。 它也是一个通用的加密库</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li>tar zxvf openssl-1.0.1e.tar.gz</li>
+<li>cd openssl-1.0.1e</li>
+<li>./configure –prefix=/usr/local/openssl</li>
+<li>make </li>
+<li>make install</li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2>
+        </div>
+        <div class="post-reply">
             
             
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                数组指针
-int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
         </div>
     </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                函数指针和指针函数
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符..
-            </p>
-            <p class="date text-shadow is-marginless">2019-01-07</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
 
-                    
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/07/other/指针数组和数组指针/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/01/07/other/指针数组和数组指针/指针数组和数组指针-内存表示.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>指针数组和数组指针</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            数组指针
-int (*p)[n], 其中()优先级高于[]，故p是一个指针， 指向一维的数组，数组长度是n,p的步长也是n,也就是说执行p+1时，p要跨过n个整型数据的长度。
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
 
-12345如要将二维数组赋给一指针，应这样赋值：int a[3][4];int (*p)[4]; //该语句是定义一个数组指针，指向含4个元素的一维数组。 p=a;       ..
-                                        </p>
-                                        <p>2019-01-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/07/other/函数指针和指针函数/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>函数指针和指针函数</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            指针函数返回指针的函数，其本质是一个函数，而该函数的返回值是一个指针。 
-声明格式为：类型标识符 *函数名(参数表)
-例如:int *fun(int x,int y);
-函数指针其本质是一个指针变量，该指针指向这个函数。总结来说，函数指针就是指向函数的指针。
-声明格式：类型说明符 (*函数名) (参数) 
-int (*fun)(int x,int y);..
-                                        </p>
-                                        <p>2019-01-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/05/流媒体/live555分析-startStream/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>live555分析-startStream</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            
-                                        </p>
-                                        <p>2019-01-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/01/04/linux/mount/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>mount</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            概述peer grouppeer group就是一个或多个挂载点的集合，他们之间可以共享挂载信息。目前在下面两种情况下会使两个挂载点属于同一个peer group（前提条件是挂载点的propagation type是shared）
-
-利用mount –bind命令，将会使源和目的挂载点属于同一个peer group，当然前提条件是‘源’必须要是一个挂载点..
-                                        </p>
-                                        <p>2019-01-04</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                </nav>
-            </section>
-            
-        </div>
-    </div>
-</div>
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
