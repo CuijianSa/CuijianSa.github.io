@@ -15,15 +15,23 @@
   </script>
 
   
-  <title>Archives: 2019 | CuijianSa.github.io</title>
+  <title>加密算法 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/archives/2019/index.html">
+  <meta name="description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="加密算法">
+<meta property="og:url" content="http://yoursite.com/2019/08/11/加密算法/SSL加密传输/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/11/加密算法/SSL加密传输/vertify_server_client.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/11/加密算法/SSL加密传输/recover_shankhand.png">
+<meta property="og:updated_time" content="2019-08-11T12:41:31.026Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="加密算法">
+<meta name="twitter:description" content="前言最近项目用到SSL比较多，为了串联各个知识点 应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。 Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,462 +117,204 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
     }
 
-    .primary-container .post-hover {
-        background: black;
+    .flow-chart {
+        text-align: center;
     }
 
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
+    img[alt="post-cover"] {
+        display: none;
     }
-
 </style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2019/08/11/加密算法/SSL加密传输/">
-            <div class="full-height post-hover" style="
-                         background-image: url('/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            加密算法
-                        </h1>
-                        <div>
-                        
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            前言最近项目用到SSL比较多，为了串联各个知识点
-应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改..
-                        </p>
-                        <p class="date text-shadow">2019-08-11</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>加密算法</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-08-11</span>
             </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
             
-                
-<a class="post-hover" href="/2019/08/01/架构/红黑树算法/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/08/01/架构/红黑树算法/rb_sample.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                红黑树算法!
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法
-文字永远也没有图直观
-
-什么是红黑树红..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-01</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2019/07/21/流媒体/live555总篇/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/07/21/流媒体/live555总篇/live555_classDiagram.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                live555总篇
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                简介live555是采用开放标准协议(RTP/RTCP,RTSP,SIP)实现的C++库，可在U..
-            </p>
-            <p class="date text-shadow is-marginless">2019-07-21</p>
-        </div>
-    </div>
-</a>
+                <div>
+                    
+                </div>
             
         </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2019/08/01/架构/红黑树算法/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/08/01/架构/红黑树算法/rb_sample.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                红黑树算法!
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法
-文字永远也没有图直观
+        <div class="content" style="overflow: auto">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近项目用到SSL比较多，为了串联各个知识点</p>
+<p>应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。</p>
+<p>Netscape公司提出的安全协议SSL，利用数据加密、身份验证和消息完整性验证机制，为网络上数据的传输提供安全性保证。SSL能够为HTTP提供安全连接，从而非常大程度上改善了万维网的安全性问题。</p>
+<ul>
+<li>SSL结构</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                         Application                                  |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">| SSL handshake | SSL change cipher spec protocol | SSL alert protocol |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                      SSL record protocol                             |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                             TCP                                      |</span><br><span class="line">------------------------------------------------------------------------</span><br><span class="line">|                             IP                                       |</span><br><span class="line">------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<ul>
+<li>技术长处<ul>
+<li>提供较高的安全性保证:SSL利用数据加密、身份验证和消息完整性验证机制。保证网络上传输数据的安全性。</li>
+<li>支持各种应用层协议:尽管SSL设计的初衷是为了解决万维网安全性问题，可是因为SSL位于应用层和传输层之间。它能够为不论什么基于TCP等可靠连接的应用层协议提供安全性保证。</li>
+<li>部署简单:眼下SSL已经成为网络中用来鉴别站点和网页浏览者身份，在浏览器使用者及Webserver之间进行加密通信的全球化标准。SSL协议已被集成到大部分的浏览器中，如IE、Netscape、Firefox等。这就意味着差点儿随意一台装有浏览器的计算机都支持SSL连接。不须要安装额外的client软件</li>
+</ul>
+</li>
+</ul>
+<h1 id="协议安全机制"><a href="#协议安全机制" class="headerlink" title="协议安全机制"></a>协议安全机制</h1><ul>
+<li>传输数据的机密性：利用对称密钥算法对传输的数据进行加密。</li>
+<li>身份验证机制：基于证书利用数字签名方法对server和client进行身份验证，当中client的身份验证是可选的。</li>
+<li>消息完整性验证：消息传输过程中使用MAC算法来检验消息的完整性。</li>
+</ul>
+<h2 id="SSL加密"><a href="#SSL加密" class="headerlink" title="SSL加密"></a>SSL加密</h2><p>安利一本权威书籍&lt;&lt;应用密码学：协议、算法与C源程序&gt;&gt;</p>
+<p>整个加密的过程就是一种数学的变换：</p>
+<p>CT = f1(PT, KEY)<br>PT = f2(CT, KEY)</p>
+<p>加密时，f1是加密的函数变换，它的输入是明文和口令，<br>解密时，f2是解密的函数变换，它的输入是密文和口令。<br>f1和f2是互逆的两种变换，但是f1和f2输入的参数key可以相等也可以不相等。相等的时候就是用同一把密钥进行加密和解密，不相等的时候就是用不同的密钥进行加解密。</p>
+<p>根据加解密的key相同或者不同，加密术分为两个体系：对称式加密体系（传统加密体系）和非对称式加密体系。</p>
+<ul>
+<li>对称密钥算法：数据加密和解密时使用同样的密钥</li>
+<li>非对称密钥算法：数据加密和解密时使用不同的密钥，一个是公开的公钥，一个是由用户秘密保存的私钥</li>
+</ul>
+<p>SSL加密通道上的数据加解密使用对称密钥算法。眼下主要支持的算法有DES、3DES、AES等，这些算法都能够有效地防止交互数据被窃听</p>
+<h3 id="对称式加密"><a href="#对称式加密" class="headerlink" title="对称式加密"></a>对称式加密</h3><p>这种加密体系的优点：加密速度很快，可以加密大量的数据</p>
+<p>但是有个致命的缺点：在非本地加密通信时，密钥的传输问题（把加密好的密文给接收方，你得把密钥给他，但是怎么安全传输这个密钥呢？）<br>虽然对称式加密体系有这个致命的缺点，但是它仍然是加密的主要手段，因为其加密速度快，能加密大量的数据。</p>
+<ul>
+<li>对称式加密测试</li>
+</ul>
+<p>openssl enc -des3 -in file -out ciphertext</p>
+<p>使用des3算法对file进行加密，生成目的文件ciphertext.</p>
+<p>openssl enc -des3 -d -in ciphertext -out deciphertext</p>
+<p>可以看到测试结果, 使用对称式算法进行加解密，可以看到ciphertext空deciphertext内容一致</p>
+<p>对称式加密算法在数据安全的领域下，有一个较为严重的问题， 关于密钥口令的传播并不能保证其安全</p>
+<p>这些问题可以使用非对称解密来解决</p>
+<h3 id="非对称式解密"><a href="#非对称式解密" class="headerlink" title="非对称式解密"></a>非对称式解密</h3><p>为了解决对称加密中密钥的传输的问题，一些提出了非对称式的加密体系</p>
+<p>加密及解密使用两个不同的密钥，分别为公钥及私钥</p>
+<p>公钥加密的数据只能由私钥进行解密， 私钥加密的数据只能由公钥解密</p>
+<p>在实际场景下，service将公钥发给各个client, client使用公钥解析server加密的数据。 client使用公钥加密发送给server, 私钥只由server保存，这种机制保证了数据的安全性</p>
+<p>这种情况下还有一个隐含的问题， 攻击者可以伪造server进行钓鱼工具；这里就需要一个权威结构CA进行验证公钥</p>
+<ul>
+<li>非对称式加密测试</li>
+</ul>
+<p>openssl genrsa -out file 1024</p>
+<p>openssl rsa -in file -pubout</p>
+<p>先产生1024bit私钥, 然后根据私钥再产生对应的公钥</p>
+<p>但是私钥的加密的速度很慢，比传统加密体系的速度慢三个数量级，所以只能加密少量的数据,了解决这个问题，我们综合对称加密和非对称加密</p>
+<h2 id="综合方案"><a href="#综合方案" class="headerlink" title="综合方案"></a>综合方案</h2><p>先发送方如果想加密发送一个很大的数据，由于非对称加密的速度很慢，所以只能采用对称式的加密方式，加密这个很大的明文数据。这时的口令就是一个session key，这个口令是个随机数，每次通讯的时候都不一样，发送方也不关心这个口令是什么，因为他只要能安全的给接收方就可以了</p>
+<p>那么怎样才能确保这个session key安全的到达接收方呢？</p>
+<p>用非对称加密的方式对session key加密，这样只有接收方用自己的私钥才能解密session key，并用session key解密那个很大的文件的密文</p>
+<h2 id="Hash-Function"><a href="#Hash-Function" class="headerlink" title="Hash Function"></a>Hash Function</h2><p>对一个大的文件进行签名，当文件比较大， 非对称签名很慢， 使用MD5可以对body进行签名， 对MD5签名进行加密</p>
+<p>任何人都可以看可以使用 这个明文，但是不能修改。一旦你修改了，别人也能很容易的看到这个不是原发送方的那个明文了，因为你没有原发送方的私钥，你无法对特征码签名，别人用原发送方的公钥验证的时候很容易就能发现你的明文是被修改过的</p>
+<h2 id="验证公钥"><a href="#验证公钥" class="headerlink" title="验证公钥"></a>验证公钥</h2><p>我怎么能确定我手里的公钥就是我心中的接收方的公钥呢？怎么防止被钓鱼呢？</p>
+<p>解决的办法就是引入一个第三方，一个权威机构，一个我们都相信的机构。</p>
+<p>验证公钥，Digital Certificate</p>
+<p>好的解决办法就是建立一个中介，我们所有的人都相信这个中介，中介对接收方的公钥的合法性进行认证，在接收方的公钥上签名，这样发送方在相信中介的基础上就能安全的给接收方发送信息了。</p>
+<p>具体的做法就是：中介要求接收方在他这里注册，验证其公钥，然后中介对接收方的公钥进行签名，也就是中介用自己的私钥对接收方的公钥进行加密。然而中介的公钥是众所周知，任何人都知道，不会被任何人假冒的，发送方如果能用中介的公钥认证这份证书，就证明里面的接收方的公钥是注册过的，是合法的。就能安全的给接收方发送信息了。</p>
+<p>也即是说如果我们想给某个人发送信息，必须得到他的公钥，但是为了防止钓鱼，这个公钥必须得被我们相信的中介签名后才是安全的。</p>
+<p>注意：这个证书仍是通信双方通信时，接收者给出的，不同的是这个证书已经被我们相信的中介签过名</p>
+<p>一张数字证书包含接收方的公钥、DN信息、签过名的哈希值。</p>
+<h1 id="协议工作过程"><a href="#协议工作过程" class="headerlink" title="协议工作过程"></a>协议工作过程</h1><h2 id="SSL的分层结构"><a href="#SSL的分层结构" class="headerlink" title="SSL的分层结构"></a>SSL的分层结构</h2><p>SSL分为两层</p>
+<ul>
+<li>上层为SSL握手协议（SSL handshake protocol）、SSLpassword变化协议（SSL change cipher spec protocol）和SSL警告协议（SSL alert protocol）</li>
+<li>底层为SSL记录协议（SSL record protocol）</li>
+</ul>
+<p>SSL握手协议：是SSL协议很重要的组成部分。用来协商通信过程中使用的加密套件（加密算法、密钥交换算法和MAC算法等）、在server和client之间安全地交换密钥、实现server和client的身份验证</p>
+<p>SSLpassword变化协议：client和server端通过password变化协议通知对端。随后的报文都将使用新协商的加密套件和密钥进行保护和传输</p>
+<p>SSL警告协议：用来向通信对端报告告警信息，消息中包括告警的严重级别和描写叙述</p>
+<p>SSL记录协议：主要负责对上层的数据（SSL握手协议、SSLpassword变化协议、SSL警告协议和应用层协议报文）进行分块、计算并加入MAC值、加密。并把处理后的记录块传输给对端</p>
+<h2 id="SSL握手过程"><a href="#SSL握手过程" class="headerlink" title="SSL握手过程"></a>SSL握手过程</h2><p>SSL通过握手过程在client和server之间协商会话參数，并建立会话。会话包括的主要參数有会话ID、对方的证书、加密套件（密钥交换算法、数据加密算法和MAC算法等）以及主密钥（master secret）。通过SSL会话传输的数据，都将採用该会话的主密钥和加密套件进行加密、计算MAC等处理</p>
+<h3 id="仅仅验证server的SSL握手过程"><a href="#仅仅验证server的SSL握手过程" class="headerlink" title="仅仅验证server的SSL握手过程"></a>仅仅验证server的SSL握手过程</h3><p><img src="/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png" alt=""></p>
+<ol>
+<li>SSLclient通过Client Hello消息将它支持的SSL版本号、加密算法、密钥交换算法、MAC算法等信息发送给SSLserver</li>
+<li>SSLserver确定本次通信採用的SSL版本号和加密套件，并通过Server Hello消息通知给SSLclient。假设SSLserver同意SSLclient在以后的通信中重用本次会话，则SSLserver会为本次会话分配会话ID。并通过Server Hello消息发送给SSLclient</li>
+<li>SSLserver将携带自己公钥信息的数字证书通过Certificate消息发送给SSLclient</li>
+<li>SSLserver发送Server Hello Done消息。通知SSLclient版本号和加密套件协商结束。開始进行密钥交换</li>
+<li>SSLclient验证SSLserver的证书合法后，利用证书中的公钥加密SSLclient随机生成的premaster secret，并通过Client Key Exchange消息发送给SSLserver</li>
+<li>SSLclient发送Change Cipher Spec消息，通知SSLserver兴许报文将採用协商好的密钥和加密套件进行加密和MAC计算</li>
+<li>SSLclient计算已交互的握手消息（除Change Cipher Spec消息外全部已交互的消息）的Hash值，利用协商好的密钥和加密套件处理Hash值（计算并加入MAC值、加密等），并通过Finished消息发送给SSLserver。SSLserver利用相同的方法计算已交互的握手消息的Hash值，并与Finished消息的解密结果比較，假设二者相同，且MAC值验证成功，则证明密钥和加密套件协商成功</li>
+<li>相同地。SSLserver发送Change Cipher Spec消息，通知SSLclient兴许报文将採用协商好的密钥和加密套件进行加密和MAC计算</li>
+<li>SSLserver计算已交互的握手消息的Hash值，利用协商好的密钥和加密套件处理Hash值（计算并加入MAC值、加密等），并通过Finished消息发送给SSLclient。SSLclient利用相同的方法计算已交互的握手消息的Hash值，并与Finished消息的解密结果比較，假设二者相同。且MAC值验证成功。则证明密钥和加密套件协商成功</li>
+</ol>
+<p>SSLclient接收到SSLserver发送的Finished消息后。假设解密成功，则能够推断SSLserver是数字证书的拥有者，即SSLserver身份验证成功，由于仅仅有拥有私钥的SSLserver才干从Client Key Exchange消息中解密得到premaster secret，从而间接地实现了SSLclient对SSLserver的身份验证</p>
+<h3 id="验证server和client的SSL握手过程"><a href="#验证server和client的SSL握手过程" class="headerlink" title="验证server和client的SSL握手过程"></a>验证server和client的SSL握手过程</h3><p><img src="/2019/08/11/加密算法/SSL加密传输/vertify_server_client.png" alt=""><br>SSLclient的身份验证是可选的，由SSLserver决定是否验证SSLclient的身份。</p>
+<ol>
+<li>SSLserver发送Certificate Request消息。请求SSLclient将其证书发送给SSLserver</li>
+<li>SSLclient通过Certificate消息将携带自己公钥的证书发送给SSLserver。SSLserver验证该证书的合法性</li>
+<li>SSLclient计算已交互的握手消息、主密钥的Hash值。利用自己的私钥对其进行加密，并通过Certificate Verify消息发送给SSLserver</li>
+<li>SSLserver计算已交互的握手消息、主密钥的Hash值。利用SSLclient证书中的公钥解密Certificate Verify消息，并将解密结果与计算出的Hash值比較。假设二者同样，则SSLclient身份验证成功</li>
+</ol>
+<h3 id="恢复原有会话的SSL握手过程"><a href="#恢复原有会话的SSL握手过程" class="headerlink" title="恢复原有会话的SSL握手过程"></a>恢复原有会话的SSL握手过程</h3><p><img src="/2019/08/11/加密算法/SSL加密传输/recover_shankhand.png" alt=""></p>
+<p>协商会话參数、建立会话的过程中。须要使用非对称密钥算法来加密密钥、验证通信对端的身份。计算量较大，占用了大量的系统资源。</p>
+<p>为了简化SSL握手过程。SSL同意重用已经协商过的会话，详细过程为</p>
+<ol>
+<li>SSLclient发送Client Hello消息，消息中的会话ID设置为计划重用的会话的ID</li>
+<li>SSLserver假设同意重用该会话，则通过在Server Hello消息中设置同样的会话ID来应答。这样，SSLclient和SSLserver就能够利用原有会话的密钥和加密套件。不必又一次协商</li>
+<li>SSLclient发送Change Cipher Spec消息，通知SSLserver兴许报文将採用原有会话的密钥和加密套件进行加密和MAC计算</li>
+<li>SSLclient计算已交互的握手消息的Hash值，利用原有会话的密钥和加密套件处理Hash值，并通过Finished消息发送给SSLserver，以便SSLserver推断密钥和加密套件是否正确</li>
+<li>相同地。SSLserver发送Change Cipher Spec消息，通知SSLclient兴许报文将採用原有会话的密钥和加密套件进行加密和MAC计算</li>
+<li>SLserver计算已交互的握手消息的Hash值，利用原有会话的密钥和加密套件处理Hash值，并通过Finished消息发送给SSLclient。以便SSLclient推断密钥和加密套件是否正确</li>
+</ol>
+<h1 id="OpenSSL"><a href="#OpenSSL" class="headerlink" title="OpenSSL"></a>OpenSSL</h1><p><a href="https://www.openssl.org/" target="_blank" rel="noopener">OpenSSL</a>是一种功能强大的商用级全功能工具包，适用于传输层安全性（TLS）和安全套接字层（SSL）协议。 它也是一个通用的加密库</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><ul>
+<li>tar zxvf openssl-1.0.1e.tar.gz</li>
+<li>cd openssl-1.0.1e</li>
+<li>./configure –prefix=/usr/local/openssl</li>
+<li>make </li>
+<li>make install</li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.cnblogs.com/bhlsheji/p/4586597.html" target="_blank" rel="noopener">SSL工作原理</a></li>
+<li><a href="https://www.cnblogs.com/stemon/p/3480626.html" target="_blank" rel="noopener">加密传输SSL协议</a></li>
+</ul>
 
-什么是红黑树红..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-01</p>
         </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2019/07/21/流媒体/live555总篇/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/07/21/流媒体/live555总篇/live555_classDiagram.jpg')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                live555总篇
-            </h3>
+        <div class="post-reply">
             
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                简介live555是采用开放标准协议(RTP/RTCP,RTSP,SIP)实现的C++库，可在U..
-            </p>
-            <p class="date text-shadow is-marginless">2019-07-21</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
-
-                    
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/08/01/架构/红黑树算法/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/08/01/架构/红黑树算法/rb_sample.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>红黑树算法!</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法
-文字永远也没有图直观
-
-什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：
-
-
-节点是红色或者黑色
-根节点是黑色
-每个叶子的节点都是黑色的空节点（NULL）
-每个红色节点的两个子节点都是黑色的。..
-                                        </p>
-                                        <p>2019-08-01</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/21/流媒体/live555总篇/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/07/21/流媒体/live555总篇/live555_classDiagram.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>live555总篇</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            简介live555是采用开放标准协议(RTP/RTCP,RTSP,SIP)实现的C++库，可在Unix,Windows及QNX平台编译构建流媒体库。这些库已在”LIVE555Proxy Server”及vobStreamer中使用，这些库也可用于流式传输，接收和处理MPEG,H265,H264，H+,DV及JPEG视频及音频解码器。它们可以很容易拓展支持..
-                                        </p>
-                                        <p>2019-07-21</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/07/C++/原码、反码、补码/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/07/07/C++/原码、反码、补码/bit.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>原码、反码、补码</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解
-最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻
-
-概念
-字节
-二进制计算
-如何理解原码、反码、补码？
-
-
-机器数与真值
-什么是机器数
-什么是真值和形式值？
-机器数和源码、反码、补码的关系
-
-
-同余定理的应用
-什么是同余定理？
-模，互为补数，同余
-模
-互为补数
-
-..
-                                        </p>
-                                        <p>2019-07-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/02/开源项目/开源项目/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>开源项目</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            我的开源项目utils简介utils是基于c++编写的一些demo，包含python、QT、通用库，其目录如下
-123456789|--- cmake:cmake 文件存放目录|--- common: 通用头文件|--- python: 一些Python demo|--- src: 源码    |--- image    |--- media    |-..
-                                        </p>
-                                        <p>2019-07-02</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/30/hexo命令/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>hexo命令</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            hexo 简介Hexo 是一套快速、简洁且高效的博客框架，使用Markdown解析文章生成静态网页
-安装
-npm install hexo-cli -g
-hexo init blog
-cd blog
-npm install
-hexo server
-
-配置配置主题
-打开hexo themes页面
-将中意的thems下载在blog/themes
-配置博客根目..
-                                        </p>
-                                        <p>2019-06-30</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/26/linux/linux应用程序加载/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>linux应用程序加载</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- -------------..
-                                        </p>
-                                        <p>2019-06-26</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/05/网络/TCP三次握手+四次挥手/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/06/05/网络/TCP三次握手+四次挥手/connect.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>TCP三次握手+四次挥手</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            三次握手流程图
-解决的问题:以最小的握手次数，达到C-S可靠的连接
-过程
-第一次握手: 建立连接时，客户端发送SYN(seq = x)包,并进入SYS_SENT状态，并等待信号回复
-第二次握手: 服务端收到SYN包，必须确定客户的SYN，并且同时发送SYN+ACK(seq = y, ack = x+1)包，此时服务器进入SYN_RECV状态
-第三次握手:..
-                                        </p>
-                                        <p>2019-06-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/05/07/SQL/mongodb/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>mongodb</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            MongoDB基础概念MongoDB是基于分布式文件存储的数据库，介于关系数据库和非关系数据库之间的产品
-优缺点:优点:
-可靠性(容错):分布式计算系统中的一个重要的优点是可靠性。一台服务器的系统崩溃并不影响到其余的服务器。
-可扩展性:在分布式计算系统可以根据需要增加更多的机器。
-资源共享
-灵活性:由于该系统是非常灵活的，它很容易安装，实施和调试新的服务..
-                                        </p>
-                                        <p>2019-05-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/04/08/网络/epoll框架/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>epoll框架</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            123456789101112131415161718192021SYNOPSIS       #include &lt;sys/epoll.h&gt;DESCRIPTION       The  epoll  API performs a similar task to poll(2): monitoring multiple       file d..
-                                        </p>
-                                        <p>2019-04-08</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                </nav>
-            </section>
             
         </div>
     </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
