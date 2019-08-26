@@ -15,15 +15,19 @@
   </script>
 
   
-  <title>Category: 性能调优 | CuijianSa.github.io</title>
+  <title>oprofile | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/categories/性能调优/index.html">
+  <meta name="description" content="简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的 主页:https://oprofile.sourceforge.io">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oprofile">
+<meta property="og:url" content="http://yoursite.com/2019/08/27/性能调优/oprofile/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的 主页:https://oprofile.sourceforge.io">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-26T16:05:42.148Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="oprofile">
+<meta name="twitter:description" content="简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的 主页:https://oprofile.sourceforge.io">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,69 +113,149 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .container.tag-cate-wrap {
-        min-height: 93vh;
+          <!--博文页面-->
+
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
+        background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .category-title-inner {
-        padding-top: 50px;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    strong {
-        text-transform: capitalize;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    .flow-chart {
+        text-align: center;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>oprofile</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-08-27</span>
+            </div>
+            
+                <div>
+                    
+                </div>
+            
+        </div>
+        <div class="content" style="overflow: auto">
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的</p>
+<p>主页:<a href="https://oprofile.sourceforge.io/news/" target="_blank" rel="noopener">https://oprofile.sourceforge.io/news/</a></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><ul>
+<li>下载: wget <a href="https://prdownloads.sourceforge.net/oprofile/oprofile-1.3.0.tar.gz" target="_blank" rel="noopener">https://prdownloads.sourceforge.net/oprofile/oprofile-1.3.0.tar.gz</a></li>
+<li>安装依赖库:<ul>
+<li>sudo apt-get install libpopt-dev</li>
+<li>sudo apt-get install binutils-dev</li>
+<li>sudo apt-get install libiberty-dev</li>
+</ul>
+</li>
+<li><p>编译: </p>
+<ul>
+<li>./configure  –with-kernel-support</li>
+<li>make </li>
+<li>make install</li>
+</ul>
+</li>
+<li><p>opcontrol –init  加载模块，mout /dev/oprofile 创建必需的文件和目录 </p>
+</li>
+<li>opcontrol –no-vmlinux 或者 opcontrol –vmlinux=/boot/vmlinux-<code>uname -r</code> 决定是否对kernel进行profiling </li>
+<li>opcontrol –reset 清楚当前会话中的数据 </li>
+<li>opcontrol –start 开始profiling </li>
+<li>./hello 运行应用程序，oprofile会对它进行profiling </li>
+<li>opcontrol –dump 把收集到的数据写入文件 </li>
+<li>opcontrol –stop 停止profiling </li>
+<li>opcotrol -h 关闭守护进程oprofiled </li>
+<li>opcontrol –shutdown 停止oprofiled</li>
+<li>opcontrol –deinit 卸载模块 </li>
+</ul>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><ol>
+<li>首先加载profile</li>
+</ol>
+<p>opcontrol –init</p>
+<p>初始化oprofile，可以通过demsg查看oprofile使用的是哪一种模式：<br>[root@compiler /]# dmesg | grep oprofile<br>oprofile: using NMI interrupt.<br>oprofile: using NMI interrupt.<br>oprofile: using NMI interrupt.<br>oprofile: using NMI interrupt.<br>oprofile: using NMI interrupt.</p>
+<ol start="2">
+<li>然后start 调用开始获取CPU采样：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@compiler /]# opcontrol --start --no-vmlinux</span><br><span class="line">ATTENTION: Use of opcontrol is discouraged. Please see the man page for operf.</span><br><span class="line">Using default event: CPU_CLK_UNHALTED:100000:0:1:1</span><br><span class="line">Using 2.6+ OProfile kernel interface.</span><br><span class="line">Using log file /var/lib/oprofile/samples/oprofiled.log</span><br><span class="line">Daemon started.</span><br><span class="line">Profiler running.</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>每次启动都会在/root/.oprofile/目录下生成一个配置文件daemonrc,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@compiler /]# cat /root/.oprofile/daemonrc </span><br><span class="line">SESSION_DIR=/var/lib/oprofile</span><br><span class="line">NR_CHOSEN=0</span><br><span class="line">SEPARATE_LIB=0</span><br><span class="line">SEPARATE_KERNEL=0</span><br><span class="line">SEPARATE_THREAD=0</span><br><span class="line">SEPARATE_CPU=0</span><br><span class="line">VMLINUX=none</span><br><span class="line">IMAGE_FILTER=</span><br><span class="line">CPU_BUF_SIZE=0</span><br><span class="line">CALLGRAPH=0</span><br><span class="line">XENIMAGE=none</span><br></pre></td></tr></table></figure></p>
+<p>注:<br>以上的每个配置项是通过启动oprofile时加的参数生成的.</p>
+<p>清理统计数据，重置统计量,如下:<br>[root@compiler /]# opcontrol –reset</p>
+<ol start="3">
+<li>这个时候启动需要监控的程序，如果是内核，就直接sleep一段时间即可</li>
+</ol>
+<p>[root@compiler /]# /usr/local/nginx/sbin/nginx</p>
+<ol start="4">
+<li>接下来我们用–dump选项告诉oprofiled输出统计量,如下:<br>[root@compiler /]# opcontrol –dump</li>
+</ol>
+<p>（可选）停止后台程序<br>[root@compiler /]# opcontrol –shutdown</p>
+<ol start="5">
+<li>再下来我们就可以用opreport,opgprof或者opannotate来观察它们,任何用户都可以看到输出,下面我们用opreport来查看统计量,如下:</li>
+</ol>
+<p>(1)opreport<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">[root@compiler /]# opreport |grep nginx</span><br><span class="line">Using /var/lib/oprofile/samples/ for samples directory.</span><br><span class="line">39 1.0e-04 nginx</span><br><span class="line"></span><br><span class="line">观察对应进程里面函数在运行时候的的占用百分比</span><br><span class="line">[root@compiler /]# opreport -l /usr/local/nginx/sbin/nginx</span><br><span class="line">Using /var/lib/oprofile/samples/ for samples directory.</span><br><span class="line">CPU: Intel Core/i7, speed 2.128e+06 MHz (estimated)</span><br><span class="line">Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (No unit mask) count 100000</span><br><span class="line">samples % symbol name</span><br><span class="line">20 39.2157 ngx_hash_init</span><br><span class="line">10 19.6078 ngx_conf_parse</span><br><span class="line">2 3.9216 ngx_init_setproctitle</span><br><span class="line">1 1.9608 _fini</span><br><span class="line">1 1.9608 main</span><br><span class="line">1 1.9608 ngx_array_push</span><br><span class="line">1 1.9608 ngx_cpuinfo</span><br><span class="line">1 1.9608 ngx_event_process_init</span><br><span class="line">1 1.9608 ngx_hash_key_lc</span><br><span class="line">1 1.9608 ngx_http_core_merge_loc_conf</span><br><span class="line">1 1.9608 ngx_http_core_server_name</span><br><span class="line">1 1.9608 ngx_http_core_type</span><br><span class="line">1 1.9608 ngx_http_limit_conn_merge_conf</span><br><span class="line">1 1.9608 ngx_http_log_compile_format</span><br><span class="line">1 1.9608 ngx_http_log_init</span><br><span class="line">1 1.9608 ngx_http_merge_locations</span><br><span class="line">1 1.9608 ngx_http_upstream_keepalive_create_conf</span><br><span class="line">1 1.9608 ngx_http_uwsgi_merge_loc_conf</span><br><span class="line">1 1.9608 ngx_signal_handler</span><br><span class="line">1 1.9608 ngx_strlow</span><br><span class="line">1 1.9608 ngx_vslprintf</span><br><span class="line">1 1.9608 ngx_worker_process_init</span><br><span class="line">[root@compiler /]#</span><br></pre></td></tr></table></figure></p>
+<p>(2)opannotate<br>[root@compiler /]# opannotate –source /usr/local/nginx/sbin/nginx &gt; 1.txt</p>
+<p>可以针对某一个进程，里面所有函数的执行采样统计，用于优化函数。</p>
+<p>注:<br>输出显示了一系列对象文件,文件包含了当profile测试时正在运行的代码.<br>oprofiled 从调用opcontrol –start时开始记录,到调用opcontrol –dump时会截取当前的统计量,但是oprofiled仍会继续搜集并积累统计数据,之后再调用opconrol –dump就会有旧的积累数据产生.直到调用opcontrol –stop时,才会停止搜集.</p>
+<p>(3)opgprof</p>
+<p>我们可以通过gprof来产生一个gmon.out文件,如下:<br>[root@compiler /]# opgprof /usr/local/nginx/sbin/nginx</p>
+<p>不调用图像数据得出gmon.out结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">[root@compiler /]# gprof --no-graph /usr/local/nginx/sbin/nginx</span><br><span class="line">Flat profile:</span><br><span class="line"></span><br><span class="line">Each sample counts as 1 samples.</span><br><span class="line">% cumulative self self total </span><br><span class="line">time samples samples calls T1/call T1/call name </span><br><span class="line">39.22 20.00 20.00 ngx_hash_init</span><br><span class="line">19.61 30.00 10.00 ngx_conf_parse</span><br><span class="line">3.92 32.00 2.00 ngx_init_setproctitle</span><br><span class="line">1.96 33.00 1.00 _fini</span><br><span class="line">1.96 34.00 1.00 main</span><br><span class="line">1.96 35.00 1.00 ngx_array_push</span><br><span class="line">1.96 36.00 1.00 ngx_cpuinfo</span><br><span class="line">1.96 37.00 1.00 ngx_event_process_init</span><br><span class="line">1.96 38.00 1.00 ngx_hash_key_lc</span><br><span class="line">1.96 39.00 1.00 ngx_http_core_merge_loc_conf</span><br><span class="line">1.96 40.00 1.00 ngx_http_core_server_name</span><br><span class="line">1.96 41.00 1.00 ngx_http_core_type</span><br><span class="line">1.96 42.00 1.00 ngx_http_limit_conn_merge_conf</span><br><span class="line">1.96 43.00 1.00 ngx_http_log_compile_format</span><br><span class="line">1.96 44.00 1.00 ngx_http_log_init</span><br><span class="line">1.96 45.00 1.00 ngx_http_merge_locations</span><br><span class="line">1.96 46.00 1.00 ngx_http_upstream_keepalive_create_conf</span><br><span class="line">1.96 47.00 1.00 ngx_http_uwsgi_merge_loc_conf</span><br><span class="line">1.96 48.00 1.00 ngx_signal_handler</span><br><span class="line">1.96 49.00 1.00 ngx_strlow</span><br><span class="line">1.96 50.00 1.00 ngx_vslprintf</span><br><span class="line">1.96 51.00 1.00 ngx_worker_process_init</span><br><span class="line"></span><br><span class="line">% the percentage of the total running time of the</span><br><span class="line">time program used by this function.</span><br><span class="line"></span><br><span class="line">cumulative a running sum of the number of seconds accounted</span><br><span class="line">seconds for by this function and those listed above it.</span><br><span class="line"></span><br><span class="line">self the number of seconds accounted for by this</span><br><span class="line">seconds function alone. This is the major sort for this</span><br><span class="line">listing.</span><br><span class="line"></span><br><span class="line">calls the number of times this function was invoked, if</span><br><span class="line">this function is profiled, else blank.</span><br><span class="line"></span><br><span class="line">self the average number of milliseconds spent in this</span><br><span class="line">ms/call function per call, if this function is profiled,</span><br><span class="line">else blank.</span><br><span class="line"></span><br><span class="line">total the average number of milliseconds spent in this</span><br><span class="line">ms/call function and its descendents per call, if this </span><br><span class="line">function is profiled, else blank.</span><br><span class="line"></span><br><span class="line">name the name of the function. This is the minor sort</span><br><span class="line">for this listing. The index shows the location of</span><br><span class="line">the function in the gprof listing. If the index is</span><br><span class="line">in parenthesis it shows where it would appear in</span><br><span class="line">the gprof listing if it were to be printed.</span><br><span class="line">[root@compiler /]#</span><br></pre></td></tr></table></figure></p>
+<p>6.<br>opcontrol –stop  #停止profiling<br>opcontrol –shutdown  #关闭守护进程oprofiled<br>opcontrol –deinit  #卸载模块</p>
+<p>二)关于oprofile的最终论述</p>
+<p>这里只提到了oprofile的表面功能.<br>默认情况下,oprofile不支持在虚拟机上进行调试,我们可以通过下面的方法让oprofile可以在虚拟机上跑,如下:</p>
+<p>echo “options oprofile timer=1” &gt;&gt; /etc/modprobe.conf<br>此时再重启虚拟机就可以工作了.</p>
 
-
-<div class="container tag-cate-wrap">
-    <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·性能调优</strong></h1>
+        </div>
+        <div class="post-reply">
+            
+            
+        </div>
     </div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
 
-    
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2019/08/27/性能调优/oprofile/">
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>oprofile</strong> <small class="post-date">at: 2019-08-27</small>
-                                <br>
-                                简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的
-主页:https://o..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2019/08/26/性能调优/gprof/">
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>gprof</strong> <small class="post-date">at: 2019-08-26</small>
-                                <br>
-                                简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系
-gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-</div>
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
+
       </div>
   </div>
   <style>
