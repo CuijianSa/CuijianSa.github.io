@@ -15,15 +15,19 @@
   </script>
 
   
-  <title>CuijianSa.github.io</title>
+  <title>gprof | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系 gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到每个函数的调用次数，执行时间，调用关系等信息">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gprof">
+<meta property="og:url" content="http://yoursite.com/2019/08/26/性能调优/gprof/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系 gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到每个函数的调用次数，执行时间，调用关系等信息">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-26T15:46:39.549Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="gprof">
+<meta name="twitter:description" content="简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系 gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到每个函数的调用次数，执行时间，调用关系等信息">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,616 +113,117 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .post-hover:hover {
-        box-shadow: inset 0 0 100px #000;
-        transition: box-shadow .2s;
-    }
+          <!--博文页面-->
 
-    .sub-post-container .post-hover:hover h3 {
-        text-decoration: underline gray;
-    }
-
-
-    .primary-item-main {
-        height: 330px;
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
         background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .primary-container .title,
-    .primary-container .sub-title,
-    .primary-container .post-content-text,
-    .primary-container .date {
-        color: #fff;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    .post-content-text {
-        color: #f1f1f1!important;
-    }
-
-    .primary-container .post-hover {
-        background: black;
-    }
-
-    .content-bg-mask {
-        background: rgba(0,0,0,.4);
-    }
-
-</style>
-
-<div style="background: #f5f8f9;">
-    <div id="main-container" class="container" style="padding-top: 20px;">
-        <div class="is-flex main-content justify-center">
-            <section class="column is-9">
-                
-<div class="primary-container content-box is-flex-desktop clear-padding bottom-line" style="margin-bottom: 25px;">
-    <div class="column  is-7-desktop">
-        <a href="/2019/08/26/性能调优/gprof/">
-            <div class="full-height post-hover" style="
-                         background-image: url('');
-                         height: 350px;
-                         background-size: cover;
-                         background-repeat: no-repeat;
-                         ">
-                    <div class=" is-flex flex-column center content has-text-centered full-height has-padding content-bg-mask">
-                        <h1 class="title text-shadow" style="margin-bottom: 15px;">
-                            gprof
-                        </h1>
-                        <div>
-                        
-                            
-                        
-                        </div>
-                        <p class="post-content-text is-marginless has-padding text-shadow">
-                            简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系
-gprof是GN..
-                        </p>
-                        <p class="date text-shadow">2019-08-26</p>
-                        <button class="button is-info is-small">Read More</button>
-                    </div>
-            </div>
-        </a>
-    </div>
-    <div class="column is-5 is-hidden-touch" style="padding-left: 0;">
-        <div class="full-height is-flex flex-column justify-space-between" style="min-height: 350px;">
-            
-                
-<a class="post-hover" href="/2019/08/20/加密算法/openssl/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                openssl
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                https://www.jianshu.com/p/1daae319d5fc
-openssl简介..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-20</p>
-        </div>
-    </div>
-</a>
-            
-            
-                
-<a class="post-hover" href="/2019/08/11/加密算法/SSL加密传输/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                加密算法
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                前言最近项目用到SSL比较多，为了串联各个知识点
-应用都须要在网络上进行在线交易，它们对网络通信..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-11</p>
-        </div>
-    </div>
-</a>
-            
-        </div>
-    </div>
-    <div class="column is-12 is-hidden-desktop">
-        
-        
-<a class="post-hover" href="/2019/08/20/加密算法/openssl/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                openssl
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                https://www.jianshu.com/p/1daae319d5fc
-openssl简介..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-20</p>
-        </div>
-    </div>
-</a>
-        
-        
-        
-<a class="post-hover" href="/2019/08/11/加密算法/SSL加密传输/" style="height: 48.5%">
-    <div class="content is-hidden-touch full-height overflow-hidden" style="background-image: url('/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png')">
-        <div class="content-bg-mask full-width full-height has-padding">
-            <h3 class="title is-marginless text-shadow">
-                加密算法
-            </h3>
-            
-            
-            
-            <p class="sub-title text-shadow"></p>
-            <p class="is-marginless text-shadow post-content-text">
-                前言最近项目用到SSL比较多，为了串联各个知识点
-应用都须要在网络上进行在线交易，它们对网络通信..
-            </p>
-            <p class="date text-shadow is-marginless">2019-08-11</p>
-        </div>
-    </div>
-</a>
-        
-    </div>
-</div>
-
-                    
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/08/20/加密算法/openssl/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>openssl</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            https://www.jianshu.com/p/1daae319d5fc
-openssl简介OpenSSL下载连接
-OpenSSL组成主要包括以下三个组件:
-
-openssl:多用途命令行工具
-libcrypto:加密算法库
-libssl:加密模块应用库，实现ssl及tls
-
-
-
-
-目录名
-功能描述
-
-
-
-
-Crypto
-存放 OpenSSL 所有加..
-                                        </p>
-                                        <p>2019-08-20</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  is-hidden-desktop" style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/08/11/加密算法/SSL加密传输/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/08/11/加密算法/SSL加密传输/vertify_server_only.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>加密算法</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            前言最近项目用到SSL比较多，为了串联各个知识点
-应用都须要在网络上进行在线交易，它们对网络通信的安全性提出了更高的要求。传统的万维网协议HTTP不具备安全机制——採用明文的形式数据传输、不能验证通信两方的身份、无法防止传输的数据被篡改等，导致HTTP无法满足电子商务和网上银行等应用的安全性要求。
-Netscape公司提出的安全协议SSL，利用数据加密、..
-                                        </p>
-                                        <p>2019-08-11</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/08/01/架构/红黑树算法/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/08/01/架构/红黑树算法/rb_sample.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>红黑树算法!</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法
-文字永远也没有图直观
-
-什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：
-
-
-节点是红色或者黑色
-根节点是黑色
-每个叶子的节点都是黑色的空节点（NULL）
-每个红色节点的两个子节点都是黑色的。..
-                                        </p>
-                                        <p>2019-08-01</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/21/流媒体/live555总篇/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/07/21/流媒体/live555总篇/live555_classDiagram.jpg')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>live555总篇</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            简介live555是采用开放标准协议(RTP/RTCP,RTSP,SIP)实现的C++库，可在Unix,Windows及QNX平台编译构建流媒体库。这些库已在”LIVE555Proxy Server”及vobStreamer中使用，这些库也可用于流式传输，接收和处理MPEG,H265,H264，H+,DV及JPEG视频及音频解码器。它们可以很容易拓展支持..
-                                        </p>
-                                        <p>2019-07-21</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/07/C++/原码、反码、补码/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/07/07/C++/原码、反码、补码/bit.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>原码、反码、补码</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            转自【组成原理】一起重温组成原理咯 | 对原码，反码，补码的理解
-最近在CSDN上看到了一篇很好的文章，对计算机源码、反码、补码解释的很透彻
-
-概念
-字节
-二进制计算
-如何理解原码、反码、补码？
-
-
-机器数与真值
-什么是机器数
-什么是真值和形式值？
-机器数和源码、反码、补码的关系
-
-
-同余定理的应用
-什么是同余定理？
-模，互为补数，同余
-模
-互为补数
-
-..
-                                        </p>
-                                        <p>2019-07-07</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/07/02/开源项目/开源项目/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>开源项目</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            我的开源项目utils简介utils是基于c++编写的一些demo，包含python、QT、通用库，其目录如下
-123456789|--- cmake:cmake 文件存放目录|--- common: 通用头文件|--- python: 一些Python demo|--- src: 源码    |--- image    |--- media    |-..
-                                        </p>
-                                        <p>2019-07-02</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/30/hexo命令/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>hexo命令</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            hexo 简介Hexo 是一套快速、简洁且高效的博客框架，使用Markdown解析文章生成静态网页
-安装
-npm install hexo-cli -g
-hexo init blog
-cd blog
-npm install
-hexo server
-
-配置配置主题
-打开hexo themes页面
-将中意的thems下载在blog/themes
-配置博客根目..
-                                        </p>
-                                        <p>2019-06-30</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/26/linux/linux应用程序加载/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>linux应用程序加载</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            1234567891011-------------------------------------------|             APPLICATION                 |----------------------------------------------------------------- -------------..
-                                        </p>
-                                        <p>2019-06-26</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                    
-                        <div class="content-box  " style="margin-bottom: 27px;">
-                            <a class="post-hover" href="/2019/06/05/网络/TCP三次握手+四次挥手/">
-                            <div class="columns" style="min-height: 230px;">
-                                
-                                    <div class="column is-4-desktop is-5-tablet post-avatar is-hidden-mobile" style="margin: 10px; background-size: cover;background-image: url('/2019/06/05/网络/TCP三次握手+四次挥手/connect.png')">
-                                    </div>
-                                
-                                <div class="column is-8-desktop post-content is-flex align-center">
-                                    <div class="content">
-                                        <h3>TCP三次握手+四次挥手</h3>
-                                        
-                                        <p>
-                                            
-                                        </p>
-                                        <p>
-                                            三次握手流程图
-解决的问题:以最小的握手次数，达到C-S可靠的连接
-过程
-第一次握手: 建立连接时，客户端发送SYN(seq = x)包,并进入SYS_SENT状态，并等待信号回复
-第二次握手: 服务端收到SYN包，必须确定客户的SYN，并且同时发送SYN+ACK(seq = y, ack = x+1)包，此时服务器进入SYN_RECV状态
-第三次握手:..
-                                        </p>
-                                        <p>2019-06-05</p>
-                                        <button class="button is-small">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    
-                
-                <!--翻頁-->
-                <nav class="pagination is-flex" style="justify-content: flex-end">
-                    
-                        
-                        
-                            <a class="pagination-next" href="/page/2/">Next page</a>
-                        
-                    
-                </nav>
-            </section>
-            
-                <style>
-    /*user info start*/
-    .user-info {
-        padding: 15px 0 0;
-    }
-
-    .user-info .avatar {
-        width: 155px;
-        height: 155px;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
         border-radius: 50%;
     }
 
-    .sns-container {
-        flex-wrap: wrap;
-    }
-
-    .sns-container a{
-        color: black;
-    }
-    /*user info end*/
-
-    /*Tag start*/
-    #tag_cloud .tags-item{
-        display: inline-block;
-        color: #000;
-        border: 1px solid gray;
-
-        margin: 4px 2px;
-        padding: 0 4px;
-        border-radius: 6px;
-    }
-    /*Tag end*/
-
-    /*Site box start*/
-    .site-box {
-        height: 60px;
-    }
-    /*Site box end*/
-
-    .category-list-item,
-    .archive-list-item {
-        display: flex;
-        margin-bottom: 4px;
-        justify-content: space-between;
-    }
-    .category-list-link,
-    .archive-list-link {
-        color: black;
-    }
-
-    .category-list-count,
-    .archive-list-count {
-        width: 32px;
+    .flow-chart {
         text-align: center;
-        border-radius: 4px;
-        color: #fff;
-        background-color: gray;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
-<aside class="column is-hidden-touch is-3" style="max-width: 280px; min-width: 230px">
-    <div class="content-box user-info">
-        <div class="has-padding">
-            <header class="has-text-centered">
-                <img class="avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-            </header>
-            <section class="has-text-centered">
-                <h3><strong>Olin</strong></h3>
-                <p class="sub-title">Embedded Software Engineer</p>
-                
-                <p class="is-flex center" style=" color: gray">
-                    <i class="fa fa-map-marker" style="padding: 5px"></i>
-                    Nanjing
-                </p>
-                
-            </section>
-        </div>
-        <div class="top-line">
-            <ul class="sns-container justify-center is-flex has-padding">
-                
-
-                
-
-                
-
-                
-
-                
-
-                
-
-                
-            </ul>
-        </div>
-    </div>
-    <div class="content-box">
-        <!--post数量和tag category 数量-->
-        <div class="site-box is-flex">
-            <div class="flex-1 is-flex flex-column center full-height right-line">
-                <strong>41</strong>
-                <p>Posts</p>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>gprof</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-08-26</span>
             </div>
-            <div class="flex-1 is-flex flex-column center full-height">
-                <strong></strong>
-                <p>Tags</p>
-            </div>
+            
+                <div>
+                    
+                </div>
+            
         </div>
-    </div>
-    <div id="tag_cloud" class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Tags</strong>
+        <div class="content" style="overflow: auto">
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系</p>
+<p>gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到每个函数的调用次数，执行时间，调用关系等信息，简单易懂。适合于查找用户级程序的性能瓶颈，对于很多时间都在内核态执行的程 序，gprof不适合。</p>
+<p>gprof用户手册:<a href="https://sourceware.org/binutils/docs-2.17/gprof/index.html" target="_blank" rel="noopener">https://sourceware.org/binutils/docs-2.17/gprof/index.html</a></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><ol>
+<li>使用 -pg 选项来编译hello.c，如果要得到带注释的源码清单，则需要增加 -g 选项。运行： gcc -pg -g -o hello hello.c</li>
+<li>运行应用程序： ./hello 会在当前目录下产生gmon.out文件</li>
+<li>使用gprof来分析 gmon.out文件，需要把它和产生它的应用程序关联起来：<ul>
+<li>gprof hello gmon.out -p 得到每个函数占用的执行时间</li>
+<li>gprof hello gmon.out -q 得到call graph，包含了每个函数的调用关系，调用次数，执行时间等信息</li>
+<li>gprof hello gmon.out -A 得到一个带注释的“源代码清单”，它会注释源码，指出每个函数的执行次数。这需要在编译的时候增加 -g选项。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>Usage:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Usage: gprof [-[abcDhilLsTvwxyz]] [-[ACeEfFJnNOpPqSQZ][name]] [-I dirs]</span><br><span class="line">	[-d[num]] [-k from/to] [-m min-count] [-t table-length]</span><br><span class="line">	[--[no-]annotated-source[=name]] [--[no-]exec-counts[=name]]</span><br><span class="line">	[--[no-]flat-profile[=name]] [--[no-]graph[=name]]</span><br><span class="line">	[--[no-]time=name] [--all-lines] [--brief] [--debug[=level]]</span><br><span class="line">	[--function-ordering] [--file-ordering] [--inline-file-names]</span><br><span class="line">	[--directory-path=dirs] [--display-unused-functions]</span><br><span class="line">	[--file-format=name] [--file-info] [--help] [--line] [--min-count=n]</span><br><span class="line">	[--no-static] [--print-path] [--separate-files]</span><br><span class="line">	[--static-call-graph] [--sum] [--table-length=len] [--traditional]</span><br><span class="line">	[--version] [--width=n] [--ignore-non-functions]</span><br><span class="line">	[--demangle[=STYLE]] [--no-demangle] [--external-symbol-table=name] [@FILE]</span><br><span class="line">	[image-file] [profile-file...]</span><br><span class="line">Report bugs to &lt;http://www.sourceware.org/bugzilla/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>使用注意：<br>1) 一般gprof只能查看用户函数信息。如果想查看库函数的信息，需要在编译是再加入“-lc_p”编译参数代替“-lc”编译参数，这样程序会链接libc_p.a库，才可以产生库函数的profiling信息。<br>2) gprof只能在程序正常结束退出之后才能生成程序测评报告，原因是gprof通过在atexit()里注册了一个函数来产生结果信息，任何非正常退出都不会执行atexit()的动作，所以不会产生gmon.out文件。如果你的程序是一个不会退出的服务程序，那就只有修改代码来达到目的。如果不想改变程序的运行方式，可以添加一个信号处理函数解决问题（这样对代码修改最少），例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static void sighandler( int sig_no )   </span><br><span class="line">&#123;   </span><br><span class="line">      exit(0);   </span><br><span class="line">&#125;   </span><br><span class="line">signal( SIGUSR1, sighandler );</span><br></pre></td></tr></table></figure>
+<p>当使用kill -USR1 pid 后，程序退出，生成gmon.out文件。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过在编译和链接你的程序的时候（使用 -pg 编译和链接选项），gcc 在你应用程序的每个函数中都加入了一个名为mcount ( or “_mcount” , or “__mcount” , 依赖于编译器或操作系统)的函数，也就是说你的应用程序里的每一个函数都会调用mcount, 而mcount 会在内存中保存一张函数调用图，并通过函数调用堆栈的形式查找子函数和父函数的地址。这张调用图也保存了所有与函数相关的调用时间、调用次数等等的所有信息</p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><ul>
+<li><p>gproc.cpp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">void a()&#123;</span><br><span class="line">    cout&lt;&lt;&quot;\t\t+---call a() function&quot;&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void c()&#123;</span><br><span class="line">    cout&lt;&lt;&quot;\t\t+---call c() function&quot;&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int b() &#123;</span><br><span class="line">    cout&lt;&lt;&quot;\t+--- call b() function&quot;&lt;&lt;endl;</span><br><span class="line">    a();</span><br><span class="line">    c();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    b();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Makefile</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">CFLAGS += -g -pg</span><br><span class="line"></span><br><span class="line">all:test</span><br><span class="line"></span><br><span class="line">test: test.o</span><br><span class="line">	$(CXX) $(CFLAGS) -o $@ $^</span><br><span class="line"></span><br><span class="line">%.o:%.cpp</span><br><span class="line">	$(CXX) $(CFLAGS) -o $@ -c $&lt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.PHONY:</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm test</span><br><span class="line">	find -name &quot;*.o&quot; | xargs rm</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>可以在当前目录看到gmon.out文件<br><code>gmon.out  gprof  gprof.cpp  gprof.o  Makefile</code></p>
+<p>执行命令生成数据gprof -b test gmon.out<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">Flat profile:</span><br><span class="line"></span><br><span class="line">Each sample counts as 0.01 seconds.</span><br><span class="line"> no time accumulated</span><br><span class="line"></span><br><span class="line">  %   cumulative   self              self     total           </span><br><span class="line"> time   seconds   seconds    calls  Ts/call  Ts/call  name    </span><br><span class="line">  0.00      0.00     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z1av</span><br><span class="line">  0.00      0.00     0.00        1     0.00     0.00  a()</span><br><span class="line">  0.00      0.00     0.00        1     0.00     0.00  b()</span><br><span class="line">  0.00      0.00     0.00        1     0.00     0.00  c()</span><br><span class="line">  0.00      0.00     0.00        1     0.00     0.00  __static_initialization_and_destruction_0(int, int)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			Call graph</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">granularity: each sample hit covers 2 byte(s) no time propagated</span><br><span class="line"></span><br><span class="line">index % time    self  children    called     name</span><br><span class="line">                0.00    0.00       1/1           __libc_csu_init [18]</span><br><span class="line">[8]      0.0    0.00    0.00       1         _GLOBAL__sub_I__Z1av [8]</span><br><span class="line">                0.00    0.00       1/1           __static_initialization_and_destruction_0(int, int) [12]</span><br><span class="line">-----------------------------------------------</span><br><span class="line">                0.00    0.00       1/1           b() [10]</span><br><span class="line">[9]      0.0    0.00    0.00       1         a() [9]</span><br><span class="line">-----------------------------------------------</span><br><span class="line">                0.00    0.00       1/1           main [6]</span><br><span class="line">[10]     0.0    0.00    0.00       1         b() [10]</span><br><span class="line">                0.00    0.00       1/1           a() [9]</span><br><span class="line">                0.00    0.00       1/1           c() [11]</span><br><span class="line">-----------------------------------------------</span><br><span class="line">                0.00    0.00       1/1           b() [10]</span><br><span class="line">[11]     0.0    0.00    0.00       1         c() [11]</span><br><span class="line">-----------------------------------------------</span><br><span class="line">                0.00    0.00       1/1           _GLOBAL__sub_I__Z1av [8]</span><br><span class="line">[12]     0.0    0.00    0.00       1         __static_initialization_and_destruction_0(int, int) [12]</span><br><span class="line">-----------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Index by function name</span><br><span class="line"></span><br><span class="line">   [8] _GLOBAL__sub_I__Z1av (test.cpp) [10] b()           [12] __static_initialization_and_destruction_0(int, int) (test.cpp)</span><br><span class="line">   [9] a()                    [11] c()</span><br></pre></td></tr></table></figure></p>
+<p>从上面的输出我们能明显的看出来，main 调用了 b 函数， 而b 函数分别调用了a 和 c 函数。由于我们的函数只是简单的输出了一个字串，故每个函数的消耗时间都是0 秒。</p>
+
         </div>
-        <div class="content-inner is-flex flex-wrap justify-space-between">
+        <div class="post-reply">
+            
             
         </div>
     </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Categories</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SQL/">SQL</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/other/">other</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/加密算法/">加密算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开源项目/">开源项目</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/性能调优/">性能调优</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/架构/">架构</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/流媒体/">流媒体</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/">笔记</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编译框架/">编译框架</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/网络/">网络</a><span class="category-list-count">4</span></li></ul>
-        </div>
-    </div>
-    <div class="content-inner content-box">
-        <div class="has-text-centered">
-            <strong>Archives</strong>
-        </div>
-        <div class="content-inner">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">2</span></li></ul>
-        </div>
-    </div>
-</aside>
-            
-        </div>
-    </div>
-</div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
+
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
+
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
       </div>
   </div>
