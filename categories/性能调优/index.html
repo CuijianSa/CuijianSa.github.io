@@ -134,15 +134,21 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2019/08/27/性能调优/oprofile/">
+                <a href="/2019/08/27/性能调优/gprof/">
+                    
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <img src="/2019/08/27/性能调优/gprof/output.png" style="height: 100%; width: 100%">
+                        </figure>
+                    </div>
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>oprofile</strong> <small class="post-date">at: 2019-08-27</small>
+                                <strong>gprof</strong> <small class="post-date">at: 2019-08-27</small>
                                 <br>
-                                简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的
-主页:https://o..
+                                简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系
+gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
@@ -154,15 +160,15 @@
         <div class="box">
             <article class="media">
                 
-                <a href="/2019/08/26/性能调优/gprof/">
+                <a href="/2019/08/27/性能调优/oprofile/">
                     
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong>gprof</strong> <small class="post-date">at: 2019-08-26</small>
+                                <strong>oprofile</strong> <small class="post-date">at: 2019-08-27</small>
                                 <br>
-                                简介gprof是GNU 编译器工具包所提供了一种剖析工具 GNU profiler（gprof）。gprof 可以为 Linux平台上的程序精确分析性能瓶颈。gprof精确地给出函数被调用的时间和次数，给出函数调用关系
-gprof是GNU工具之一，它在编译的时候在每个函数的出入口加入了profiling的代码，运行时统计程序在用户态的 执行信息，可以得到..
+                                简介oprofile也是一个开源的profiling工具，它使用硬件调试寄存器来统计信息，进 行profiling的开销比较小，而且可以对内核进行profiling。它统计的信息非常的多，可以得到cache的缺失率，memory的访存信 息，分支预测错误率等等，这些信息gprof是得不到的，但是对于函数调用次数，它是不能够得到的
+主页:https://o..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
