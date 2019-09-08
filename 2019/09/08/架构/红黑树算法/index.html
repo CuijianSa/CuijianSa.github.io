@@ -15,15 +15,23 @@
   </script>
 
   
-  <title>Category: 架构 | CuijianSa.github.io</title>
+  <title>红黑树算法! | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="CuijianSa.github.io">
-<meta property="og:url" content="http://yoursite.com/categories/架构/index.html">
+  <meta name="description" content="什么是红黑树 红黑树解决了什么问题 红黑树复杂度 如何构造 实现代码 方法 左旋 右旋 插入节点 删除节点       在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观 什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：  节点是红色或者黑色 根节点是黑色 每个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红黑树算法!">
+<meta property="og:url" content="http://yoursite.com/2019/09/08/架构/红黑树算法/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="什么是红黑树 红黑树解决了什么问题 红黑树复杂度 如何构造 实现代码 方法 左旋 右旋 插入节点 删除节点       在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观 什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：  节点是红色或者黑色 根节点是黑色 每个">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/09/08/架构/红黑树算法/rb_sample.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/08/架构/红黑树算法/left_rotate.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/08/架构/红黑树算法/right_rotate.jpg">
+<meta property="og:updated_time" content="2019-09-08T15:22:25.781Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
+<meta name="twitter:title" content="红黑树算法!">
+<meta name="twitter:description" content="什么是红黑树 红黑树解决了什么问题 红黑树复杂度 如何构造 实现代码 方法 左旋 右旋 插入节点 删除节点       在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法 文字永远也没有图直观 什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：  节点是红色或者黑色 根节点是黑色 每个">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/08/架构/红黑树算法/rb_sample.jpg">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -109,102 +117,134 @@
 
   <div id="main-wrap" class="position-relative" style="margin-top: 55px;">
       <div class="main-inner-content">
-          <style>
-    .container.tag-cate-wrap {
-        min-height: 93vh;
+          <!--博文页面-->
+
+<style>
+    .header-box {
+        height: 370px;
+        filter: blur(10px);
+        background-size: cover;
+        background-color: lightsteelblue;
     }
 
-    .category-title-inner {
-        padding-top: 50px;
+    .post-box {
+        padding: 15px;
+        padding-top: 60px;
+        min-height: 80vh;
+        margin-top: -200px;
+        border-radius: 4px;
+        background-color: rgba(255,255,255,.8);
     }
 
-    strong {
-        text-transform: capitalize;
+    .post-avatar {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+
+    .flow-chart {
+        text-align: center;
+    }
+
+    img[alt="post-cover"] {
+        display: none;
     }
 </style>
+<header>
+    <div id="header_box" class="header-box"></div>
+</header>
+<section>
+    <div class="container post-box">
+        <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
+            <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
+                <strong>红黑树算法!</strong>
+            </h1>
+            
+            <div class="is-flex align-center">
+                <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span class="post-date sub-title">at: 2019-09-08</span>
+            </div>
+            
+                <div>
+                    
+                </div>
+            
+        </div>
+        <div class="content" style="overflow: auto">
+            <!-- TOC -->
+<ul>
+<li><a href="#什么是红黑树">什么是红黑树</a></li>
+<li><a href="#红黑树解决了什么问题">红黑树解决了什么问题</a></li>
+<li><a href="#红黑树复杂度">红黑树复杂度</a></li>
+<li><a href="#如何构造">如何构造</a><ul>
+<li><a href="#实现代码">实现代码</a></li>
+<li><a href="#方法">方法</a><ul>
+<li><a href="#左旋">左旋</a></li>
+<li><a href="#右旋">右旋</a></li>
+<li><a href="#插入节点">插入节点</a></li>
+<li><a href="#删除节点">删除节点</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<p>在CSDN看到了一篇文章， <a href="https://blog.csdn.net/csdnsevenn/article/details/97842196" target="_blank" rel="noopener">漫画：5 分钟学会红黑树算法</a></p>
+<p>文字永远也没有图直观</p>
+<h1 id="什么是红黑树"><a href="#什么是红黑树" class="headerlink" title="什么是红黑树"></a>什么是红黑树</h1><p>红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性：</p>
+<ul>
+<li>节点是红色或者黑色</li>
+<li>根节点是黑色</li>
+<li>每个叶子的节点都是黑色的空节点（NULL）</li>
+<li>每个红色节点的两个子节点都是黑色的。</li>
+<li>从任意节点到其每个叶子的所有路径都包含相同的黑色节点。</li>
+</ul>
+<p><img src="/2019/09/08/架构/红黑树算法/rb_sample.jpg" alt=""></p>
+<h1 id="红黑树解决了什么问题"><a href="#红黑树解决了什么问题" class="headerlink" title="红黑树解决了什么问题"></a>红黑树解决了什么问题</h1><p>红黑树能够以O(log2 n)的时间复杂度进行搜索、插入、删除操作。此外，由于它的设计，任何不平衡都会在三次旋转之内解决。当然，还有一些更好的，但实现起来更复杂的数据结构能够做到一步旋转之内达到平衡，但红黑树能够给我们一个比较“便宜”的解决方案。红黑树的算法时间复杂度和AVL相同，但统计性能比AVL树更高</p>
+<h1 id="红黑树复杂度"><a href="#红黑树复杂度" class="headerlink" title="红黑树复杂度"></a>红黑树复杂度</h1><p>能保证在最坏情况下，基本的动态几何操作的时间均为O（lgn）</p>
+<h1 id="如何构造"><a href="#如何构造" class="headerlink" title="如何构造"></a>如何构造</h1><h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><ul>
+<li>rb-tree:<a href="https://github.com/CuijianSa/utils/blob/master/src/redblack-tree/rb-tree.h" target="_blank" rel="noopener">路径</a></li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="左旋"><a href="#左旋" class="headerlink" title="左旋"></a>左旋</h3><p>对x进行左旋，将x编程一个左节点<img src="/2019/09/08/架构/红黑树算法/left_rotate.jpg" alt=""></p>
+<h3 id="右旋"><a href="#右旋" class="headerlink" title="右旋"></a>右旋</h3><p>对x进行右旋，将x编程一个右节点<img src="/2019/09/08/架构/红黑树算法/right_rotate.jpg" alt=""></p>
+<h3 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h3><p><strong>红黑树特性</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 每个节点或者是黑色，或者是红色。</span><br><span class="line">2. 根节点是黑色。</span><br><span class="line">3. 每个叶子节点是黑色。 [注意：这里叶子节点，是指为空的叶子节点！]</span><br><span class="line">4. 如果一个节点是红色的，则它的子节点必须是黑色的。</span><br><span class="line">5. 从一个节点到该节点的子孙节点的所有路径上包含相同数目的黑节点。</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>将红黑树当作一颗二叉查找树，将节点插入。</li>
+<li>将插入的节点着色为”红色”(减少特性冲突)</li>
+<li>特对特性2,4， 修复红黑树</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">RB-INSERT-FIXUP(T, z)</span><br><span class="line">    while z.p.color == RED                 // 当z的父结点为红色，循环继续</span><br><span class="line">        if z.p == z.p.p.left               // 父结点是祖父结点的左孩子的情况</span><br><span class="line">            y = z.p.p.right                // y指向祖父结点的右孩子，即叔结点</span><br><span class="line">            if y.color == RED              // 如果叔结点为红色</span><br><span class="line">                z.p.color = BLACK          // case 1  父结点置为黑色</span><br><span class="line">                y.color = BLACK            // case 1  叔结点置为黑色</span><br><span class="line">                z.p.p.color = RED          // case 1  祖父结点置为红色</span><br><span class="line">                z = z.p.p                  // case 1  将z指向其祖父结点</span><br><span class="line">            else                           // 否则，叔结点为黑色</span><br><span class="line">                if z == z.p.right          // 如果z为父结点的右孩子</span><br><span class="line">                    z = z.p                // case 2  z指向其父结点</span><br><span class="line">                    LEFT-ROTATE(T, z)      // case 2  对z左旋</span><br><span class="line">                                           // 到这里表明z为父结点的左孩子</span><br><span class="line">                z.p.color = BLACK          // case 3  父结点置为黑色</span><br><span class="line">                z.p.p.color = RED          // case 3  祖父结点置为红色</span><br><span class="line">                RIGHT-ROTATE(T, z.p.p)     // case 3  对祖父结点右旋</span><br><span class="line">        else(same as then clause with &quot;right&quot; and &quot;left&quot; exchanged)</span><br><span class="line">    T.root.color = BLACK                  // 根节点置为黑色</span><br></pre></td></tr></table></figure>
+<h3 id="删除节点"><a href="#删除节点" class="headerlink" title="删除节点"></a>删除节点</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">RB-TRANSPLANT(T, u, v)</span><br><span class="line">    if u.p == T.nil          // u的父结点为T.nil，说明u为根结点</span><br><span class="line">        T.root = v           // v成为新的根结点</span><br><span class="line">    else if u == u.p.left    // 若u是他爹的左孩子</span><br><span class="line">        u.p.left = v         // u的爹重新认v为左孩子</span><br><span class="line">    else                     // 若u是他爹的右孩子</span><br><span class="line">        u.p.right = v        // u的爹重新认v为右孩子</span><br><span class="line">    v.p = u.p                // v认u的爹为爹</span><br><span class="line"></span><br><span class="line">TREE-MINIMUM(x)</span><br><span class="line">    while x.left != T.nil</span><br><span class="line">        x = x.left</span><br><span class="line">    return x</span><br><span class="line"></span><br><span class="line">RB-DELETE(T, z)</span><br><span class="line">    y = z                                  // y指向z</span><br><span class="line">    y-original-color = y.color             // 记录y的颜色</span><br><span class="line">    if z.left == T.nil                     // 如果z的左孩子是T.nil</span><br><span class="line">        x = z.right                        // x指向z的右孩子</span><br><span class="line">        RB-TRANSPLANT(T, z, z.right)       // 用z的右孩子替换z</span><br><span class="line">    else if z.right == T.nil               // 如果z有左孩子并且z的右孩子是T.nil</span><br><span class="line">        x = z.left                         // x指向z的左孩子</span><br><span class="line">        RB-TRANSPLANT(T, z, z.left)        // 用z的左孩子替换z</span><br><span class="line">    else                                   // 如果z既有左孩子又有右孩子</span><br><span class="line">        y = TREE-MINIMUM(z.right)          // y指向z的右子树的最小结点</span><br><span class="line">        y-orighinal-color == y.color       // 记录y的颜色</span><br><span class="line">        x = y.right                        // x指向y的右孩子</span><br><span class="line">        if y.p == z                        // 如果y的父结点是z</span><br><span class="line">            x.p = y                        // 因为x可能为T.nil结点，所以需要指明x的父结点</span><br><span class="line">        else                               // 如果y的父结点不是z</span><br><span class="line">            RB-TRANSPLANT(T, y, y.right)   // 用y的右孩子替换y</span><br><span class="line">            y.right = z.right              // y认z的右孩子为自己的右孩子</span><br><span class="line">            y.right.p = y                  // y的右孩子认y为父</span><br><span class="line">        RB-TRANSPLANT(T, z, y)             // y替换z</span><br><span class="line">        y.left = z.left                    // y认z的左孩子为自己的左孩子</span><br><span class="line">        y.left.p = y                       // y的左孩子认y为父</span><br><span class="line">        y.color = z.color                  // y的颜色变为z的颜色</span><br><span class="line">    if y-original-color == BLACK           // y的初始颜色为黑色</span><br><span class="line">        RB-DELETE-FIXUP(T, x)              // 修复红黑性质</span><br></pre></td></tr></table></figure>
+<p><strong>参考书籍</strong>：</p>
+<ul>
+<li>&lt;&lt;算法导论&gt;&gt;第3版</li>
+</ul>
 
-
-<div class="container tag-cate-wrap">
-    <div class="category-title-inner content has-text-centered">
-        <h1><strong style="border-top: 2px solid; border-bottom: 2px solid;">category·架构</strong></h1>
+        </div>
+        <div class="post-reply">
+            
+            
+        </div>
     </div>
+</section>
+<script>
+    // 获取第一张图, 用以当封面背景图
+    var img = document.querySelectorAll('img')[1]
 
-    
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2019/09/08/架构/红黑树算法/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="/2019/09/08/架构/红黑树算法/rb_sample.jpg" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>红黑树算法!</strong> <small class="post-date">at: 2019-09-08</small>
-                                <br>
-                                
+    if (img) {
+        var header_box = document.querySelector('#header_box')
+        header_box.style.backgroundImage = 'url('+ img.src +')'
+    }
+</script>
 
-什么是红黑树
-红黑树解决了什么问题
-红黑树复杂度
-如何构造
-实现代码
-方法
-左旋
-右旋
-插入节点
-删除节点
+<!-- for code block highlight --> 
+<!-- theme.block_highlight -->
+<!-- we do not guarantee the char sequences spell right, usr himself do it -->
+<link rel="stylesheet" href="/css/highlight_rainbow.css">
+<script src="/js/highlight.min.js"></script>
+<script type="text/javascript"> hljs.initHighlightingOnLoad();</script>
 
-
-
-
-
-
-在CSDN看到了一篇文章， 漫画：5 分钟学会红黑树算法
-文字永远也没有图直观
-什么是红黑树红黑树就是一种平衡的二叉查找树，说他平衡的意思是他不会变成“瘸子”，左腿特别长或者右腿特别长。除了符合二叉查找树的特性之外，还具体下列的特性..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2018/07/31/架构/thinking-in-uml/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="/2018/07/31/架构/thinking-in-uml/relation.jpg" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>thinking_in_uml</strong> <small class="post-date">at: 2018-07-31</small>
-                                <br>
-                                比较好的UML类图实例
-UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合）
-面向对象面向对象是将世界看成一个个独立的对象， 相互之间没有因果关系。只有在某个外部驱动下，对象之间才会根据某种规律相互传递信息。
-将对客观事物建立一种抽象的方法用以表征事物并获得对事物本身的理解，同时将理解概念化， 将逻辑组织起来构成一种对所观察的对象的内部结构和工作..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-</div>
       </div>
   </div>
   <style>
