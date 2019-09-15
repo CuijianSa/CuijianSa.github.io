@@ -17,14 +17,26 @@
   
   <title>软件设计模式-类与类之间的关系 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="1. 类 1.1. 类 1.2. 属性 1.3. 操作   2. 接口 3. 类图 4. 类与类之间的关系 4.1. 依赖 4.2. 关联 4.3. 聚合 4.4. 组合 4.5. 泛化 4.6. 实现     1. 类1.1. 类类（Class）是指具有相同属性、方法和关系的对象的抽象，它封装了数据和行为，是面向对象程序设计（OOP）的基础，具有封装性、继承性和多态性等三大特性 1.2. 属">
+<meta property="og:type" content="article">
 <meta property="og:title" content="软件设计模式-类与类之间的关系">
 <meta property="og:url" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
+<meta property="og:description" content="1. 类 1.1. 类 1.2. 属性 1.3. 操作   2. 接口 3. 类图 4. 类与类之间的关系 4.1. 依赖 4.2. 关联 4.3. 聚合 4.4. 组合 4.5. 泛化 4.6. 实现     1. 类1.1. 类类（Class）是指具有相同属性、方法和关系的对象的抽象，它封装了数据和行为，是面向对象程序设计（OOP）的基础，具有封装性、继承性和多态性等三大特性 1.2. 属">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-13T06:37:17.258Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/interface.gif">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/class.gif">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/dependency.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/association.JPG">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/aggregation.JPG">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/composition.JPG">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/generalization.JPG">
+<meta property="og:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/realization.JPG">
+<meta property="og:updated_time" content="2019-09-15T08:33:46.513Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="软件设计模式-类与类之间的关系">
+<meta name="twitter:description" content="1. 类 1.1. 类 1.2. 属性 1.3. 操作   2. 接口 3. 类图 4. 类与类之间的关系 4.1. 依赖 4.2. 关联 4.3. 聚合 4.4. 组合 4.5. 泛化 4.6. 实现     1. 类1.1. 类类（Class）是指具有相同属性、方法和关系的对象的抽象，它封装了数据和行为，是面向对象程序设计（OOP）的基础，具有封装性、继承性和多态性等三大特性 1.2. 属">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-类与类之间的关系/interface.gif">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -165,7 +177,45 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            
+            <!-- TOC -->
+<ul>
+<li><a href="#1-%e7%b1%bb">1. 类</a><ul>
+<li><a href="#11-%e7%b1%bb">1.1. 类</a></li>
+<li><a href="#12-%e5%b1%9e%e6%80%a7">1.2. 属性</a></li>
+<li><a href="#13-%e6%93%8d%e4%bd%9c">1.3. 操作</a></li>
+</ul>
+</li>
+<li><a href="#2-%e6%8e%a5%e5%8f%a3">2. 接口</a></li>
+<li><a href="#3-%e7%b1%bb%e5%9b%be">3. 类图</a></li>
+<li><a href="#4-%e7%b1%bb%e4%b8%8e%e7%b1%bb%e4%b9%8b%e9%97%b4%e7%9a%84%e5%85%b3%e7%b3%bb">4. 类与类之间的关系</a><ul>
+<li><a href="#41-%e4%be%9d%e8%b5%96">4.1. 依赖</a></li>
+<li><a href="#42-%e5%85%b3%e8%81%94">4.2. 关联</a></li>
+<li><a href="#43-%e8%81%9a%e5%90%88">4.3. 聚合</a></li>
+<li><a href="#44-%e7%bb%84%e5%90%88">4.4. 组合</a></li>
+<li><a href="#45-%e6%b3%9b%e5%8c%96">4.5. 泛化</a></li>
+<li><a href="#46-%e5%ae%9e%e7%8e%b0">4.6. 实现</a></li>
+</ul>
+</li>
+</ul>
+<!-- /TOC -->
+<h1 id="1-类"><a href="#1-类" class="headerlink" title="1. 类"></a>1. 类</h1><h2 id="1-1-类"><a href="#1-1-类" class="headerlink" title="1.1. 类"></a>1.1. 类</h2><p>类（Class）是指具有相同属性、方法和关系的对象的抽象，它封装了数据和行为，是面向对象程序设计（OOP）的基础，具有封装性、继承性和多态性等三大特性</p>
+<h2 id="1-2-属性"><a href="#1-2-属性" class="headerlink" title="1.2. 属性"></a>1.2. 属性</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[可见性]属性名:类型[=默认值]</span><br></pre></td></tr></table></figure>
+<hr>
+<p>“可见性”表示该属性对类外的元素是否可见，包括公有（Public）、私有（Private）、受保护（Protected）和朋友（Friendly）4 种，在类图中分别用符号+、-、#、~表示。</p>
+<h2 id="1-3-操作"><a href="#1-3-操作" class="headerlink" title="1.3. 操作"></a>1.3. 操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[可见性]名称(参数列表)[:返回类型]</span><br></pre></td></tr></table></figure>
+<h1 id="2-接口"><a href="#2-接口" class="headerlink" title="2. 接口"></a>2. 接口</h1><p>接口（Interface）是一种特殊的类，它具有类的结构但不可被实例化，只可以被子类实现。它包含抽象操作，但不包含属性。它描述了类或组件对外可见的动作。在 UML 中，接口使用一个带有名称的小圆圈来进行表示。<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/interface.gif" alt=""></p>
+<h1 id="3-类图"><a href="#3-类图" class="headerlink" title="3. 类图"></a>3. 类图</h1><p>类图（ClassDiagram）是用来显示系统中的类、接口、协作以及它们之间的静态结构和关系的一种静态模型。它主要用于描述软件系统的结构化设计，帮助人们简化对软件系统的理解，它是系统分析与设计阶段的重要产物，也是系统编码与测试的重要模型依据。</p>
+<p>类图中的类可以通过某种编程 语言直接实现。类图在软件系统开发的整个生命周期都是有效的，它是面向对象系统的建模中最常见的图。图 3 所示是“计算长方形和圆形的周长与面积”的类图，图形接口有计算面积和周长的抽象方法，长方形和圆形实现这两个方法供访问类调用<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/class.gif" alt=""></p>
+<h1 id="4-类与类之间的关系"><a href="#4-类与类之间的关系" class="headerlink" title="4. 类与类之间的关系"></a>4. 类与类之间的关系</h1><p>根据类与类之间的耦合度从弱到强排列：赖关系、关联关系、聚合关系、组合关系、泛化关系和实现关系</p>
+<h2 id="4-1-依赖"><a href="#4-1-依赖" class="headerlink" title="4.1. 依赖"></a>4.1. 依赖</h2><p>使用一种使用关系，它是对象之间耦合度最弱的一种关联方式，是临时性的关联。在类中，某个类的方法通过局部变量、方法的参数或者静态方法的调用来访问另一个类的某一些方法<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/dependency.jpg" alt=""></p>
+<h2 id="4-2-关联"><a href="#4-2-关联" class="headerlink" title="4.2. 关联"></a>4.2. 关联</h2><p>对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系，在代码中通常将一个类的对象作为另一个类的成员变量来实现关联关系<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/association.JPG" alt=""></p>
+<h2 id="4-3-聚合"><a href="#4-3-聚合" class="headerlink" title="4.3. 聚合"></a>4.3. 聚合</h2><p>是关联关系的一种，是强关联关系，是整体和部分之间的关系,聚合关系也是通过成员对象来实现的，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/aggregation.JPG" alt=""></p>
+<h2 id="4-4-组合"><a href="#4-4-组合" class="headerlink" title="4.4. 组合"></a>4.4. 组合</h2><p>组合（Composition）关系也是关联关系的一种，也表示类之间的整体与部分的关系，但它是一种更强烈的聚合关系，是 cxmtains-a 关系。</p>
+<p>在组合关系中，整体对象可以控制部分对象的生命周期，一旦整体对象不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/composition.JPG" alt=""></p>
+<h2 id="4-5-泛化"><a href="#4-5-泛化" class="headerlink" title="4.5. 泛化"></a>4.5. 泛化</h2><p>对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系<br><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/generalization.JPG" alt=""></p>
+<h2 id="4-6-实现"><a href="#4-6-实现" class="headerlink" title="4.6. 实现"></a>4.6. 实现</h2><p>是接口与实现类之间的关系。在这种关系中，类实现了接口，类中的操作实现了接口中所声明的所有的抽象操作</p>
+<p><img src="/2019/09/13/设计模式/软件设计模式-类与类之间的关系/realization.JPG" alt=""></p>
+
         </div>
         <div class="post-reply">
             

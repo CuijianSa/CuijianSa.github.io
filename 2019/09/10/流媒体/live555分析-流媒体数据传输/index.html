@@ -15,19 +15,19 @@
   </script>
 
   
-  <title>CuijianSa.github.io</title>
+  <title>live555分析-流媒体数据传输 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title: live555分析-流媒体数据传输date: 2019-09-10 23:06:30categories: 流媒体tags: 在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;">
+  <meta name="description" content="在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;handleCmd_withinSession() 执行： 12345678910&amp;#125; else if (strcmp(cmdName">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CuijianSa.github.io">
+<meta property="og:title" content="live555分析-流媒体数据传输">
 <meta property="og:url" content="http://yoursite.com/2019/09/10/流媒体/live555分析-流媒体数据传输/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
-<meta property="og:description" content="title: live555分析-流媒体数据传输date: 2019-09-10 23:06:30categories: 流媒体tags: 在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;">
+<meta property="og:description" content="在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;handleCmd_withinSession() 执行： 12345678910&amp;#125; else if (strcmp(cmdName">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-10T16:05:27.403Z">
+<meta property="og:updated_time" content="2019-09-15T08:32:58.347Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CuijianSa.github.io">
-<meta name="twitter:description" content="title: live555分析-流媒体数据传输date: 2019-09-10 23:06:30categories: 流媒体tags: 在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;">
+<meta name="twitter:title" content="live555分析-流媒体数据传输">
+<meta name="twitter:description" content="在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&amp;gt;handleCmd_withinSession() 执行： 12345678910&amp;#125; else if (strcmp(cmdName">
   
     <link rel="alternate" href="/atom.xml" title="CuijianSa.github.io" type="application/atom+xml">
   
@@ -153,7 +153,7 @@
     <div class="container post-box">
         <div class="content post-title is-flex center flex-column" style="margin-bottom: 70px; overflow: auto;">
             <h1 class="has-text-centered" style="padding-bottom: 10px; border-bottom: 3px solid #fff">
-                <strong>Null</strong>
+                <strong>live555分析-流媒体数据传输</strong>
             </h1>
             
             <div class="is-flex align-center">
@@ -168,9 +168,7 @@
             
         </div>
         <div class="content" style="overflow: auto">
-            <hr>
-<p>title: live555分析-流媒体数据传输<br>date: 2019-09-10 23:06:30<br>categories: 流媒体<br>tags:</p>
-<p>在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&gt;handleCmd_withinSession() 执行：</p>
+            <p>在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&gt;handleCmd_withinSession() 执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#125; else if (strcmp(cmdName, &quot;TEARDOWN&quot;) == 0</span><br><span class="line">		 || strcmp(cmdName, &quot;PLAY&quot;) == 0</span><br><span class="line">		 || strcmp(cmdName, &quot;PAUSE&quot;) == 0</span><br><span class="line">		 || strcmp(cmdName, &quot;GET_PARAMETER&quot;) == 0</span><br><span class="line">		 || strcmp(cmdName, &quot;SET_PARAMETER&quot;) == 0) &#123;</span><br><span class="line">	if (clientSession != NULL) &#123;</span><br><span class="line">	  clientSession-&gt;handleCmd_withinSession(this, cmdName, urlPreSuffix, urlSuffix, (char const*)fRequestBuffer);</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">	  handleCmd_sessionNotFound();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 <p>在这个函数中，将streamName与前缀进行比较，通过trackId寻找到subsession, 找到subsession后LAY 请求通过RTSPServer::RTSPClientSession::handleCmd_PLAY() 函数处理：</p>
 <p>第一步:解析scaleHeader, scale 值是用于控制播放速度的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Boolean sawScaleHeader = parseScaleHeader(fullRequestStr, scale);</span><br><span class="line"></span><br><span class="line">// Try to set the stream&apos;s scale factor to this value:</span><br><span class="line">if (subsession == NULL /*aggregate op*/) &#123;</span><br><span class="line">  fOurServerMediaSession-&gt;testScaleFactor(scale);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  subsession-&gt;testScaleFactor(scale);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">char buf[100];</span><br><span class="line">char* scaleHeader;</span><br><span class="line">if (!sawScaleHeader) &#123;</span><br><span class="line">  buf[0] = &apos;\0&apos;; // Because we didn&apos;t see a Scale: header, don&apos;t send one back</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  sprintf(buf, &quot;Scale: %f\r\n&quot;, scale);</span><br><span class="line">&#125;</span><br><span class="line">scaleHeader = strDup(buf);</span><br></pre></td></tr></table></figure></p>

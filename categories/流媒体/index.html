@@ -134,6 +134,26 @@
         <div class="box">
             <article class="media">
                 
+                <a href="/2019/09/10/流媒体/live555分析-流媒体数据传输/">
+                    
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong>live555分析-流媒体数据传输</strong> <small class="post-date">at: 2019-09-10</small>
+                                <br>
+                                在 SETUP 请求之后，客户端会发起 PLAY 请求，以请求服务器开始传输音视频数据。在 PLAY 请求执行时，一定是已经执行过 SETUP 请求，建立好了客户端会话，因而会与其它要求客户端会话已经建立的请求一起，通过 clientSession-&gt;handleCmd_withinSession() 执行：
+12345678910&#125; e..
+                            </p>
+                            <button class="button is-info">Read</button>
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    
+        <div class="box">
+            <article class="media">
+                
                 <a href="/2019/09/10/流媒体/ONVIF-使用gSOAP生成ONVIF框架代码/">
                     
                     <div class="media-content">
@@ -389,36 +409,6 @@ https://..
 首先可从代码调用关系开始着手分析
 BasicTaskScheduler0主要初始化一些参数，包括socket、 event handle
 12345678BasicTaskScheduler0::BasicTaskScheduler0()  : fLastHan..
-                            </p>
-                            <button class="button is-info">Read</button>
-                        </div>
-                    </div>
-                </a>
-            </article>
-        </div>
-    
-        <div class="box">
-            <article class="media">
-                
-                <a href="/2018/10/13/流媒体/RTMP/RTMP/">
-                    
-                    <div class="media-left">
-                        <figure class="image is-128x128">
-                            <img src="/2018/10/13/流媒体/RTMP/RTMP/rtmp_handshake_package.png" style="height: 100%; width: 100%">
-                        </figure>
-                    </div>
-                    
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>RTMP</strong> <small class="post-date">at: 2018-10-13</small>
-                                <br>
-                                从腾讯云中看到一篇对RTMP介绍比较好的文章转自视频协议学习：推流拉流都擅长的 RTMP
-简介RTMP(Real Time Message Protocol)是进行实时通信协议的网络，用于Flash/AIR平台及支持RTMP协议的流媒体/交互服务器之间进行音视频和数据通信
-RTMP有多个变种
-
-RTMP工作在TCP之上，默认使用端口1935；
-RTMPE..
                             </p>
                             <button class="button is-info">Read</button>
                         </div>
