@@ -46,7 +46,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Olin</span>'s Blog
+              <span class="logo">Diskobólos</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -74,10 +74,6 @@
                 About
             </a>
             
-            <a class="nav-item" href="/tags">
-                Tags
-            </a>
-            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -96,10 +92,6 @@
             
             <a class="nav-item flex-1" href="/about">
                 About
-            </a>
-            
-            <a class="nav-item flex-1" href="/tags">
-                Tags
             </a>
             
         </div>
@@ -236,5 +228,20 @@ UML类图关系（泛化 、继承、实现、依赖、关联、聚合、组合�
 <script src="/js/search_core.js"></script>
 <script src="/js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

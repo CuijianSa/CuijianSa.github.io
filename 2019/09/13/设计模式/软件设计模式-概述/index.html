@@ -18,13 +18,14 @@
   <title>软件设计模式-概述 | CuijianSa.github.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="1. 什么是设计模式 2. 可以为我们解决什么问题 3. 应用场景是什么 3.1. 原则 3.2. 设计模式   4. 相关文档   1. 什么是设计模式被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结的一套设计模式，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是 2. 可以为我们解决什么问题为了提高代码的可重用性、代码的可读性">
+<meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="软件设计模式-概述">
 <meta property="og:url" content="http://yoursite.com/2019/09/13/设计模式/软件设计模式-概述/index.html">
 <meta property="og:site_name" content="CuijianSa.github.io">
 <meta property="og:description" content="1. 什么是设计模式 2. 可以为我们解决什么问题 3. 应用场景是什么 3.1. 原则 3.2. 设计模式   4. 相关文档   1. 什么是设计模式被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结的一套设计模式，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是 2. 可以为我们解决什么问题为了提高代码的可重用性、代码的可读性">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-15T08:34:11.996Z">
+<meta property="og:updated_time" content="2019-09-15T14:20:46.954Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="软件设计模式-概述">
 <meta name="twitter:description" content="1. 什么是设计模式 2. 可以为我们解决什么问题 3. 应用场景是什么 3.1. 原则 3.2. 设计模式   4. 相关文档   1. 什么是设计模式被反复使用、多数人知晓的、经过分类编目的、代码设计经验的总结的一套设计模式，它是解决特定问题的一系列套路，是前辈们的代码设计经验的总结，具有一定的普遍性，可以反复使用。其目的是 2. 可以为我们解决什么问题为了提高代码的可重用性、代码的可读性">
@@ -50,7 +51,7 @@
     <nav class="nav">
          <div class="nav-left">
             <a href="/" class="nav-item" style="font-size: 20px;">
-              <span class="logo">Olin</span>'s Blog
+              <span class="logo">Diskobólos</span>'s Blog
             </a>
          </div>
         <div class="nav-center is-hidden position-relative" id="search_container">
@@ -78,10 +79,6 @@
                 About
             </a>
             
-            <a class="nav-item" href="/tags">
-                Tags
-            </a>
-            
         </div>
         <span class="nav-toggle" id="navMenuDropdown">
             <span></span>
@@ -100,10 +97,6 @@
             
             <a class="nav-item flex-1" href="/about">
                 About
-            </a>
-            
-            <a class="nav-item flex-1" href="/tags">
-                Tags
             </a>
             
         </div>
@@ -158,11 +151,13 @@
             
             <div class="is-flex align-center">
                 <img class="post-avatar" src="https://cdn2.iconfinder.com/data/icons/rcons-user/32/male-shadow-circle-512.png">
-                <span style="padding:0 10px;"> <span class="sub-title">By</span> Olin</span>
+                <span style="padding:0 10px;"> <span class="sub-title">By</span> Diskobólos</span>
                 <span class="post-date sub-title">at: 2019-09-13</span>
             </div>
             
                 <div>
+                    
+                         <a class="tag is-post-tag" href="/tags/设计模式/">设计模式</a>
                     
                 </div>
             
@@ -255,6 +250,25 @@
         </div>
         <div class="post-reply">
             
+                <!-- 来必力City版安装代码 -->
+                <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTE4Ni81NzUz">
+                    <script type="text/javascript">
+                        (function(d, s) {
+                            var j, e = d.getElementsByTagName(s)[0];
+
+                            if (typeof LivereTower === 'function') { return; }
+
+                            j = d.createElement(s);
+                            j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                            j.async = true;
+
+                            e.parentNode.insertBefore(j, e);
+                        })(document, 'script');
+                    </script>
+                    <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+                </div>
+                <!-- City版安装代码已完成 -->
+            
             
         </div>
     </div>
@@ -307,5 +321,20 @@
 <script src="/js/search_core.js"></script>
 <script src="/js/script.js"></script>
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
