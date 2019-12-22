@@ -4,6 +4,50 @@
   
     
     <entry>
+      <title>C++11智能指针</title>
+      <link href="/2019/12/22/C++/C++11%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/"/>
+      <url>/2019/12/22/C++/C++11%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/</url>
+      
+        <content type="html"><![CDATA[<h1 id="指针类型转换"><a href="#指针类型转换" class="headerlink" title="指针类型转换"></a>指针类型转换</h1><p>C++支持4中指针类型转换：</p><h2 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h2><ul><li>取消const属性</li><li>可以用常量初始化常引用，但不能用常量初始化普通引用</li></ul><h2 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h2><ul><li>基本类型转换，不能用于基本类型指针间转换</li><li>可用于有继承关系的类之间对象间(父子对象)的转换和指针之间(父子指针)的转换</li></ul><h2 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h2><ul><li>用于有继承关系的基类与派生类指针之间的转换，前提视必须有多态存在<ul><li>向上转型  基类指针对象=派生类指针对象</li><li>向下转型  派生类指针对象=基类指针对象</li></ul></li></ul><h2 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h2><ul><li>普通类型之间的转换(不安全)</li><li>整数和指针之间的转换</li></ul><h1 id="为什么使用智能指针"><a href="#为什么使用智能指针" class="headerlink" title="为什么使用智能指针"></a>为什么使用智能指针</h1><h1 id="智能指针如何使用"><a href="#智能指针如何使用" class="headerlink" title="智能指针如何使用"></a>智能指针如何使用</h1><h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>shared_ptr指向相同的对象，shared_ptr使用引用计数，每个shared_ptr的拷贝都指向相同的内存。每使用一次，内部的引用计数+1,每析构一次，内部的引用计数-1,减为0时自动删除所指向的堆内存.shared_ptr引用计数线程安全的，但对象的读取需要加锁</p><h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><p>unique’唯一’拥有其所指对象，同一时刻只能有一个unique_ptr指向给定的对象（通过禁止拷贝语义、只有移动语义来实现）.</p><p>unique_ptr指针本身的生命周期：从unique_ptr指针创建时开始，直到离开作用域。离开作用域时，若其指向对象，则将其所指对象销毁(默认使用delete操作符，用户可指定其他操作)<br>unique_ptr指针与其所指对象的关系：在智能指针生命周期内，可以改变智能指针所指对象，如创建智能指针时通过构造函数指定、通过reset方法重新指定、通过release方法释放所有权、通过移动语义转移所有权。</p><h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><p>为了配合shared_ptr而引入的一种智能指针，因为它不具有普通指针的行为，没有重载operator*和-&gt;,它的最大作用在于协助shared_ptr工作，像旁观者那样观测资源的使用情况。weak_ptr可以从一个shared_ptr或者另一个weak_ptr对象构造，获得资源的观测权。但weak_ptr没有共享资源，它的构造不会引起指针引用计数的增加。使用weak_ptr的成员函数use_count()可以观测资源的引用计数，另一个成员函数expired()的功能等价于use_count()==0,但更快，表示被观测的资源(也就是shared_ptr的管理的资源)已经不复存在。weak_ptr可以使用一个非常重要的成员函数lock()从被观测的shared_ptr获得一个可用的shared_ptr对象， 从而操作资源。但当expired()==true的时候，lock()函数将返回一个存储空指针的shared_ptr。</p><h1 id="指针指针的设计与实现"><a href="#指针指针的设计与实现" class="headerlink" title="指针指针的设计与实现"></a>指针指针的设计与实现</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> C++ </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>chromium概述</title>
+      <link href="/2019/11/28/chromium/chromium%E6%A6%82%E8%BF%B0/"/>
+      <url>/2019/11/28/chromium/chromium%E6%A6%82%E8%BF%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="NPAPI-plugin"><a href="#NPAPI-plugin" class="headerlink" title="NPAPI plugin"></a>NPAPI plugin</h1><ul><li>NPP: 由插件来实现，被浏览器调用，主要包括一些插件创建，初始化，关闭，销毁，信息查询及事件处理，数据流，窗口设置，URL等</li><li>NPN: 由浏览器来实现，被插件所调用，主要包括图形绘制，数据流处理，浏览器信息查询，内存分配和释放，浏览器的插件设置，URL等</li></ul><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">          Render </span><br><span class="line">    IPC  /         \IPC</span><br><span class="line">Browser   Render   Plugin</span><br><span class="line">    IPC  \         /IPC    </span><br><span class="line">          Render</span><br></pre></td></tr></table></figure><ul><li>每一种类型的plugin只有一个进程，这就是说，如果有两个或者多个renderer进程同时使用同一个插件，那么该插件会共享同一个进程。因为多个renderer进程共享同一种的plugin进程，那么plugin进程如何为它们服务呢？答案是为每个插件使用点在plugin进程中创建一个插件实例(PluginInstance).</li><li>plugin进程是由browser进程来负责创建和销毁, 而不是renderer进程。 原因在于renderer进程没有创建的权限，而且plugin进程由browser进程来统一管理也更方便。 当plugin进程创建成功时，browser进程会返回IPCchannel handle用于创建和plugin进程通讯的PluginChannelHost. 那它什么时候被销毁呢？当没有任何插件实例并且空闲一段事件后，它才会被销毁，这样做的好处是避免频繁的创建和销毁plugin进程。</li></ul><h1 id="Content-Shell"><a href="#Content-Shell" class="headerlink" title="Content Shell"></a>Content Shell</h1><p>content shell是一个基于content api的简单测试程序, 它仅仅是一个壳，调用了content API并实现了部分必需的回调接口，可以用来测试和其他一些简单的功能。</p><ul><li><p>app<br>这部分主要是跟应用程序或者进程的创建和初始化相关。<br>第一类，主要包括创建进程的初始化函数，content的初始化和关闭；<br>第二类，主要是实现回调函数，告诉嵌入者启动完成，进程启动，进程推出，沙盒模型初始化开始和结束等等。</p></li><li><p>browser<br>第一类包括，对一些HTML5功能和其他一些高级功能实现的参与，例如resource，sensor，notification，speech recognition， web worker，download， web intents，等等;</p></li></ul><p>第二类包括ContentBrowserClient，主要是实现部分逻辑，被Browser端（或者进程）调用，还有就是一些事件的回调函数.</p><ul><li><p>common<br>主要定义一些公共的接口，被render和browser共享，例如一些进程相关，参数，gpu相关等等</p></li><li><p>render<br>一类包含获取RenderThread的消息循环，注册v8 extension，计算JavaScript表达式等等</p></li></ul><p>第二类包括ContentRendererClient，主要是实现部分逻辑，被Browser端（或者进程）调用，还有就是一些事件的回调函数</p><ul><li><p>utility<br>工具类接口，主要包括让嵌入者参与content API中的线程创建和消息的过滤。</p></li><li><p>gpu<br>创建gpu进程进行gpu加速</p></li><li><p>child</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> chromium </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> chromium </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>软件设计模式-解释器模式</title>
       <link href="/2019/09/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/"/>
       <url>/2019/09/29/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8F/</url>
